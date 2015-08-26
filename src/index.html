@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>verge</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/main.css">
+		<script src="phaser.min.js"></script>
+		<script src="js/boot.js"></script>
+		<script src="js/preloader.js"></script>
+		<script src="js/mainmenu.js"></script>
+		<script src="js/game.js"></script>
+		<script src="js/gameover.js"></script>
+		<script>
+			var game = new Phaser.Game(640, 480, Phaser.AUTO, 'game');
+			
+			game.state.add('boot', boot);
+			game.state.add('preloader', preloader);
+			game.state.add('mainmenu', mainmenu);
+			game.state.add('game', game);
+			game.state.add('gameover', gameover);
+			
+			game.state.start('boot');
+		</script>
+	</head>
+	<body>
+		<div id="game"></div>
+	</body>
+</html>
