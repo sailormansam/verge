@@ -1,7 +1,7 @@
-var gameover = function(game){};
+GameStates.GameOver = function (game) {};
 
-gameover.prototype = {
-	create: function() {
+GameStates.GameOver.prototype = {
+	create: function () {
 		
 	}
-}
+};

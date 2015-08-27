@@ -1,7 +1,11 @@
-var mainmenu = function(game){};
+GameStates.MainMenu = function (game) {
+	this.background;
+};
 
-mainmenu.prototype = {
-	create: function() {
-		
+GameStates.MainMenu.prototype = {
+	create: function () {
+		this.background = this.game.add.sprite(this.game.width / 2, this.game.height / 2, 'background');
+		this.background.anchor.setTo(0.5);
+		this.background.scale.set(0.4);
 	}
-}
+};

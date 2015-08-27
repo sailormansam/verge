@@ -1,7 +1,7 @@
-var game = function(game){};
+GameStates.Game = function (game) {};
 
-game.prototype = {
-	create: function() {
+GameStates.Game.prototype = {
+	create: function () {
 		
 	}
-}
+};

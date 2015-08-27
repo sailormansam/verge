@@ -1,10 +1,10 @@
-var preloader = function(game){};
+GameStates.Preloader = function (game) {};
 
-preloader.prototype = {
-	preload: function() {
-		
+GameStates.Preloader.prototype = {
+	preload: function () {
+		this.load.image('background', 'images/cactus.jpg');
 	},
-	create: function() {
+	create: function () {
 		game.state.start('mainmenu');
 	}
-}
+};
