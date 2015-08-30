@@ -4,7 +4,7 @@ GameStates.MainMenu = function (game) {
 
 GameStates.MainMenu.prototype = {
 	create: function () {
-		this.background = this.game.add.sprite(this.game.width / 2, this.game.height / 2, 'background');
+        var loadingText = game.add.text(game.world.centerX, game.width * 2, 'VERGE', { font: "6em squada one", fill: "#333"});
 		this.background.anchor.setTo(0.5);
 		this.background.scale.set(0.4);
 	}
