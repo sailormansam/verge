@@ -1,4 +1,8 @@
 var GameStates = GameStates || {};
+var textStyle = {
+	'normal': { font: "3em squada one", fill: "#333"},
+	'large': { font: "6em squada one", fill: "#333"}
+};
 
 GameStates.Boot = function (game) {};
 

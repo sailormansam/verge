@@ -18,7 +18,7 @@ gulp.task('del', function (cb) {
 
 gulp.task('html-replace', function () {
 	return gulp.src('src/index.html')
-		.pipe(htmlreplace({ js: 'main.min.js', css: 'main.min.css' }))
+		.pipe(htmlreplace({ js: 'js/main.min.js', css: 'css/main.min.css' }))
 		.pipe(gulp.dest('dist'));
 });
 
@@ -27,7 +27,7 @@ gulp.task('minify-js', function () {
 		.pipe(concat('main.js'))
 		.pipe(uglify())
 		.pipe(rename({suffix: '.min'}))
-		.pipe(gulp.dest('dist'));
+		.pipe(gulp.dest('dist/js'));
 });
 
 gulp.task('minify-css', function () {
@@ -35,7 +35,7 @@ gulp.task('minify-css', function () {
 		.pipe(concat('main.css'))
 		.pipe(minifycss())
 		.pipe(rename({suffix: '.min'}))
-		.pipe(gulp.dest('dist'));
+		.pipe(gulp.dest('dist/css'));
 });
 
 gulp.task('imagemin', function () {
@@ -50,6 +50,6 @@ gulp.task('copy', function () {
 });
 
 gulp.task('copy-fonts', function() {
-   return gulp.src('src/fonts')
+   return gulp.src('src/fonts/**')
     .pipe(copy('dist', { prefix: 1 }));
 });
