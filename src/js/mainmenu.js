@@ -1,25 +1,32 @@
-GameStates.MainMenu = function (game) {};
+GameStates.MainMenu = function (game) {
+	this.titleText;
+	this.playText;
+};
 
 GameStates.MainMenu.prototype = {
 	create: function () {
-		var titleText = game.add.text(game.width * .25, game.world.centerY, 'VERGE', textStyle['large']);
-		titleText.anchor.set(0, 0.5);
-		titleText.alpha = 0;
+		// title and play text
+		this.titleText = game.add.text(game.width * .25, game.world.centerY, 'VERGE', textStyle['large']);
+		this.titleText.anchor.set(0, 0.5);
+		this.titleText.alpha = 0;
 		
-		var playText = game.add.text(game.width * .25, game.height * .625, 'PLAY', textStyle['normal']);
-		playText.anchor.set(0, 0.5);
-		playText.alpha = 0;
+		this.playText = game.add.text(game.width * .25, game.height * .625, 'PLAY', textStyle['normal']);
+		this.playText.anchor.set(0, 0.5);
+		this.playText.alpha = 0;
 		
 		// tween in title and play button
-		game.add.tween(titleText).to( { alpha: 1, x: game.width * .2 }, 500, Phaser.Easing.Quadratic.InOut, true);
-		game.add.tween(playText).to( { alpha: 1, x: game.width * .2 }, 500, Phaser.Easing.Quadratic.InOut, true, 200);
+		game.add.tween(this.titleText).to( { alpha: 1, x: game.width * .2 }, 500, Phaser.Easing.Quadratic.InOut, true);
+		game.add.tween(this.playText).to( { alpha: 1, x: game.width * .2 }, 500, Phaser.Easing.Quadratic.InOut, true, 200);
 		
 		// click event to play
-		playText.inputEnabled = true;
-		playText.input.useHandCursor = true;
-		playText.events.onInputDown.add(this.play, this);
+		this.playText.inputEnabled = true;
+		this.playText.input.useHandCursor = true;
+		this.playText.events.onInputDown.add(this.play, this);
 	},
 	play: function() {
-		game.state.start('game');
+		// tween the text out and then start game
+		game.add.tween(this.titleText).to( { alpha: 0, x: game.width * .15 }, 500, Phaser.Easing.Quadratic.InOut, true);
+		var t = game.add.tween(this.playText).to( { alpha: 0, x: game.width * .15 }, 500, Phaser.Easing.Quadratic.InOut, true, 200);
+		t.onComplete.add(function () { game.state.start('Game'); }, this)
 	}
 };

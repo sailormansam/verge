@@ -12,6 +12,6 @@ GameStates.Boot.prototype = {
 		game.stage.backgroundColor = '#ffffff';
 	},
 	create: function () {
-		game.state.start('preloader');
+		game.state.start('Preloader');
 	}
 };

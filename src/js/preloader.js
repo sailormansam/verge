@@ -6,6 +6,6 @@ GameStates.Preloader.prototype = {
 		loadingText.anchor.set(0, 0.5);
 	},
 	create: function () {
-		game.state.start('mainmenu');
+		game.state.start('MainMenu');
 	}
 };
