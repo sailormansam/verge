@@ -8,6 +8,6 @@ GameStates.Game.prototype = {
 		this.player = new Player();
 	},
 	update: function () {
-		
+		this.player.update();
 	}
 };
