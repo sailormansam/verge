@@ -12,13 +12,13 @@
 		<script>
 			var game = new Phaser.Game(640, 480, Phaser.AUTO, 'game');
 			
-			game.state.add('boot', GameStates.Boot);
-			game.state.add('preloader', GameStates.Preloader);
-			game.state.add('mainmenu', GameStates.MainMenu);
-			game.state.add('game', GameStates.Game);
-			game.state.add('gameover', GameStates.GameOver);
+			game.state.add('Boot', GameStates.Boot);
+			game.state.add('Preloader', GameStates.Preloader);
+			game.state.add('MainMenu', GameStates.MainMenu);
+			game.state.add('Game', GameStates.Game);
+			game.state.add('GameOver', GameStates.GameOver);
 			
-			game.state.start('boot');
+			game.state.start('Boot');
 		</script>
 	</head>
 	<body>

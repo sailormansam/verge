@@ -1,11 +1,9 @@
-var Player = function (game) {
-	this.game = game;
+var Player = function () {
 	this.sprite;
 	this.width = 25;
 	this.height = 40;
 	
 	this.SPEED = 300;
-	this.GRAVITY = 1000;
 	this.JUMP = -450;
 	
 	this.create();
@@ -23,21 +21,18 @@ Player.prototype = {
 		graphics.destroy();
 		
 		// enable physics
-		game.physics.startSystem(Phaser.Physics.P2JS);
-		game.physics.p2.defaultRestitution = 1;
 		game.physics.p2.enable(this.sprite);
-		game.physics.p2.gravity.y = this.GRAVITY;
-		game.physics.p2.damping = 1;
 		
 		// player physics settings
 		this.sprite.body.mass = 1;
 	},
 	update: function () {
+		this.sprite.body.setZeroRotation();
+		this.sprite.body.rotation = 0;
+		
 		this.move();
 	},
 	move: function () {
-		this.sprite.body.rotation = 0;
-		
 		if(game.input.keyboard.isDown(Phaser.Keyboard.A)
 		  || game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
 			this.sprite.body.velocity.x = -this.SPEED;
