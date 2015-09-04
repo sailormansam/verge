@@ -1,4 +1,4 @@
-var Block = function (x, y, mapGrain) {
+var Teleporter = function (x, y, mapGrain) {
 	this.sprite;
 	this.width = mapGrain;
 	this.height = mapGrain;
@@ -8,21 +8,18 @@ var Block = function (x, y, mapGrain) {
 	this.create();
 }
 
-Block.prototype = {
+Teleporter.prototype = {
 	create: function () {
 		// create player
 		var graphics = game.add.graphics(0, 0);
 		
-		graphics.beginFill(0x666666);
+		graphics.beginFill(0xff0000);
 		graphics.drawRect(0, 0, this.width, this.height);
 		
 		this.sprite = game.add.sprite(this.x, this.y, graphics.generateTexture());
 		graphics.destroy();
 		
-		// enable physics
-		game.physics.p2.enable(this.sprite);
-		
-		// make sure block doesn't move
-		this.sprite.body.dynamic = false;
+		// center sprite to align with map grid (physics objects are centered by default)
+		this.sprite.anchor.set(0.5);
 	}
 }

@@ -1,5 +1,7 @@
-var Player = function () {
+var Player = function (x, y) {
 	this.sprite;
+	this.x = x;
+	this.y = y;
 	this.width = 25;
 	this.height = 40;
 	
@@ -17,7 +19,7 @@ Player.prototype = {
 		graphics.beginFill(0x333333);
 		graphics.drawRect(0, 0, this.width, this.height);
 		
-		this.sprite = game.add.sprite(200, 200, graphics.generateTexture());
+		this.sprite = game.add.sprite(this.x, this.y, graphics.generateTexture());
 		graphics.destroy();
 		
 		// enable physics
@@ -45,9 +47,17 @@ Player.prototype = {
 			
 		}
 		
+		// TODO only jump while on ground, or at least hit the ground once
 		if(game.input.keyboard.isDown(Phaser.Keyboard.W)
 		  || game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
 			this.sprite.body.velocity.y = this.JUMP;
 		}
+	},
+	moveToStart: function (x, y) {
+		this.sprite.body.x = x;
+		this.sprite.body.y = y;
+		
+		this.sprite.body.velocity.x = 0;
+		this.sprite.body.velocity.y = 0;
 	}
 }
