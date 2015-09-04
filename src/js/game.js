@@ -22,11 +22,17 @@ GameStates.Game.prototype = {
 		// create map
 		var map = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
 		
-		for(var i = 0, len = map.level[0].block.length; i < len; i++) {
-			this.block.push(new Block(map.level[0].block[i].x * this.mapGrain,
-									  map.level[0].block[i].y * this.mapGrain,
+		for(var i = 0, len = map.level[this.level].block.length; i < len; i++) {
+			this.block.push(new Block(map.level[this.level].block[i].x * this.mapGrain,
+									  map.level[this.level].block[i].y * this.mapGrain,
 									  this.mapGrain));
 		}
+		
+		// set the world bounds based on level
+		game.world.setBounds(0, 0, map.level[this.level].block[i - 1].x * this.mapGrain, game.height);
+		
+		// camera
+		game.camera.follow(this.player.sprite);
 	},
 	update: function () {
 		this.player.update();
