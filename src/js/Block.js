@@ -1,4 +1,8 @@
 var Block = function (x, y, mapGrain) {
+    // align to zero
+    x -= 0.5;
+    y -= 0.5;
+    
 	this.sprite;
 	this.width = mapGrain;
 	this.height = mapGrain;

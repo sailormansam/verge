@@ -58,10 +58,10 @@ GameStates.Game.prototype = {
 		
 		// create player
 		if(this.player) {
-			this.player.moveToStart(this.map.level[this.level].start.x * this.mapGrain, this.map.level[this.level].start.y * this.mapGrain);
+			this.player.moveToStart(this.map.level[this.level].start.x * (this.mapGrain / 2), this.map.level[this.level].start.y * (this.mapGrain / 2));
 		}
 		else {
-			this.player = new Player(this.map.level[this.level].start.x * this.mapGrain, this.map.level[this.level].start.y * this.mapGrain);
+			this.player = new Player(this.map.level[this.level].start.x * (this.mapGrain / 2), this.map.level[this.level].start.y * (this.mapGrain / 2));
 		}
 		
 		// create map
