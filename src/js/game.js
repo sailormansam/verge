@@ -7,8 +7,8 @@
 // click to place blocks and invetory and that whole system
 // check for block overlap before placement and picking moveable blocks back up
 var blockType = {
-    STATIC: 0,
-    MOVEABLE: 1
+	STATIC: 0,
+	MOVEABLE: 1
 }
 
 GameStates.Game = function (game) {
@@ -38,9 +38,9 @@ GameStates.Game.prototype = {
 		
 		// camera
 		game.camera.follow(this.player.sprite);
-        
-        // place a block on click
-        game.input.onDown.add(this.placeBlock, this);
+		
+		// place a block on click
+		game.input.onDown.add(this.placeBlock, this);
 	},
 	update: function () {
 		this.player.update();
@@ -52,14 +52,21 @@ GameStates.Game.prototype = {
 			}
 		}
 	},
-    placeBlock: function (pointer) {
-        var truePointer = {
-            x: Math.floor(((pointer.x + game.camera.x) / this.mapGrain)),
-            y: Math.floor(((pointer.y + game.camera.y) / this.mapGrain))
-        };
-        
-        this.block.push(new Block(truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE));
-    },
+	placeBlock: function (pointer) {
+		var truePointer = {
+			x: Math.floor(((pointer.x + game.camera.x) / this.mapGrain)),
+			y: Math.floor(((pointer.y + game.camera.y) / this.mapGrain))
+		};
+		
+		// check if there is a block at pointer location
+		for(var i = 0, len = this.block.length; i < len; i++) {
+			if(this.block[i].x == (truePointer.x + 0.5) * this.mapGrain && this.block[i].y == (truePointer.y + 0.5) * this.mapGrain) {
+				return;
+			}
+		}
+		
+		this.block.push(new Block(truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE));
+	},
 	makeLevel: function () {
 		// clear block array
 		this.block.forEach(function (block) {
@@ -85,7 +92,7 @@ GameStates.Game.prototype = {
 			this.block.push(new Block(this.map.level[this.level].block[i].x,
 									  this.map.level[this.level].block[i].y,
 									  this.mapGrain,
-                                      blockType.STATIC));
+									  blockType.STATIC));
 		}
 		
 		// create teleporter for this level
