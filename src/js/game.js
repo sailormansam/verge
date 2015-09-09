@@ -5,6 +5,7 @@
 // transitions from level to level and from title to levels
 // click to place blocks and invetory and that whole system
 // check for block overlap before placement and picking moveable blocks back up
+// fix net dimensions when moving camera, make sure net only picks up moveable blocks
 var blockType = {
 	STATIC: 0,
 	MOVEABLE: 1
@@ -16,6 +17,8 @@ GameStates.Game = function (game) {
 	this.block = [];
 	this.teleporter;
 	this.map;
+	this.graphics;
+	this.originPointer;
 	
 	this.GRAVITY = 1000;
 	
@@ -41,6 +44,9 @@ GameStates.Game.prototype = {
 		// place a block on click
 		game.input.mouse.capture = true;
 		
+		// add graphics layer
+		this.graphics = game.add.graphics(0, 0);
+		this.graphics.alpha = 0.5;
 	},
 	update: function () {
 		this.player.update();
@@ -48,6 +54,36 @@ GameStates.Game.prototype = {
 		// place blocks if mouse is down
 		if(game.input.activePointer.leftButton.isDown) {
 			this.placeBlock(game.input);
+		}
+		
+		// clear graphics before potential drawing
+		this.graphics.clear();
+		
+		if(game.input.activePointer.rightButton.isDown) {
+			// Set the origin of the net
+			if(this.originPointer == null) {
+				this.originPointer = {
+					x: game.input.x,
+					y: game.input.y
+				};
+			}
+			this.drawNet(game.input);
+		}
+		else {
+			if(this.originPointer != null) {
+				var hitbox = new Phaser.Rectangle(this.originPointer.x, this.originPointer.y, game.input.x - this.originPointer.x, game.input.y - this.originPointer.y);
+				
+				var toSplice = [];
+				
+				// remove blocks that overlap
+				for(var i = 0, len = this.block.length; i < len; i++) {
+					if(this.block[i] != null && Phaser.Rectangle.intersects(this.block[i].sprite.getBounds(), hitbox)) {
+						this.block[i].sprite.destroy();
+						this.block[i] = null;
+					}
+				}
+			}
+			this.originPointer = null;
 		}
 		
 		if(Phaser.Rectangle.intersects(this.player.sprite.getBounds(), this.teleporter.sprite.getBounds())) {
@@ -65,12 +101,16 @@ GameStates.Game.prototype = {
 		
 		// check if there is a block at pointer location
 		for(var i = 0, len = this.block.length; i < len; i++) {
-			if(this.block[i].x == (truePointer.x + 0.5) * this.mapGrain && this.block[i].y == (truePointer.y + 0.5) * this.mapGrain) {
+			if(this.block[i] != null && this.block[i].x == (truePointer.x + 0.5) * this.mapGrain && this.block[i].y == (truePointer.y + 0.5) * this.mapGrain) {
 				return;
 			}
 		}
 		
 		this.block.push(new Block(truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE));
+	},
+	drawNet: function (pointer) {
+		this.graphics.beginFill(0xff0000);
+		this.graphics.drawRect(this.originPointer.x, this.originPointer.y, pointer.x - this.originPointer.x, pointer.y - this.originPointer.y);
 	},
 	makeLevel: function () {
 		// clear block array
