@@ -10,6 +10,9 @@ GameStates.Boot.prototype = {
 	init: function () {
 		this.input.maxPointers = 1;
 		game.stage.backgroundColor = '#ffffff';
+		
+		// block default right click to use for other actions
+		game.canvas.oncontextmenu = function (e) { e.preventDefault(); }
 	},
 	create: function () {
 		game.state.start('Preloader');

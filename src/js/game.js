@@ -1,6 +1,5 @@
 // TODO move tasks into github?
-// make blocks not centered around regestration point
-// don't let player move on next level start until they hit the ground
+// don't let player move on next level start until they hit the ground?
 // maybe make custom physics for more control
 // simpify geometry if there are multiple blocks in a straight line
 // transitions from level to level and from title to levels
@@ -40,11 +39,17 @@ GameStates.Game.prototype = {
 		game.camera.follow(this.player.sprite);
 		
 		// place a block on click
-		game.input.onDown.add(this.placeBlock, this);
+		game.input.mouse.capture = true;
+		
 	},
 	update: function () {
 		this.player.update();
-
+		
+		// place blocks if mouse is down
+		if(game.input.activePointer.leftButton.isDown) {
+			this.placeBlock(game.input);
+		}
+		
 		if(Phaser.Rectangle.intersects(this.player.sprite.getBounds(), this.teleporter.sprite.getBounds())) {
 			// go to next level
 			if(this.map.level[this.level + 1]) {
