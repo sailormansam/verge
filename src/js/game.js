@@ -4,8 +4,6 @@
 // simpify geometry if there are multiple blocks in a straight line
 // transitions from level to level and from title to levels
 // click to place blocks and invetory and that whole system
-// check for block overlap before placement and picking moveable blocks back up
-// fix net dimensions when moving camera, make sure net only picks up moveable blocks
 var blockType = {
 	STATIC: 0,
 	MOVEABLE: 1
@@ -71,13 +69,37 @@ GameStates.Game.prototype = {
 		}
 		else {
 			if(this.originPointer != null) {
-				var hitbox = new Phaser.Rectangle(this.originPointer.x, this.originPointer.y, game.input.x - this.originPointer.x, game.input.y - this.originPointer.y);
+				// create hitbox from net this handles dragging the box in any direction
+				var a = { x: null, y: null };
+				var b = { x: null, y: null };
+				
+				if( this.originPointer.x < game.input.x ) {
+					a.x = this.originPointer.x;
+					b.x = game.input.x;
+				}
+				else {
+					a.x = game.input.x;
+					b.x = this.originPointer.x;
+				}
+				
+				if( this.originPointer.y < game.input.y ) {
+					a.y = this.originPointer.y;
+					b.y = game.input.y;
+				}
+				else {
+					a.y = game.input.y;
+					b.y = this.originPointer.y;
+				}
+				
+				var hitbox = new Phaser.Rectangle(a.x, a.y, b.x - a.x, b.y - a.y);
 				
 				var toSplice = [];
 				
 				// remove blocks that overlap
 				for(var i = 0, len = this.block.length; i < len; i++) {
-					if(this.block[i] != null && Phaser.Rectangle.intersects(this.block[i].sprite.getBounds(), hitbox)) {
+					if(this.block[i] != null
+					   && this.block[i].type == blockType.MOVEABLE
+					   && Phaser.Rectangle.intersects(this.block[i].sprite.getBounds(), hitbox)) {
 						this.block[i].sprite.destroy();
 						this.block[i] = null;
 					}
@@ -101,7 +123,9 @@ GameStates.Game.prototype = {
 		
 		// check if there is a block at pointer location
 		for(var i = 0, len = this.block.length; i < len; i++) {
-			if(this.block[i] != null && this.block[i].x == (truePointer.x + 0.5) * this.mapGrain && this.block[i].y == (truePointer.y + 0.5) * this.mapGrain) {
+			if(this.block[i] != null
+			   && this.block[i].x == (truePointer.x + 0.5) * this.mapGrain
+			   && this.block[i].y == (truePointer.y + 0.5) * this.mapGrain) {
 				return;
 			}
 		}
@@ -110,7 +134,7 @@ GameStates.Game.prototype = {
 	},
 	drawNet: function (pointer) {
 		this.graphics.beginFill(0xff0000);
-		this.graphics.drawRect(this.originPointer.x, this.originPointer.y, pointer.x - this.originPointer.x, pointer.y - this.originPointer.y);
+		this.graphics.drawRect(this.camera.x + this.originPointer.x, this.camera.y + this.originPointer.y, pointer.x - this.originPointer.x, pointer.y - this.originPointer.y);
 	},
 	makeLevel: function () {
 		// clear block array
