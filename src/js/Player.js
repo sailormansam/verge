@@ -4,7 +4,9 @@ var Player = function (x, y) {
 	this.y = y;
 	this.width = 25;
 	this.height = 40;
+	this.inventory = 0;
 	
+	this.INVENTORY_CAP = 5;
 	this.SPEED = 300;
 	this.JUMP = -450;
 	

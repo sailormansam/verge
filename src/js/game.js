@@ -4,9 +4,13 @@
 // simpify geometry if there are multiple blocks in a straight line
 // transitions from level to level and from title to levels
 // click to place blocks and invetory and that whole system
+// jump once
+// fall off level
+// small twitch when a net is active and the camera is moving
+
 var blockType = {
-	STATIC: 0,
-	MOVEABLE: 1
+	STATIC: "STATIC",
+	MOVEABLE: "MOVEABLE"
 }
 
 GameStates.Game = function (game) {
@@ -17,10 +21,13 @@ GameStates.Game = function (game) {
 	this.map;
 	this.graphics;
 	this.originPointer;
-	
-	this.GRAVITY = 1000;
-	
 	this.mapGrain = 40;	// size of map blocks
+	
+	// layers
+	this.blockLayer;
+	
+	// constants
+	this.GRAVITY = 1000;
 };
 
 GameStates.Game.prototype = {
@@ -34,6 +41,14 @@ GameStates.Game.prototype = {
 		// get json
 		this.map = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
 		
+		// create a layer for moveable blocks to live on
+		this.blockLayer = game.add.group();
+		
+		// add graphics layer
+		this.graphics = game.add.graphics(0, 0);
+		this.graphics.alpha = 0.5;
+		
+		// make level
 		this.makeLevel(this.level);
 		
 		// camera
@@ -41,10 +56,6 @@ GameStates.Game.prototype = {
 		
 		// place a block on click
 		game.input.mouse.capture = true;
-		
-		// add graphics layer
-		this.graphics = game.add.graphics(0, 0);
-		this.graphics.alpha = 0.5;
 	},
 	update: function () {
 		this.player.update();
@@ -98,10 +109,12 @@ GameStates.Game.prototype = {
 				// remove blocks that overlap
 				for(var i = 0, len = this.block.length; i < len; i++) {
 					if(this.block[i] != null
+					   && this.player.inventory < this.player.INVENTORY_CAP
 					   && this.block[i].type == blockType.MOVEABLE
 					   && Phaser.Rectangle.intersects(this.block[i].sprite.getBounds(), hitbox)) {
 						this.block[i].sprite.destroy();
 						this.block[i] = null;
+						this.player.inventory++;
 					}
 				}
 			}
@@ -116,6 +129,7 @@ GameStates.Game.prototype = {
 		}
 	},
 	placeBlock: function (pointer) {
+		// get a pointer relative to camera
 		var truePointer = {
 			x: Math.floor(((pointer.x + game.camera.x) / this.mapGrain)),
 			y: Math.floor(((pointer.y + game.camera.y) / this.mapGrain))
@@ -130,7 +144,13 @@ GameStates.Game.prototype = {
 			}
 		}
 		
-		this.block.push(new Block(truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE));
+		// place block if inventory allows
+		if(this.player.inventory > 0) {
+			var newBlock = new Block(truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE)
+			this.block.push(newBlock);
+			this.blockLayer.add(newBlock.sprite);
+			this.player.inventory--;
+		}
 	},
 	drawNet: function (pointer) {
 		this.graphics.beginFill(0xff0000);
@@ -139,7 +159,9 @@ GameStates.Game.prototype = {
 	makeLevel: function () {
 		// clear block array
 		this.block.forEach(function (block) {
-			block.sprite.destroy();
+			if(block != null){
+				block.sprite.destroy();
+			}
 		});
 		this.block = [];
 		
@@ -161,7 +183,7 @@ GameStates.Game.prototype = {
 			this.block.push(new Block(this.map.level[this.level].block[i].x,
 									  this.map.level[this.level].block[i].y,
 									  this.mapGrain,
-									  blockType.STATIC));
+									  this.map.level[this.level].block[i].type));
 		}
 		
 		// create teleporter for this level
