@@ -1,13 +1,3 @@
-// TODO move tasks into github?
-// don't let player move on next level start until they hit the ground?
-// maybe make custom physics for more control
-// simpify geometry if there are multiple blocks in a straight line
-// transitions from level to level and from title to levels
-// click to place blocks and invetory and that whole system
-// jump once
-// fall off level
-// small twitch when a net is active and the camera is moving
-
 var blockType = {
 	STATIC: "STATIC",
 	MOVEABLE: "MOVEABLE"
@@ -192,8 +182,6 @@ GameStates.Game.prototype = {
 										 this.mapGrain);
 		
 		// set the world bounds based on level
-		// TODO check the block with the greatest value of x not just last element in array
-		//		if the map is higher than the game height
 		game.world.setBounds(0, 0, this.map.level[this.level].block[i - 1].x * this.mapGrain, game.height);
 	}
 };
