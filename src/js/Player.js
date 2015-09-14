@@ -7,6 +7,7 @@ var Player = function (parent, x, y) {
 	this.height = 40;
 	this.inventory = 0;
 	this.canJump = false;
+	this.jumpKeyUp = false;
 	
 	this.INVENTORY_CAP = 5;
 	this.SPEED = 300;
@@ -39,6 +40,15 @@ Player.prototype = {
 		this.sprite.body.rotation = 0;
 		
 		this.move();
+		
+		// reset jump if key is up
+		if(!game.input.keyboard.isDown(Phaser.Keyboard.W)
+		   && !game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+			this.jumpKeyUp = true;
+		}
+		else {
+			this.jumpKeyUp = false;
+		}
 	},
 	move: function () {
 		// move left and right
@@ -54,7 +64,8 @@ Player.prototype = {
 		// jump
 		if((game.input.keyboard.isDown(Phaser.Keyboard.W)
 		  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
-		  && this.canJump) {
+		  && this.canJump
+		  && this.jumpKeyUp) {
 			this.sprite.body.velocity.y = this.JUMP;
 			this.canJump = false;
 		}
@@ -67,6 +78,7 @@ Player.prototype = {
 		this.sprite.body.velocity.y = 0;
 	},
 	checkJump: function () {
+		// allow another jump if the jump key is no longer down
 		this.canJump = true;
 	}
 }
