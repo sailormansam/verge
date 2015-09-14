@@ -1,8 +1,9 @@
-var Block = function (x, y, mapGrain, blockType) {
+var Block = function (parent, x, y, mapGrain, blockType) {
 	// align to zero
 	x += 0.5;
 	y += 0.5;
-
+	
+	this.parent = parent;
 	this.sprite;
 	this.width = mapGrain;
 	this.height = mapGrain;
@@ -35,5 +36,9 @@ Block.prototype = {
 		
 		// make sure block doesn't move
 		this.sprite.body.dynamic = false;
+		
+		// add to collision group and then make sure that the block collides with the player
+		this.sprite.body.setCollisionGroup(this.parent.blockCollisionGroup);
+		this.sprite.body.collides([this.parent.blockCollisionGroup, this.parent.playerCollisionGroup]);
 	}
 }

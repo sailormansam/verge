@@ -12,6 +12,8 @@ GameStates.Game = function (game) {
 	this.graphics;
 	this.originPointer;
 	this.mapGrain = 40;	// size of map blocks
+	this.playerCollisionGroup;
+	this.blockCollisionGroup;
 	
 	// layers
 	this.blockLayer;
@@ -27,6 +29,11 @@ GameStates.Game.prototype = {
 		game.physics.p2.defaultRestitution = 1;
 		game.physics.p2.gravity.y = this.GRAVITY;
 		game.physics.p2.damping = 1;
+		
+		// turn on collision callbacks
+		game.physics.p2.setImpactEvents(true);
+		this.playerCollisionGroup = game.physics.p2.createCollisionGroup();
+		this.blockCollisionGroup = game.physics.p2.createCollisionGroup();
 		
 		// get json
 		this.map = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
@@ -46,6 +53,9 @@ GameStates.Game.prototype = {
 		
 		// place a block on click
 		game.input.mouse.capture = true;
+		
+		// set up jump event for player scope callback function to player
+		this.player.sprite.body.collides(this.blockCollisionGroup, this.player.checkJump, this.player);
 	},
 	update: function () {
 		this.player.update();
@@ -136,7 +146,7 @@ GameStates.Game.prototype = {
 		
 		// place block if inventory allows
 		if(this.player.inventory > 0) {
-			var newBlock = new Block(truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE)
+			var newBlock = new Block(this, truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE);
 			this.block.push(newBlock);
 			this.blockLayer.add(newBlock.sprite);
 			this.player.inventory--;
@@ -165,12 +175,13 @@ GameStates.Game.prototype = {
 			this.player.moveToStart(this.map.level[this.level].start.x * this.mapGrain + 0.5, this.map.level[this.level].start.y * this.mapGrain + 0.5);
 		}
 		else {
-			this.player = new Player(this.map.level[this.level].start.x * this.mapGrain + 0.5, this.map.level[this.level].start.y * this.mapGrain + 0.5);
+			this.player = new Player(this, this.map.level[this.level].start.x * this.mapGrain + 0.5, this.map.level[this.level].start.y * this.mapGrain + 0.5);
 		}
 		
 		// create map
 		for(var i = 0, len = this.map.level[this.level].block.length; i < len; i++) {
-			this.block.push(new Block(this.map.level[this.level].block[i].x,
+			this.block.push(new Block(this,
+									  this.map.level[this.level].block[i].x,
 									  this.map.level[this.level].block[i].y,
 									  this.mapGrain,
 									  this.map.level[this.level].block[i].type));

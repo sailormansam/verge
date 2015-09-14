@@ -1,10 +1,12 @@
-var Player = function (x, y) {
+var Player = function (parent, x, y) {
+	this.parent = parent;
 	this.sprite;
 	this.x = x;
 	this.y = y;
 	this.width = 25;
 	this.height = 40;
 	this.inventory = 0;
+	this.canJump = false;
 	
 	this.INVENTORY_CAP = 5;
 	this.SPEED = 300;
@@ -29,6 +31,8 @@ Player.prototype = {
 		
 		// player physics settings
 		this.sprite.body.mass = 1;
+		
+		this.sprite.body.setCollisionGroup(this.parent.playerCollisionGroup);
 	},
 	update: function () {
 		this.sprite.body.setZeroRotation();
@@ -37,6 +41,7 @@ Player.prototype = {
 		this.move();
 	},
 	move: function () {
+		// move left and right
 		if(game.input.keyboard.isDown(Phaser.Keyboard.A)
 		  || game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
 			this.sprite.body.velocity.x = -this.SPEED;
@@ -45,14 +50,13 @@ Player.prototype = {
 			   || game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
 			this.sprite.body.velocity.x = this.SPEED;
 		}
-		else {
-			
-		}
 		
-		// TODO only jump while on ground, or at least hit the ground once
-		if(game.input.keyboard.isDown(Phaser.Keyboard.W)
-		  || game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+		// jump
+		if((game.input.keyboard.isDown(Phaser.Keyboard.W)
+		  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
+		  && this.canJump) {
 			this.sprite.body.velocity.y = this.JUMP;
+			this.canJump = false;
 		}
 	},
 	moveToStart: function (x, y) {
@@ -61,5 +65,8 @@ Player.prototype = {
 		
 		this.sprite.body.velocity.x = 0;
 		this.sprite.body.velocity.y = 0;
+	},
+	checkJump: function () {
+		this.canJump = true;
 	}
 }
