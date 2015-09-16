@@ -10,8 +10,10 @@ var Player = function (parent, x, y) {
 	this.jumpKeyUp = false;
 	
 	this.INVENTORY_CAP = 5;
-	this.SPEED = 300;
+	this.ACCELERATION = 50;
+	this.MAX_SPEED = 300;
 	this.JUMP = -450;
+	this.IN_AIR_SPEED = 0.3;
 	
 	this.create();
 }
@@ -51,14 +53,30 @@ Player.prototype = {
 		}
 	},
 	move: function () {
+		var multiplier = 1;
+		
+		// in the air
+		if(!this.canJump) {
+			multiplier = this.IN_AIR_SPEED;
+		}
+		
 		// move left and right
 		if(game.input.keyboard.isDown(Phaser.Keyboard.A)
-		  || game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-			this.sprite.body.velocity.x = -this.SPEED;
+		   || game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+			this.sprite.body.velocity.x += -this.ACCELERATION * multiplier;
 		}
 		else if(game.input.keyboard.isDown(Phaser.Keyboard.D)
 			   || game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-			this.sprite.body.velocity.x = this.SPEED;
+			this.sprite.body.velocity.x += this.ACCELERATION * multiplier;
+		}
+		
+		// check for max speed
+		if(this.sprite.body.velocity.x > this.MAX_SPEED) {
+			this.sprite.body.velocity.x = this.MAX_SPEED;
+		}
+		
+		if(this.sprite.body.velocity.x < -this.MAX_SPEED) {
+			this.sprite.body.velocity.x = -this.MAX_SPEED;
 		}
 		
 		// jump
