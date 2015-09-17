@@ -12,6 +12,7 @@ GameStates.Game = function (game) {
 	this.graphics;
 	this.originPointer;
 	this.mapGrain = 40;	// size of map blocks
+	this.worldBottomPadding = 300;
 	this.playerCollisionGroup;
 	this.blockCollisionGroup;
 	
@@ -121,12 +122,19 @@ GameStates.Game.prototype = {
 			this.originPointer = null;
 		}
 		
+		// check for collision with teleporter
 		if(Phaser.Rectangle.intersects(this.player.sprite.getBounds(), this.teleporter.sprite.getBounds())) {
 			// go to next level
 			if(this.map.level[this.level + 1]) {
 				this.makeLevel(this.level++);
 			}
 		}
+		
+		// check if player falls too far to reset level
+		if(this.player.sprite.body.y > game.world.height + this.worldBottomPadding + this.player.sprite.height) {
+			this.makeLevel(this.level);
+		}
+		
 	},
 	placeBlock: function (pointer) {
 		// get a pointer relative to camera
@@ -178,6 +186,8 @@ GameStates.Game.prototype = {
 			this.player = new Player(this, this.map.level[this.level].start.x * this.mapGrain + 0.5, this.map.level[this.level].start.y * this.mapGrain + 0.5);
 		}
 		
+		this.player.reset();
+		
 		// create map
 		for(var i = 0, len = this.map.level[this.level].block.length; i < len; i++) {
 			this.block.push(new Block(this,
@@ -193,6 +203,7 @@ GameStates.Game.prototype = {
 										 this.mapGrain);
 		
 		// set the world bounds based on level
-		game.world.setBounds(0, 0, this.map.level[this.level].block[i - 1].x * this.mapGrain, game.height);
+		// added a little to the game height so the camera follows the player a little before allowing the player to fall off screen and reset
+		game.world.setBounds(0, 0, this.map.level[this.level].block[i - 1].x * this.mapGrain, game.height + this.worldBottomPadding);
 	}
 };

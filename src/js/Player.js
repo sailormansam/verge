@@ -98,5 +98,9 @@ Player.prototype = {
 	checkJump: function () {
 		// allow another jump if the jump key is no longer down
 		this.canJump = true;
+	},
+	reset: function () {
+		// reset inventory count
+		this.inventory = 0;
 	}
 }
