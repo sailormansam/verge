@@ -5,11 +5,9 @@ var Player = function (parent, x, y) {
 	this.y = y;
 	this.width = 25;
 	this.height = 40;
-	this.inventory = 0;
 	this.canJump = false;
 	this.jumpKeyUp = false;
 	
-	this.INVENTORY_CAP = 5;
 	this.ACCELERATION = 50;
 	this.MAX_SPEED = 300;
 	this.JUMP = -450;
@@ -36,6 +34,13 @@ Player.prototype = {
 		this.sprite.body.mass = 1;
 		
 		this.sprite.body.setCollisionGroup(this.parent.playerCollisionGroup);
+		
+		// set up inventory
+		this.inventory = new Inventory(this.parent);
+	},
+	preRender: function () {
+		// update inventory
+		this.inventory.preRender(this);
 	},
 	update: function () {
 		this.sprite.body.setZeroRotation();
@@ -98,9 +103,5 @@ Player.prototype = {
 	checkJump: function () {
 		// allow another jump if the jump key is no longer down
 		this.canJump = true;
-	},
-	reset: function () {
-		// reset inventory count
-		this.inventory = 0;
 	}
 }

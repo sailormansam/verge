@@ -110,12 +110,12 @@ GameStates.Game.prototype = {
 				// remove blocks that overlap
 				for(var i = 0, len = this.block.length; i < len; i++) {
 					if(this.block[i] != null
-					   && this.player.inventory < this.player.INVENTORY_CAP
+					   && this.player.inventory.count < this.player.inventory.CAP
 					   && this.block[i].type == blockType.MOVEABLE
 					   && Phaser.Rectangle.intersects(this.block[i].sprite.getBounds(), hitbox)) {
 						this.block[i].sprite.destroy();
 						this.block[i] = null;
-						this.player.inventory++;
+						this.player.inventory.change(1);
 					}
 				}
 			}
@@ -136,6 +136,9 @@ GameStates.Game.prototype = {
 		}
 		
 	},
+	preRender: function () {
+		this.player.preRender();
+	},
 	placeBlock: function (pointer) {
 		// get a pointer relative to camera
 		var truePointer = {
@@ -153,11 +156,11 @@ GameStates.Game.prototype = {
 		}
 		
 		// place block if inventory allows
-		if(this.player.inventory > 0) {
+		if(this.player.inventory.count > 0) {
 			var newBlock = new Block(this, truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE);
 			this.block.push(newBlock);
 			this.blockLayer.add(newBlock.sprite);
-			this.player.inventory--;
+			this.player.inventory.change(-1);
 		}
 	},
 	drawNet: function (pointer) {
@@ -186,7 +189,7 @@ GameStates.Game.prototype = {
 			this.player = new Player(this, this.map.level[this.level].start.x * this.mapGrain + 0.5, this.map.level[this.level].start.y * this.mapGrain + 0.5);
 		}
 		
-		this.player.reset();
+		this.player.inventory.clear();
 		
 		// create map
 		for(var i = 0, len = this.map.level[this.level].block.length; i < len; i++) {
