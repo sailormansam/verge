@@ -21,6 +21,7 @@ GameStates.Game = function (game) {
 	
 	// constants
 	this.GRAVITY = 1000;
+    this.FALL_BUFFER = 200;
 };
 
 GameStates.Game.prototype = {
@@ -205,8 +206,33 @@ GameStates.Game.prototype = {
 										 this.map.level[this.level].teleporter.y,
 										 this.mapGrain);
 		
+        //  find the greatest x and y position of blocks
+        var greatestX = 0;
+        var greatestY = 0;
+        
+        for(var i = 0, len = this.block.length; i < len; i++) {
+            if(this.block[i].x > greatestX) {
+                greatestX = this.block[i].x;
+            }
+            
+            if(this.block[i].y > greatestY) {
+                greatestY = this.block[i].y;
+            }
+                
+        }
+        
+        // check for small values
+        if (greatestX < game.width) {
+            greatestX = game.width;
+        }
+        
+        if (greatestY < game.height) {
+            greatestY = game.height;
+        }
+        
 		// set the world bounds based on level
 		// added a little to the game height so the camera follows the player a little before allowing the player to fall off screen and reset
-		game.world.setBounds(0, 0, this.map.level[this.level].block[i - 1].x * this.mapGrain, game.height + this.worldBottomPadding);
+        // add a half of a block to the width because the blocks are centered on position
+		game.world.setBounds(0, 0, greatestX + this.mapGrain / 2, greatestY + this.FALL_BUFFER);
 	}
 };
