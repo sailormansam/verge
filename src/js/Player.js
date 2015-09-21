@@ -7,6 +7,7 @@ var Player = function (parent, x, y) {
 	this.height = 40;
 	this.canJump = false;
 	this.jumpKeyUp = false;
+	this.continueJump = false;
 	
 	this.ACCELERATION = 50;
 	this.MAX_SPEED = 300;
@@ -85,19 +86,17 @@ Player.prototype = {
 		}
 		
 		// jump
-        console.log(this.canJump, this.jumpKeyUp);
 		if((game.input.keyboard.isDown(Phaser.Keyboard.W)
 		  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
-		  && this.canJump
-		  && this.jumpKeyUp) {
+		  && ((this.canJump && this.jumpKeyUp) || this.continueJump)) {
 			this.sprite.body.velocity.y = this.JUMP;
-            game.time.events.add(Phaser.Timer.SECOND, this.stopJump, this).autoDestroy = true;
-            console.log('in');
+			this.continueJump = true;
+			game.time.events.add(Phaser.Timer.SECOND / 4, this.stopJump, this).autoDestroy = true;
 		}
 	},
-    stopJump: function () {
-        this.canJump = false;
-    },
+	stopJump: function () {
+		this.continueJump = false;
+	},
 	moveToStart: function (x, y) {
 		this.sprite.body.x = x;
 		this.sprite.body.y = y;
