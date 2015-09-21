@@ -85,14 +85,19 @@ Player.prototype = {
 		}
 		
 		// jump
+        console.log(this.canJump, this.jumpKeyUp);
 		if((game.input.keyboard.isDown(Phaser.Keyboard.W)
 		  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
 		  && this.canJump
 		  && this.jumpKeyUp) {
 			this.sprite.body.velocity.y = this.JUMP;
-			this.canJump = false;
+            game.time.events.add(Phaser.Timer.SECOND, this.stopJump, this).autoDestroy = true;
+            console.log('in');
 		}
 	},
+    stopJump: function () {
+        this.canJump = false;
+    },
 	moveToStart: function (x, y) {
 		this.sprite.body.x = x;
 		this.sprite.body.y = y;
