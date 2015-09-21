@@ -4,8 +4,8 @@ var blockType = {
 }
 
 GameStates.Game = function (game) {
-	this.player = null;
-	this.level = 0;
+	this.player;
+	this.level;
 	this.block = [];
 	this.teleporter;
 	this.map;
@@ -21,11 +21,15 @@ GameStates.Game = function (game) {
 	
 	// constants
 	this.GRAVITY = 1000;
-    this.FALL_BUFFER = 200;
+	this.FALL_BUFFER = 200;
 };
 
 GameStates.Game.prototype = {
 	create: function () {
+		// reset variables
+		this.player = null;
+		this.level = 0;
+		
 		// enable physics
 		game.physics.startSystem(Phaser.Physics.P2JS);
 		game.physics.p2.defaultRestitution = 1;
@@ -129,6 +133,9 @@ GameStates.Game.prototype = {
 			if(this.map.level[this.level + 1]) {
 				this.makeLevel(this.level++);
 			}
+			else {
+				game.state.start('GameOver');
+			}
 		}
 		
 		// check if player falls too far to reset level
@@ -206,33 +213,33 @@ GameStates.Game.prototype = {
 										 this.map.level[this.level].teleporter.y,
 										 this.mapGrain);
 		
-        //  find the greatest x and y position of blocks
-        var greatestX = 0;
-        var greatestY = 0;
-        
-        for(var i = 0, len = this.block.length; i < len; i++) {
-            if(this.block[i].x > greatestX) {
-                greatestX = this.block[i].x;
-            }
-            
-            if(this.block[i].y > greatestY) {
-                greatestY = this.block[i].y;
-            }
-                
-        }
-        
-        // check for small values
-        if (greatestX < game.width) {
-            greatestX = game.width;
-        }
-        
-        if (greatestY < game.height) {
-            greatestY = game.height;
-        }
-        
+		//  find the greatest x and y position of blocks
+		var greatestX = 0;
+		var greatestY = 0;
+
+		for(var i = 0, len = this.block.length; i < len; i++) {
+			if(this.block[i].x > greatestX) {
+				greatestX = this.block[i].x;
+			}
+
+			if(this.block[i].y > greatestY) {
+				greatestY = this.block[i].y;
+			}
+
+		}
+
+		// check for small values
+		if (greatestX < game.width) {
+			greatestX = game.width;
+		}
+
+		if (greatestY < game.height) {
+			greatestY = game.height;
+		}
+
 		// set the world bounds based on level
 		// added a little to the game height so the camera follows the player a little before allowing the player to fall off screen and reset
-        // add a half of a block to the width because the blocks are centered on position
+		// add a half of a block to the width because the blocks are centered on position
 		game.world.setBounds(0, 0, greatestX + this.mapGrain / 2, greatestY + this.FALL_BUFFER);
 	}
 };
