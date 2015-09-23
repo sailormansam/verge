@@ -90,6 +90,7 @@ Player.prototype = {
 		  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
 		  && ((this.canJump && this.jumpKeyUp) || this.continueJump)) {
 			this.sprite.body.velocity.y = this.JUMP;
+			this.canJump = false;
 			this.continueJump = true;
 			game.time.events.add(Phaser.Timer.SECOND / 4, this.stopJump, this).autoDestroy = true;
 		}
