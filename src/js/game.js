@@ -15,6 +15,7 @@ GameStates.Game = function (game) {
 	this.worldBottomPadding = 300;
 	this.playerCollisionGroup;
 	this.blockCollisionGroup;
+	this.timer;
 	
 	// layers
 	this.blockLayer;
@@ -62,9 +63,15 @@ GameStates.Game.prototype = {
 		
 		// set up jump event for player scope callback function to player
 		this.player.sprite.body.collides(this.blockCollisionGroup, this.player.checkJump, this.player);
+		
+		// set up gameplay timer
+		this.timer = new Timer(game, game.width - 60, 20);
 	},
 	update: function () {
 		this.player.update();
+		
+		// incremement timer
+		this.timer.update(game.time.elapsed);
 		
 		// place blocks if mouse is down
 		if(game.input.activePointer.leftButton.isDown) {

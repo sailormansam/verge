@@ -3,7 +3,7 @@ GameStates.GameOver = function (game) {};
 GameStates.GameOver.prototype = {
 	create: function () {
 		// title and play text
-		this.titleText = game.add.text(game.width * 0.25, game.height * 0.5, 'THE END', textStyle['large']);
+		this.titleText = game.add.text(game.width * 0.25, game.height * 0.5, 'TIME ' + (time/1000).toFixed(0).toString(), textStyle['large']);
 		this.titleText.anchor.set(0, 0.5);
 		this.titleText.alpha = 0;
 		
