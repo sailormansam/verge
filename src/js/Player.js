@@ -6,6 +6,7 @@ var Player = function (parent, x, y) {
 	this.width = 25;
 	this.height = 40;
 	this.canJump = false;
+	this.canMove = false;
 	this.jumpKeyUp = false;
 	this.continueJump = false;
 	
@@ -65,34 +66,35 @@ Player.prototype = {
 		if(!this.canJump) {
 			multiplier = this.IN_AIR_SPEED;
 		}
-		
-		// move left and right
-		if(game.input.keyboard.isDown(Phaser.Keyboard.A)
-		   || game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
-			this.sprite.body.velocity.x += -this.ACCELERATION * multiplier;
-		}
-		else if(game.input.keyboard.isDown(Phaser.Keyboard.D)
-			   || game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
-			this.sprite.body.velocity.x += this.ACCELERATION * multiplier;
-		}
-		
-		// check for max speed
-		if(this.sprite.body.velocity.x > this.MAX_SPEED) {
-			this.sprite.body.velocity.x = this.MAX_SPEED;
-		}
-		
-		if(this.sprite.body.velocity.x < -this.MAX_SPEED) {
-			this.sprite.body.velocity.x = -this.MAX_SPEED;
-		}
-		
-		// jump
-		if((game.input.keyboard.isDown(Phaser.Keyboard.W)
-		  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
-		  && ((this.canJump && this.jumpKeyUp) || this.continueJump)) {
-			this.sprite.body.velocity.y = this.JUMP;
-			this.canJump = false;
-			this.continueJump = true;
-			game.time.events.add(Phaser.Timer.SECOND / 4, this.stopJump, this).autoDestroy = true;
+		if(this.canMove) {
+			// move left and right
+			if(game.input.keyboard.isDown(Phaser.Keyboard.A)
+			   || game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+				this.sprite.body.velocity.x += -this.ACCELERATION * multiplier;
+			}
+			else if(game.input.keyboard.isDown(Phaser.Keyboard.D)
+				   || game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+				this.sprite.body.velocity.x += this.ACCELERATION * multiplier;
+			}
+
+			// check for max speed
+			if(this.sprite.body.velocity.x > this.MAX_SPEED) {
+				this.sprite.body.velocity.x = this.MAX_SPEED;
+			}
+
+			if(this.sprite.body.velocity.x < -this.MAX_SPEED) {
+				this.sprite.body.velocity.x = -this.MAX_SPEED;
+			}
+
+			// jump
+			if((game.input.keyboard.isDown(Phaser.Keyboard.W)
+			  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
+			  && ((this.canJump && this.jumpKeyUp) || this.continueJump)) {
+				this.sprite.body.velocity.y = this.JUMP;
+				this.canJump = false;
+				this.continueJump = true;
+				game.time.events.add(Phaser.Timer.SECOND / 4, this.stopJump, this).autoDestroy = true;
+			}
 		}
 	},
 	stopJump: function () {
@@ -108,5 +110,6 @@ Player.prototype = {
 	checkJump: function () {
 		// allow another jump if the jump key is no longer down
 		this.canJump = true;
+		this.canMove = true;
 	}
 }

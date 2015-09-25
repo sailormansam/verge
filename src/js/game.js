@@ -139,6 +139,7 @@ GameStates.Game.prototype = {
 			// go to next level
 			if(this.map.level[this.level + 1]) {
 				this.makeLevel(this.level++);
+				this.player.canMove = false;
 			}
 			else {
 				game.state.start('GameOver');
