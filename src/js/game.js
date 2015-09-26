@@ -66,6 +66,7 @@ GameStates.Game.prototype = {
 		
 		// set up gameplay timer
 		this.timer = new Timer(game, game.width - 60, 20);
+        
 	},
 	update: function () {
 		this.player.update();

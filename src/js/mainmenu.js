@@ -22,6 +22,9 @@ GameStates.MainMenu.prototype = {
 		this.playText.inputEnabled = true;
 		this.playText.input.useHandCursor = true;
 		this.playText.events.onInputDown.add(this.play, this);
+        
+        // lock mouse pointer to canvas
+        game.canvas.addEventListener('mousedown', function () { game.input.mouse.requestPointerLock(); });
 	},
 	play: function() {
 		// tween the text out and then start game
