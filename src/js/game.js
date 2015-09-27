@@ -79,10 +79,34 @@ GameStates.Game.prototype = {
 			this.placeBlock(game.input);
 		}
 		
+		
+		
+		
+		// check for collision with teleporter
+		if(Phaser.Rectangle.intersects(this.player.sprite.getBounds(), this.teleporter.sprite.getBounds())) {
+			// go to next level
+			if(this.map.level[this.level + 1]) {
+				this.makeLevel(this.level++);
+				this.player.canMove = false;
+			}
+			else {
+				game.state.start('GameOver');
+			}
+		}
+		
+		// check if player falls too far to reset level
+		if(this.player.sprite.body.y > game.world.height + this.worldBottomPadding + this.player.sprite.height) {
+			this.makeLevel(this.level);
+		}
+		
+	},
+	preRender: function () {
+		this.player.preRender();
+        
 		// clear graphics before potential drawing
 		this.graphics.clear();
-		
-		if(game.input.activePointer.rightButton.isDown) {
+        
+        if(game.input.activePointer.rightButton.isDown) {
 			// Set the origin of the net
 			if(this.originPointer == null) {
 				this.originPointer = {
@@ -134,27 +158,6 @@ GameStates.Game.prototype = {
 			}
 			this.originPointer = null;
 		}
-		
-		// check for collision with teleporter
-		if(Phaser.Rectangle.intersects(this.player.sprite.getBounds(), this.teleporter.sprite.getBounds())) {
-			// go to next level
-			if(this.map.level[this.level + 1]) {
-				this.makeLevel(this.level++);
-				this.player.canMove = false;
-			}
-			else {
-				game.state.start('GameOver');
-			}
-		}
-		
-		// check if player falls too far to reset level
-		if(this.player.sprite.body.y > game.world.height + this.worldBottomPadding + this.player.sprite.height) {
-			this.makeLevel(this.level);
-		}
-		
-	},
-	preRender: function () {
-		this.player.preRender();
 	},
 	placeBlock: function (pointer) {
 		// get a pointer relative to camera
