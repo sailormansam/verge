@@ -56,7 +56,7 @@ GameStates.Game.prototype = {
 		this.makeLevel(this.level);
 		
 		// camera
-		game.camera.follow(this.player.sprite);
+//		game.camera.follow(this.player.sprite);
 		
 		// place a block on click
 		game.input.mouse.capture = true;
@@ -66,7 +66,6 @@ GameStates.Game.prototype = {
 		
 		// set up gameplay timer
 		this.timer = new Timer(game, game.width - 60, 20);
-        
 	},
 	update: function () {
 		this.player.update();
@@ -78,9 +77,6 @@ GameStates.Game.prototype = {
 		if(game.input.activePointer.leftButton.isDown) {
 			this.placeBlock(game.input);
 		}
-		
-		
-		
 		
 		// check for collision with teleporter
 		if(Phaser.Rectangle.intersects(this.player.sprite.getBounds(), this.teleporter.sprite.getBounds())) {
@@ -98,15 +94,14 @@ GameStates.Game.prototype = {
 		if(this.player.sprite.body.y > game.world.height + this.worldBottomPadding + this.player.sprite.height) {
 			this.makeLevel(this.level);
 		}
-		
 	},
 	preRender: function () {
 		this.player.preRender();
-        
+
 		// clear graphics before potential drawing
 		this.graphics.clear();
-        
-        if(game.input.activePointer.rightButton.isDown) {
+
+		if(game.input.activePointer.rightButton.isDown) {
 			// Set the origin of the net
 			if(this.originPointer == null) {
 				this.originPointer = {
@@ -188,6 +183,9 @@ GameStates.Game.prototype = {
 		this.graphics.drawRect(this.camera.x + this.originPointer.x, this.camera.y + this.originPointer.y, pointer.x - this.originPointer.x, pointer.y - this.originPointer.y);
 	},
 	makeLevel: function () {
+		// let's tween in the world
+		game.world.alpha = 0;
+		
 		// clear block array
 		this.block.forEach(function (block) {
 			if(block != null){
@@ -253,5 +251,18 @@ GameStates.Game.prototype = {
 		// added a little to the game height so the camera follows the player a little before allowing the player to fall off screen and reset
 		// add a half of a block to the width because the blocks are centered on position
 		game.world.setBounds(0, 0, greatestX + this.mapGrain / 2, greatestY + this.FALL_BUFFER);
+		
+		// set camera follow to null to tween camera
+		game.camera.follow(null);
+		
+		// change the game camera for tween
+		game.camera.x = 20;
+		
+		// tween in world
+		game.add.tween(game.world).to({ alpha: 1}, 500).start();
+		var t = game.add.tween(game.camera).to({ x: 0}, 300);
+		
+		t.start();
+		t.onComplete.add((function() {game.camera.follow(this.player.sprite);}), this);
 	}
 };
