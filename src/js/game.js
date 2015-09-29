@@ -71,7 +71,7 @@ GameStates.Game.prototype = {
 		this.player.update();
 		
 		// incremement timer
-		this.timer.update(game.time.elapsed);
+		this.timer.update(game.time.elapsedMS);
 		
 		// place blocks if mouse is down
 		if(game.input.activePointer.leftButton.isDown) {
