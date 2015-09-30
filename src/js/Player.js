@@ -94,6 +94,11 @@ Player.prototype = {
 				this.canJump = false;
 				this.continueJump = true;
 				game.time.events.add(Phaser.Timer.SECOND / 4, this.stopJump, this).autoDestroy = true;
+				
+				// start jump animation
+				var t = game.add.tween(this.sprite.scale).to({ x: 0.9, y: 1.3}, 100, Phaser.Easing.Quadratic.In)
+														 .to({ x: 1, y: 1}, 100, Phaser.Easing.Quadratic.In);
+				t.start();
 			}
 		}
 	},
