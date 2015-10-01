@@ -7,6 +7,9 @@ GameStates.Preloader.prototype = {
 		
 		// load map file
 		game.load.json('map', '../map.json');
+		
+		// load images
+		game.load.image('block', 'images/block.png');
 	},
 	create: function () {
 		game.state.start('MainMenu');

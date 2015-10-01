@@ -116,5 +116,21 @@ Player.prototype = {
 		// allow another jump if the jump key is no longer down
 		this.canJump = true;
 		this.canMove = true;
+		
+		// emit a little particle effect
+		emitter = game.add.emitter(this.sprite.body.x, this.sprite.body.y + (this.sprite.height / 2) - 10, 200);
+		
+		emitter.makeParticles('block');
+
+		emitter.setXSpeed(-100, 100);
+		emitter.setYSpeed(-3, 0);
+
+		emitter.bringToTop = true;
+		emitter.setRotation(0, 0);
+		emitter.setAlpha(1, 1, 500);
+		emitter.setScale(0.2, 0.3, 0.2, 0.3, 500);
+		emitter.gravity = -50;
+
+		emitter.start(true, 300, null, 2);
 	}
 }
