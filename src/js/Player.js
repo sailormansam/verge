@@ -91,9 +91,15 @@ Player.prototype = {
 			  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
 			  && ((this.canJump && this.jumpKeyUp) || this.continueJump)) {
 				this.sprite.body.velocity.y = this.JUMP;
+				
+//				if(this.canJump) {
+//					this.doParticles();
+//				}
+				
 				this.canJump = false;
 				this.continueJump = true;
 				game.time.events.add(Phaser.Timer.SECOND / 4, this.stopJump, this).autoDestroy = true;
+				
 				
 				// start jump animation
 				var t = game.add.tween(this.sprite.scale).to({ x: 0.9, y: 1.3}, 100, Phaser.Easing.Quadratic.In)
@@ -113,24 +119,46 @@ Player.prototype = {
 		this.sprite.body.velocity.y = 0;
 	},
 	checkJump: function () {
+		if(!this.canJump) {
+			this.doParticles();
+		}
+		
 		// allow another jump if the jump key is no longer down
 		this.canJump = true;
 		this.canMove = true;
+	},
+	doParticles: function () {
+		// emit a little particle effect for jumping and landing
+		// emitter for the left side of the player
+		emitterLeft = game.add.emitter(this.sprite.body.x + 20, this.sprite.body.y + (this.sprite.height / 2) - 8, 200);
+
+		emitterLeft.makeParticles('block');
+
+		emitterLeft.setXSpeed(0, 0);
+		emitterLeft.setYSpeed(0, 0);
+
+		emitterLeft.bringToTop = true;
+		emitterLeft.setRotation(0, 0);
+		emitterLeft.setAlpha(1, 1, 500);
+		emitterLeft.setScale(0.2, 0.25, 0.2, 0.25, 500);
+		emitterLeft.gravity = -50;
+
+		emitterLeft.start(true, 300, null, 2);
 		
-		// emit a little particle effect
-		emitter = game.add.emitter(this.sprite.body.x, this.sprite.body.y + (this.sprite.height / 2) - 10, 200);
-		
-		emitter.makeParticles('block');
+		// emitter for the right side of the player
+		emitterRight = game.add.emitter(this.sprite.body.x - 20, this.sprite.body.y + (this.sprite.height / 2) - 8, 200);
 
-		emitter.setXSpeed(-100, 100);
-		emitter.setYSpeed(-3, 0);
+		emitterRight.makeParticles('block');
 
-		emitter.bringToTop = true;
-		emitter.setRotation(0, 0);
-		emitter.setAlpha(1, 1, 500);
-		emitter.setScale(0.2, 0.3, 0.2, 0.3, 500);
-		emitter.gravity = -50;
+		emitterRight.setXSpeed(0, 0);
+		emitterRight.setYSpeed(0, 0);
 
-		emitter.start(true, 300, null, 2);
+		emitterRight.bringToTop = true;
+		emitterRight.setRotation(0, 0);
+		emitterRight.setAlpha(1, 1, 500);
+		emitterRight.setScale(0.2, 0.25, 0.2, 0.25, 500);
+		emitterRight.gravity = -50;
+
+		emitterRight.start(true, 300, null, 2);
 	}
 }
