@@ -1,6 +1,13 @@
-var Inventory = function () {
-	this.count = 0;
-	this.CAP = 5;
+var Inventory = function (isEditor) {
+	this.isEditor = isEditor;
+	if(this.isEditor) {
+		this.count = 512;
+		this.CAP = 512;
+	}
+	else {
+		this.count = 0;
+		this.CAP = 5;
+	}
 	this.sprite = null;
 	this.blockWidth = 20;
 	this.blockHeight = 20;
@@ -14,13 +21,17 @@ var Inventory = function () {
 
 Inventory.prototype = {
 	create: function () {
-		this.drawCount();
+		if(!this.isEditor) {
+			this.drawCount();
+		}
 	},
 	preRender: function (player) {
-		this.x = player.sprite.body.x;
-		this.y = player.sprite.body.y;
-		
-		this.positionSprite();
+		if(!this.isEditor) {
+			this.x = player.sprite.body.x;
+			this.y = player.sprite.body.y;
+
+			this.positionSprite();
+		}
 	},
 	change: function (num) {
 		this.count += num;

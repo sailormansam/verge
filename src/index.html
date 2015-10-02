@@ -19,6 +19,7 @@
 		<script src="js/Teleporter.js"></script>
 		<script src="js/Inventory.js"></script>
 		<script src="js/Timer.js"></script>
+		<script src="js/Editor.js"></script>
 		<!-- endbuild -->
 		<script>
 			var game = new Phaser.Game(640, 480, Phaser.AUTO, 'game');
@@ -27,6 +28,7 @@
 			game.state.add('Preloader', GameStates.Preloader);
 			game.state.add('MainMenu', GameStates.MainMenu);
 			game.state.add('Game', GameStates.Game);
+			game.state.add('Editor', GameStates.Editor);
 			game.state.add('GameOver', GameStates.GameOver);
 			
 			game.state.start('Boot');

@@ -1,4 +1,4 @@
-var Player = function (parent, x, y) {
+var Player = function (parent, x, y, isEditor) {
 	this.parent = parent;
 	this.sprite;
 	this.x = x;
@@ -9,6 +9,7 @@ var Player = function (parent, x, y) {
 	this.canMove = false;
 	this.jumpKeyUp = false;
 	this.continueJump = false;
+	this.isEditor = isEditor;
 	
 	this.ACCELERATION = 50;
 	this.MAX_SPEED = 300;
@@ -38,7 +39,7 @@ Player.prototype = {
 		this.sprite.body.setCollisionGroup(this.parent.playerCollisionGroup);
 		
 		// set up inventory
-		this.inventory = new Inventory(this.parent);
+		this.inventory = new Inventory(this.isEditor);
 	},
 	preRender: function () {
 		// update inventory
@@ -66,7 +67,7 @@ Player.prototype = {
 		if(!this.canJump) {
 			multiplier = this.IN_AIR_SPEED;
 		}
-		if(this.canMove) {
+		if(this.canMove || this.isEditor) {
 			// move left and right
 			if(game.input.keyboard.isDown(Phaser.Keyboard.A)
 			   || game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
@@ -85,26 +86,48 @@ Player.prototype = {
 			if(this.sprite.body.velocity.x < -this.MAX_SPEED) {
 				this.sprite.body.velocity.x = -this.MAX_SPEED;
 			}
+			
+			if(this.isEditor) {
+				// move up and down
+				if(game.input.keyboard.isDown(Phaser.Keyboard.W)
+				   || game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+					this.sprite.body.velocity.y += -this.ACCELERATION * multiplier;
+				}
+				else if(game.input.keyboard.isDown(Phaser.Keyboard.S)
+					   || game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+					this.sprite.body.velocity.y += this.ACCELERATION * multiplier;
+				}
 
-			// jump
-			if((game.input.keyboard.isDown(Phaser.Keyboard.W)
-			  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
-			  && ((this.canJump && this.jumpKeyUp) || this.continueJump)) {
-				this.sprite.body.velocity.y = this.JUMP;
-				
-//				if(this.canJump) {
-//					this.doParticles();
-//				}
-				
-				this.canJump = false;
-				this.continueJump = true;
-				game.time.events.add(Phaser.Timer.SECOND / 4, this.stopJump, this).autoDestroy = true;
-				
-				
-				// start jump animation
-				var t = game.add.tween(this.sprite.scale).to({ x: 0.9, y: 1.3}, 100, Phaser.Easing.Quadratic.In)
-														 .to({ x: 1, y: 1}, 100, Phaser.Easing.Quadratic.In);
-				t.start();
+				// check for max speed
+				if(this.sprite.body.velocity.y > this.MAX_SPEED) {
+					this.sprite.body.velocity.y = this.MAX_SPEED;
+				}
+
+				if(this.sprite.body.velocity.y < -this.MAX_SPEED) {
+					this.sprite.body.velocity.y = -this.MAX_SPEED;
+				}
+			}
+			else {
+				// jump
+				if((game.input.keyboard.isDown(Phaser.Keyboard.W)
+				  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
+				  && ((this.canJump && this.jumpKeyUp) || this.continueJump)) {
+					this.sprite.body.velocity.y = this.JUMP;
+
+	//				if(this.canJump) {
+	//					this.doParticles();
+	//				}
+
+					this.canJump = false;
+					this.continueJump = true;
+					game.time.events.add(Phaser.Timer.SECOND / 4, this.stopJump, this).autoDestroy = true;
+
+
+					// start jump animation
+					var t = game.add.tween(this.sprite.scale).to({ x: 0.9, y: 1.3}, 100, Phaser.Easing.Quadratic.In)
+															 .to({ x: 1, y: 1}, 100, Phaser.Easing.Quadratic.In);
+					t.start();
+				}
 			}
 		}
 	},
