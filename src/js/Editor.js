@@ -49,22 +49,38 @@ GameStates.Editor.prototype = {
 		this.graphics = game.add.graphics(0, 0);
 		this.graphics.alpha = 0.5;
 		
-		this.player = new Player(this, this.game.width / 2, this.game.height / 2, true);
-		
 		// place a block on click
 		game.input.mouse.capture = true;
+		
+		// set world bounds
+		game.world.setBounds(0, 0, 2048, 2048);
 	},
 	update: function () {
-		this.player.update();
-		
 		// place blocks if mouse is down
 		if(game.input.activePointer.leftButton.isDown) {
 			this.placeBlock(game.input);
 		}
+		
+		if(game.input.keyboard.isDown(Phaser.Keyboard.A)
+		   || game.input.keyboard.isDown(Phaser.Keyboard.LEFT)) {
+			game.camera.x -= 5;
+		}
+		else if(game.input.keyboard.isDown(Phaser.Keyboard.D)
+			   || game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
+			game.camera.x += 5;
+		}
+		
+		// move up and down
+		if(game.input.keyboard.isDown(Phaser.Keyboard.W)
+		   || game.input.keyboard.isDown(Phaser.Keyboard.UP)) {
+			game.camera.y -= 5;
+		}
+		else if(game.input.keyboard.isDown(Phaser.Keyboard.S)
+			   || game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
+			game.camera.y += 5;
+		}
 	},
 	preRender: function () {
-		this.player.preRender();
-
 		// clear graphics before potential drawing
 		this.graphics.clear();
 
@@ -138,12 +154,9 @@ GameStates.Editor.prototype = {
 		}
 		
 		// place block if inventory allows
-		if(this.player.inventory.count > 0) {
-			var newBlock = new Block(this, truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE);
-			this.block.push(newBlock);
-			this.blockLayer.add(newBlock.sprite);
-			this.player.inventory.change(-1);
-		}
+		var newBlock = new Block(this, truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE);
+		this.block.push(newBlock);
+		this.blockLayer.add(newBlock.sprite);
 	},
 	drawNet: function (pointer) {
 		this.graphics.beginFill(0xff0000);
