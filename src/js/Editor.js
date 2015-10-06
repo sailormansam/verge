@@ -16,6 +16,7 @@ GameStates.Editor = function (game) {
 	this.playerCollisionGroup;
 	this.blockCollisionGroup;
 	this.timer;
+	this.mapButton;
 	
 	// layers
 	this.blockLayer;
@@ -54,6 +55,10 @@ GameStates.Editor.prototype = {
 		
 		// set world bounds
 		game.world.setBounds(0, 0, 2048, 2048);
+		
+		// create map button
+		this.mapButton = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+		this.mapButton.onDown.add(this.saveMap, this);
 	},
 	update: function () {
 		// place blocks if mouse is down
@@ -161,5 +166,14 @@ GameStates.Editor.prototype = {
 	drawNet: function (pointer) {
 		this.graphics.beginFill(0xff0000);
 		this.graphics.drawRect(this.camera.x + this.originPointer.x, this.camera.y + this.originPointer.y, pointer.x - this.originPointer.x, pointer.y - this.originPointer.y);
+	},
+	saveMap: function () {
+		// spit out a json object
+		var blocks = [];
+		for( var i = 0, len = this.block.length; i < len; i++) {
+			blocks.push({type: 'STATIC', x:this.block[i].x, y:this.block[i].y});
+		}
+		
+		console.log(JSON.stringify({"block":blocks}));
 	}
 };
