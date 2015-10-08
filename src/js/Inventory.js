@@ -27,8 +27,8 @@ Inventory.prototype = {
 	},
 	preRender: function (player) {
 		if(!this.isEditor) {
-			this.x = player.sprite.body.x;
-			this.y = player.sprite.body.y;
+			this.x = player.body.x;
+			this.y = player.body.y;
 
 			this.positionSprite();
 		}

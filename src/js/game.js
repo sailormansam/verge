@@ -55,21 +55,16 @@ GameStates.Game.prototype = {
 		// make level
 		this.makeLevel(this.level);
 		
-		// camera
-//		game.camera.follow(this.player.sprite);
-		
 		// place a block on click
 		game.input.mouse.capture = true;
 		
 		// set up jump event for player scope callback function to player
-		this.player.sprite.body.collides(this.blockCollisionGroup, this.player.checkJump, this.player);
+		this.player.body.collides(this.blockCollisionGroup, this.player.checkJump, this.player);
 		
 		// set up gameplay timer
 		this.timer = new Timer(game, game.width - 60, 20);
 	},
 	update: function () {
-		this.player.update();
-		
 		// incremement timer
 		this.timer.update(game.time.elapsedMS);
 		
@@ -79,7 +74,7 @@ GameStates.Game.prototype = {
 		}
 		
 		// check for collision with teleporter
-		if(Phaser.Rectangle.intersects(this.player.sprite.getBounds(), this.teleporter.sprite.getBounds())) {
+		if(Phaser.Rectangle.intersects(this.player.getBounds(), this.teleporter.sprite.getBounds())) {
 			// go to next level
 			if(this.map.level[this.level + 1]) {
 				this.makeLevel(this.level++);
@@ -91,13 +86,11 @@ GameStates.Game.prototype = {
 		}
 		
 		// check if player falls too far to reset level
-		if(this.player.sprite.body.y > game.world.height + this.worldBottomPadding + this.player.sprite.height) {
+		if(this.player.body.y > game.world.height + this.worldBottomPadding + this.player.height) {
 			this.makeLevel(this.level);
 		}
 	},
 	preRender: function () {
-		this.player.preRender();
-
 		// clear graphics before potential drawing
 		this.graphics.clear();
 
@@ -263,6 +256,6 @@ GameStates.Game.prototype = {
 		var t = game.add.tween(game.camera).to({ x: 0}, 300);
 		
 		t.start();
-		t.onComplete.add((function() {game.camera.follow(this.player.sprite);}), this);
+		t.onComplete.add((function() {game.camera.follow(this.player);}), this);
 	}
 };
