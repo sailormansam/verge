@@ -1,8 +1,3 @@
-var blockType = {
-	STATIC: "STATIC",
-	MOVEABLE: "MOVEABLE"
-}
-
 GameStates.Editor = function (game) {
 	this.player;
 	this.level;
@@ -131,7 +126,7 @@ GameStates.Editor.prototype = {
 				for(var i = 0, len = this.block.length; i < len; i++) {
 					if(this.block[i] != null
 					   && this.player.inventory.count < this.player.inventory.CAP
-					   && this.block[i].type == blockType.MOVEABLE
+					   && this.block[i].type == blockType.DYNAMIC
 					   && Phaser.Rectangle.intersects(this.block[i].sprite.getBounds(), hitbox)) {
 						this.block[i].sprite.destroy();
 						this.block[i] = null;
@@ -159,7 +154,7 @@ GameStates.Editor.prototype = {
 		}
 		
 		// place block if inventory allows
-		var newBlock = new Block(this, truePointer.x, truePointer.y, this.mapGrain, blockType.MOVEABLE);
+		var newBlock = new Block(this, truePointer.x, truePointer.y, this.mapGrain, blockType.DYNAMIC);
 		this.block.push(newBlock);
 		this.blockLayer.add(newBlock.sprite);
 	},

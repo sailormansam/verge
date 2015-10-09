@@ -3,13 +3,13 @@
 		{
 			"start": {"x": 8, "y": 4},
 			"teleporter": {"x": 20, "y": 7},
-			"block": [
-				{"type": "MOVEABLE", "x": 2,"y": 2},
-				{"type": "MOVEABLE", "x": 3,"y": 3},
-				{"type": "MOVEABLE", "x": 4,"y": 4},
-				{"type": "MOVEABLE", "x": 5,"y": 8},
-				{"type": "MOVEABLE", "x": 6,"y": 8},
-				{"type": "MOVEABLE", "x": 7,"y": 8},
+			"blocks": [
+				{"type": "DYNAMIC", "x": 2,"y": 2},
+				{"type": "DYNAMIC", "x": 3,"y": 3},
+				{"type": "DYNAMIC", "x": 4,"y": 4},
+				{"type": "DYNAMIC", "x": 5,"y": 8},
+				{"type": "DYNAMIC", "x": 6,"y": 8},
+				{"type": "DYNAMIC", "x": 7,"y": 8},
 				{"type": "STATIC", "x": 8,"y": 8},
 				{"type": "STATIC", "x": 9,"y": 8},
 				{"type": "STATIC", "x": 10,"y": 8},
@@ -30,7 +30,7 @@
 		{
 			"start": {"x": 4, "y": 4},
 			"teleporter": {"x": 15, "y": 7},
-			"block": [
+			"blocks": [
 				{"type": "STATIC", "x": 1,"y": 8},
 				{"type": "STATIC", "x": 2,"y": 8},
 				{"type": "STATIC", "x": 3,"y": 8},
