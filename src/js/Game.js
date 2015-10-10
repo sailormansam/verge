@@ -1,8 +1,3 @@
-var blockType = {
-	STATIC: "STATIC",
-	DYNAMIC: "DYNAMIC"
-}
-
 GameStates.Game = function (game) {
 	// properties
 	this.player;
@@ -37,6 +32,7 @@ GameStates.Game.prototype = {
 		
 		// make level
 		this.map = new Map(this);
+		this.map.createCurrentLevel();
 		
 		// create pointer controller
 		this.pointerController = new PointerController(this);

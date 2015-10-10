@@ -4,6 +4,11 @@ var textStyle = {
 	'large': { font: "6em squada one", fill: "#333"}
 };
 
+var blockType = {
+	STATIC: "STATIC",
+	DYNAMIC: "DYNAMIC"
+};
+
 GameStates.Boot = function (game) {};
 
 GameStates.Boot.prototype = {

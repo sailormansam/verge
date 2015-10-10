@@ -26,8 +26,6 @@ Map.prototype = {
 		
 		// create a layer for moveable blocks to live on
 		this.blockLayer = game.add.group();
-		
-		this.createCurrentLevel();
 	},
 	
 	hasNextLevel: function () {
@@ -139,24 +137,39 @@ Map.prototype = {
 		}
 		
 		// place block if inventory allows
-		if(this.gameState.player.inventory.count > 0) {
+		if(this.gameState.player && this.gameState.player.inventory.count > 0) {
 			var newBlock = new Block(this.gameState, truePointer.x, truePointer.y, this.MAP_GRAIN, blockType.DYNAMIC);
 			this.blocks.push(newBlock);
 			this.blockLayer.add(newBlock);
 			this.gameState.player.inventory.change(-1);
+		}
+		else if(!this.gameState.player) {
+			var newBlock = new Block(this.gameState, truePointer.x, truePointer.y, this.MAP_GRAIN, blockType.DYNAMIC);
+			this.blocks.push(newBlock);
+			this.blockLayer.add(newBlock);
 		}
 	},
 	
 	removeBlocksWithin: function (hitbox) {
 		// remove blocks that overlap
 		for(var i = 0, len = this.blocks.length; i < len; i++) {
-			if(this.blocks[i] != null
-			   && this.gameState.player.inventory.count < this.gameState.player.inventory.CAP
-			   && this.blocks[i].material == blockType.DYNAMIC
-			   && Phaser.Rectangle.intersects(this.blocks[i].getBounds(), hitbox)) {
-				this.blocks[i].destroy();
-				this.blocks[i] = null;
-				this.gameState.player.inventory.change(1);
+			if(this.gameState.player) {
+				if(this.blocks[i] != null
+				   && this.gameState.player.inventory.count < this.gameState.player.inventory.CAP
+				   && this.blocks[i].material == blockType.DYNAMIC
+				   && Phaser.Rectangle.intersects(this.blocks[i].getBounds(), hitbox)) {
+					this.blocks[i].destroy();
+					this.blocks[i] = null;
+					this.gameState.player.inventory.change(1);
+				}
+			}
+			else {
+				if(this.blocks[i] != null
+				   && this.blocks[i].material == blockType.DYNAMIC
+				   && Phaser.Rectangle.intersects(this.blocks[i].getBounds(), hitbox)) {
+					this.blocks[i].destroy();
+					this.blocks[i] = null;
+				}
 			}
 		}
 	}
