@@ -27,7 +27,7 @@ Map.prototype = {
 		// create a layer for moveable blocks to live on
 		this.blockLayer = game.add.group();
 		
-		this.createLevel();
+		this.createCurrentLevel();
 	},
 	
 	hasNextLevel: function () {
@@ -38,21 +38,21 @@ Map.prototype = {
 		this.level++;
 	},
 	
-	createLevel: function () {
+	createCurrentLevel: function () {
 		// let's tween in the world
 		game.world.alpha = 0;
 		
 		// clear block array
 		this.blocks.forEach(function (block) {
 			if(block != null){
-				block.sprite.destroy();
+				block.destroy();
 			}
 		});
 		this.blocks = [];
 		
 		// clear teleporter
 		if(this.gameState.teleporter) {
-			this.gameState.teleporter.sprite.destroy();
+			this.gameState.teleporter.destroy();
 		}
 		
 		// create player
@@ -71,7 +71,7 @@ Map.prototype = {
 									   this.data.level[this.level].blocks[i].x,
 									   this.data.level[this.level].blocks[i].y,
 									   this.MAP_GRAIN,
-									   this.data.level[this.level].blocks[i].type));
+									   this.data.level[this.level].blocks[i].material));
 		}
 		
 		// create teleporter for this level
@@ -142,7 +142,7 @@ Map.prototype = {
 		if(this.gameState.player.inventory.count > 0) {
 			var newBlock = new Block(this.gameState, truePointer.x, truePointer.y, this.MAP_GRAIN, blockType.DYNAMIC);
 			this.blocks.push(newBlock);
-			this.blockLayer.add(newBlock.sprite);
+			this.blockLayer.add(newBlock);
 			this.gameState.player.inventory.change(-1);
 		}
 	},
@@ -152,9 +152,9 @@ Map.prototype = {
 		for(var i = 0, len = this.blocks.length; i < len; i++) {
 			if(this.blocks[i] != null
 			   && this.gameState.player.inventory.count < this.gameState.player.inventory.CAP
-			   && this.blocks[i].type == blockType.DYNAMIC
-			   && Phaser.Rectangle.intersects(this.blocks[i].sprite.getBounds(), hitbox)) {
-				this.blocks[i].sprite.destroy();
+			   && this.blocks[i].material == blockType.DYNAMIC
+			   && Phaser.Rectangle.intersects(this.blocks[i].getBounds(), hitbox)) {
+				this.blocks[i].destroy();
 				this.blocks[i] = null;
 				this.gameState.player.inventory.change(1);
 			}

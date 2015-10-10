@@ -127,8 +127,8 @@ GameStates.Editor.prototype = {
 					if(this.block[i] != null
 					   && this.player.inventory.count < this.player.inventory.CAP
 					   && this.block[i].type == blockType.DYNAMIC
-					   && Phaser.Rectangle.intersects(this.block[i].sprite.getBounds(), hitbox)) {
-						this.block[i].sprite.destroy();
+					   && Phaser.Rectangle.intersects(this.block[i].getBounds(), hitbox)) {
+						this.block[i].destroy();
 						this.block[i] = null;
 						this.player.inventory.change(1);
 					}
@@ -156,7 +156,7 @@ GameStates.Editor.prototype = {
 		// place block if inventory allows
 		var newBlock = new Block(this, truePointer.x, truePointer.y, this.mapGrain, blockType.DYNAMIC);
 		this.block.push(newBlock);
-		this.blockLayer.add(newBlock.sprite);
+		this.blockLayer.add(newBlock);
 	},
 	drawNet: function (pointer) {
 		this.graphics.beginFill(0xff0000);

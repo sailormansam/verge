@@ -4,13 +4,16 @@ var blockType = {
 }
 
 GameStates.Game = function (game) {
+	// properties
 	this.player;
 	this.map;
 	this.teleporter;
-	this.playerCollisionGroup;
-	this.blockCollisionGroup;
 	this.timer;
 	this.pointerController;
+	
+	// collison layers
+	this.playerCollisionGroup;
+	this.blockCollisionGroup;
 	
 	// constants
 	this.GRAVITY = 1000;
@@ -56,11 +59,11 @@ GameStates.Game.prototype = {
 		this.pointerController.update();
 		
 		// check for collision with teleporter
-		if(Phaser.Rectangle.intersects(this.player.getBounds(), this.teleporter.sprite.getBounds())) {
-			// go to next level
+		if(Phaser.Rectangle.intersects(this.player.getBounds(), this.teleporter.getBounds())) {
+			// go to next level if there is one
 			if(this.map.hasNextLevel()) {
 				this.map.incrementLevel();
-				this.map.createLevel();
+				this.map.createCurrentLevel();
 				this.player.canMove = false;
 			}
 			else {
@@ -70,7 +73,7 @@ GameStates.Game.prototype = {
 		
 		// check if player falls too far to reset level
 		if(this.player.body.y > game.world.height + this.map.WORLD_PADDING_BOTTOM + this.player.height) {
-			this.map.createLevel();
+			this.map.createCurrentLevel();
 		}
 	}
 };
