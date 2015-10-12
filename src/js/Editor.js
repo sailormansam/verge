@@ -92,8 +92,8 @@ GameStates.Editor.prototype = {
 
 		bmd.ctx.beginPath();
 		bmd.ctx.lineWidth = "1";
-		bmd.ctx.strokeStyle = 'cccccc';
-		bmd.ctx.setLineDash([2,3]);
+		bmd.ctx.strokeStyle = 'e1e1e1';
+		bmd.ctx.setLineDash([1,2]);
 		
 		// loop through grid x
 		for(var i = 0, len = game.world.width / this.map.MAP_GRAIN; i < len; i++) {
