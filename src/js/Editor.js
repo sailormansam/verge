@@ -44,6 +44,14 @@ GameStates.Editor.prototype = {
 		
 		// create pointer controller
 		this.pointerController = new PointerController(this);
+		
+		// move map with middle mouse
+		game.input.mouse.onMouseMove = function (e) {
+			if(game.input.activePointer.middleButton.isDown) {
+				game.camera.x -= e.movementX;
+				game.camera.y -= e.movementY;
+			}
+		};
 	},
 	
 	preRender: function () {
