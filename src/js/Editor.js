@@ -52,6 +52,8 @@ GameStates.Editor.prototype = {
 				game.camera.y -= e.movementY;
 			}
 		};
+		
+		var bubble = new Bubble('test');
 	},
 	
 	preRender: function () {
