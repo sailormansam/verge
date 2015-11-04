@@ -4,6 +4,8 @@ GameStates.Editor = function (game) {
 	this.map;
 	this.teleporter;
 	this.mapButton;
+	this.bubbleController;
+	this.toggle = true;
 	
 	// collison layers
 	this.playerCollisionGroup;
@@ -53,7 +55,9 @@ GameStates.Editor.prototype = {
 			}
 		};
 		
-		var bubble = new Bubble('test');
+		
+		this.bubbleController = new BubbleController();
+		this.bubbleController.add(new Bubble(null, 40));
 	},
 	
 	preRender: function () {
@@ -94,6 +98,15 @@ GameStates.Editor.prototype = {
 		else if(game.input.keyboard.isDown(Phaser.Keyboard.S)
 			   || game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
 			game.camera.y += 5;
+		}
+		
+		// show bubbles
+		if(game.input.keyboard.isDown(Phaser.Keyboard.V) && this.toggle) {
+			this.bubbleController.show(new Phaser.Point(game.input.x, game.input.y));
+			this.toggle = false;
+		}
+		else {
+			this.toggle = true;
 		}
 	},
 	

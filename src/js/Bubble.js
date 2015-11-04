@@ -6,7 +6,7 @@ var Bubble = function (image, distanceFromPointer) {
 	this.desiredLocation;
 	this.showing = false;
 	this.velocity = new Phaser.Point(0, 0);
-	this.k = 0.5;
+	this.k = 0.1;
 	
 	// create background
 	var graphics = game.add.graphics(0, 0);
@@ -34,8 +34,8 @@ Bubble.prototype.update = function () {
 		var currentPoint = new Phaser.Point(this.x, this.y);
 		
 		// calculate acceleration for x and y
-		var ax = -this.k * Math.abs(desiredLocation.x - currentPoint.x);
-		var ay = -this.k * Math.abs(desiredLocation.y - currentPoint.y);
+		var ax = -this.k * Math.abs(this.desiredLocation.x - currentPoint.x);
+		var ay = -this.k * Math.abs(this.desiredLocation.y - currentPoint.y);
 		
 		// add to velocity
 		this.velocity.x += ax;
@@ -46,10 +46,12 @@ Bubble.prototype.update = function () {
 		this.y += this.velocity.y;
 		
 		// set scale based on distance to desiredLocation
-		var originDistance = this.origin.distance(this.currentPoint);
-		var currentDistance = this.currentPoint.distance(this.desiredLocation);
+		var originDistance = this.origin.distance(currentPoint);
+		var currentDistance = currentPoint.distance(this.desiredLocation);
 		this.scale.set(currentDistance / originDistance);
 	}
+	
+	// update foreground image
 };
 
 Bubble.prototype.show = function (angle, pointer) {
@@ -57,12 +59,12 @@ Bubble.prototype.show = function (angle, pointer) {
 	
 	// set points to control spring
 	this.origin = new Phaser.Point(pointer.x, pointer.y);
-	this.desiredLocation = new Phaser.Point(origin.x + distanceFromPointer * Math.cos(angle),
-											origin.y + distanceFromPointer * Math.sin(angle));
+	this.desiredLocation = new Phaser.Point(this.origin.x + this.distanceFromPointer * Math.cos(angle),
+											this.origin.y + this.distanceFromPointer * Math.sin(angle));
 	
 	// set to origin
-	this.x = origin.x;
-	this.y = origin.y;
+	this.x = this.origin.x;
+	this.y = this.origin.y;
 };
 
 Bubble.prototype.hide = function () {
