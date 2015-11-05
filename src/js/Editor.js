@@ -6,6 +6,7 @@ GameStates.Editor = function (game) {
 	this.mapButton;
 	this.bubbleController;
 	this.toggle = true;
+	this.previousLocation = new Phaser.Point(0, 0);
 	
 	// collison layers
 	this.playerCollisionGroup;
@@ -48,13 +49,14 @@ GameStates.Editor.prototype = {
 		this.pointerController = new PointerController(this);
 		
 		// move map with middle mouse
-		game.input.mouse.onMouseMove = function (e) {
-			if(game.input.activePointer.middleButton.isDown) {
-				game.camera.x -= e.movementX;
-				game.camera.y -= e.movementY;
+		game.input.addMoveCallback(function(pointer, x, y) {
+			if(pointer.middleButton.isDown) {
+				game.camera.x -= x - this.previousLocation.x;
+				game.camera.y -= y - this.previousLocation.y;
 			}
-		};
-		
+			
+			this.previousLocation = new Phaser.Point(x, y);
+		}, this);
 		
 		this.bubbleController = new BubbleController();
 		this.bubbleController.add(new Bubble(null, 40));
@@ -101,9 +103,11 @@ GameStates.Editor.prototype = {
 		}
 		
 		// show bubbles
-		if(game.input.keyboard.isDown(Phaser.Keyboard.V) && this.toggle) {
-			this.bubbleController.show(new Phaser.Point(game.input.x, game.input.y));
-			this.toggle = false;
+		if(game.input.keyboard.isDown(Phaser.Keyboard.V)) {
+			if(this.toggle) {
+				this.bubbleController.show(new Phaser.Point(game.input.x, game.input.y));
+				this.toggle = false;
+			}
 		}
 		else {
 			this.toggle = true;
