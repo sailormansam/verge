@@ -6,7 +6,7 @@ var Bubble = function (image, distanceFromPointer) {
 	this.desiredLocation;
 	this.showing = false;
 	this.velocity = new Phaser.Point(0, 0);
-	this.k = 0.01;
+	this.k = 100;
 	
 	// create background
 	var graphics = game.add.graphics(0, 0);
@@ -38,13 +38,13 @@ Bubble.prototype.update = function () {
 		var ay = -this.k * (currentPoint.y - this.desiredLocation.y);
 		
 		// add to velocity
-//		game.time.elapsedMS
-		this.velocity.x += ax;
-		this.velocity.y += ay;
+		this.velocity.x += ax * game.time.elapsedMS / 1000;
+		this.velocity.x *= 0.9;
+		this.velocity.y += ay * game.time.elapsedMS / 1000;
 		
 		// add to position
-		this.x += this.velocity.x;
-		this.y += this.velocity.y;
+		this.x += this.velocity.x * game.time.elapsedMS / 1000;
+		this.y += this.velocity.y * game.time.elapsedMS / 1000;
 		
 		currentPoint.x = this.x;
 		currentPoint.y = this.y;
