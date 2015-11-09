@@ -59,7 +59,9 @@ GameStates.Editor.prototype = {
 		}, this);
 		
 		this.bubbleController = new BubbleController();
-		this.bubbleController.add(new Bubble(null, 100));
+		this.bubbleController.add(new Bubble(null, 50));
+		this.bubbleController.add(new Bubble(null, 50));
+		this.bubbleController.add(new Bubble(null, 50));
 	},
 	
 	preRender: function () {

@@ -6,17 +6,20 @@ var Bubble = function (image, distanceFromPointer) {
 	this.desiredLocation;
 	this.showing = false;
 	this.velocity = new Phaser.Point(0, 0);
-	this.k = 100;
+	this.k = 120;
+	this.dampening = 0.84;
 	
 	// create background
 	var graphics = game.add.graphics(0, 0);
 
 	graphics.beginFill(0x999999);
-	graphics.drawCircle(0, 0, 25);
+	graphics.drawCircle(0, 0, 45);
 	
 	Phaser.Sprite.call(this, game, this.origin.x, this.origin.y, graphics.generateTexture());
 	
 	graphics.destroy();
+	this.anchor.set(0.5);
+	this.scale.set(0);
 
 	// create foreground image
 	
@@ -39,8 +42,9 @@ Bubble.prototype.update = function () {
 		
 		// add to velocity
 		this.velocity.x += ax * game.time.elapsedMS / 1000;
-		this.velocity.x *= 0.9;
+		this.velocity.x *= this.dampening;
 		this.velocity.y += ay * game.time.elapsedMS / 1000;
+		this.velocity.y *= this.dampening;
 		
 		// add to position
 		this.x += this.velocity.x * game.time.elapsedMS / 1000;
@@ -53,12 +57,20 @@ Bubble.prototype.update = function () {
 		var originDistance = this.origin.distance(this.desiredLocation);
 		var currentDistance = this.origin.distance(currentPoint);
 		this.scale.set(currentDistance / originDistance);
+		
+		var alpha = currentDistance / originDistance;
+		
+		if(alpha > 1)
+			alpha = 1;
+		
+		this.alpha = alpha;
 	}
 	
 	// update foreground image
 };
 
 Bubble.prototype.show = function (angle, pointer) {
+	console.log(angle);
 	this.showing = true;
 	this.velocity.x = 0;
 	this.velocity.y = 0;
