@@ -105,14 +105,11 @@ GameStates.Editor.prototype = {
 		}
 		
 		// show bubbles
-		if(game.input.keyboard.isDown(Phaser.Keyboard.V)) {
-			if(this.toggle) {
-				this.bubbleController.show(new Phaser.Point(game.input.x, game.input.y));
-				this.toggle = false;
-			}
+		if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+			this.bubbleController.show(new Phaser.Point(game.input.x, game.input.y));
 		}
 		else {
-			this.toggle = true;
+			this.bubbleController.hide(new Phaser.Point(game.input.x, game.input.y));
 		}
 	},
 	
