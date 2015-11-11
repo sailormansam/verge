@@ -6,8 +6,8 @@ var Bubble = function (image, distanceFromPointer) {
 	this.desiredLocation;
 	this.showing = false;
 	this.velocity = new Phaser.Point(0, 0);
-	this.k = 120;
-	this.dampening = 0.84;
+	this.k = 300;
+	this.dampening = 0.7;
 	
 	// create background
 	var graphics = game.add.graphics(0, 0);
@@ -20,6 +20,12 @@ var Bubble = function (image, distanceFromPointer) {
 	graphics.destroy();
 	this.anchor.set(0.5);
 	this.scale.set(0);
+	
+	// on hover
+	this.inputEnabled = true;
+	this.input.useHandCursor = true;
+	this.events.onInputOver.add(this.highlight, this);
+	this.events.onInputOut.add(this.leave, this);
 
 	// create foreground image
 	
@@ -88,4 +94,26 @@ Bubble.prototype.hide = function () {
 	// pop out bubble
 	this.showing = false;
 	this.desiredLocation = new Phaser.Point(this.origin.x, this.origin.y);
+};
+
+Bubble.prototype.highlight = function () {
+	var graphics = game.add.graphics(0, 0);
+
+	graphics.beginFill(0xeeeeee);
+	graphics.drawCircle(0, 0, 45);
+	
+	this.loadTexture(graphics.generateTexture());
+	
+	graphics.destroy();
+};
+
+Bubble.prototype.leave = function () {
+	var graphics = game.add.graphics(0, 0);
+
+	graphics.beginFill(0x999999);
+	graphics.drawCircle(0, 0, 45);
+	
+	this.loadTexture(graphics.generateTexture());
+	
+	graphics.destroy();
 };

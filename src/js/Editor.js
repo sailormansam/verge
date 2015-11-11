@@ -5,7 +5,6 @@ GameStates.Editor = function (game) {
 	this.teleporter;
 	this.mapButton;
 	this.bubbleController;
-	this.toggle = true;
 	this.previousLocation = new Phaser.Point(0, 0);
 	
 	// collison layers
