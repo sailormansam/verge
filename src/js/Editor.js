@@ -5,7 +5,11 @@ GameStates.Editor = function (game) {
 	this.teleporter;
 	this.mapButton;
 	this.bubbleController;
+	this.bubbleShow;
 	this.previousLocation = new Phaser.Point(0, 0);
+		
+	// keys
+	this.bubbleKey;
 	
 	// collison layers
 	this.playerCollisionGroup;
@@ -19,6 +23,7 @@ GameStates.Editor.prototype = {
 	create: function () {
 		// reset variables
 		this.player = null;
+		this.bubbleShow = false;
 		
 		// enable physics
 		game.physics.startSystem(Phaser.Physics.P2JS);
@@ -61,6 +66,15 @@ GameStates.Editor.prototype = {
 		this.bubbleController.add(new Bubble(null, 50));
 		this.bubbleController.add(new Bubble(null, 50));
 		this.bubbleController.add(new Bubble(null, 50));
+		
+		// set up keys
+		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+		this.bubbleKey.onDown.add(this.toggle, this);
+		
+		//  Stop the following keys from propagating up to the browser
+		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
+		
+		// don't hide mouse on keypress
 	},
 	
 	preRender: function () {
@@ -71,6 +85,17 @@ GameStates.Editor.prototype = {
 		this.pointerController.update();
 		
 		this.move();
+	},
+	
+	toggle: function () {
+		this.bubbleShow = !this.bubbleShow;
+		
+		if(this.bubbleShow) {
+			this.bubbleController.show(new Phaser.Point(game.input.x, game.input.y));
+		}
+		else {
+			this.bubbleController.hide(new Phaser.Point(game.input.x, game.input.y));
+		}
 	},
 	
 	saveMap: function () {
@@ -101,14 +126,6 @@ GameStates.Editor.prototype = {
 		else if(game.input.keyboard.isDown(Phaser.Keyboard.S)
 			   || game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
 			game.camera.y += 5;
-		}
-		
-		// show bubbles
-		if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-			this.bubbleController.show(new Phaser.Point(game.input.x, game.input.y));
-		}
-		else {
-			this.bubbleController.hide(new Phaser.Point(game.input.x, game.input.y));
 		}
 	},
 	

@@ -3,8 +3,8 @@ var Bubble = function (image, distanceFromPointer) {
 	this.origin = new Phaser.Point(20, 20);
 	this.distanceFromPointer = distanceFromPointer;
 	this.origin;
-	this.desiredLocation;
 	this.showing = false;
+	this.desiredLocation = new Phaser.Point(0, 0);
 	this.velocity = new Phaser.Point(0, 0);
 	this.k = 300;
 	this.dampening = 0.7;
@@ -60,13 +60,24 @@ Bubble.prototype.update = function () {
 
 	// set scale based on distance to desiredLocation
 	var originDistance = this.origin.distance(this.desiredLocation);
-	var currentDistance = this.origin.distance(currentPoint);
+	
+	// invert for hiding
+	if(this.showing) {
+		var currentDistance = this.origin.distance(currentPoint);
+	}
+	else {
+		var currentDistance = this.desiredLocation.distance(currentPoint);
+	}
+	
 	this.scale.set(currentDistance / originDistance);
-
+	
 	var alpha = currentDistance / originDistance;
-
+	
 	if(alpha > 1)
 		alpha = 1;
+	
+	if(alpha < 0)
+		alpha = 0;
 
 	this.alpha = alpha;
 	
@@ -74,26 +85,25 @@ Bubble.prototype.update = function () {
 };
 
 Bubble.prototype.show = function (angle, pointer) {
-	if(!this.showing) {
-		this.showing = true;
-		this.velocity.x = 0;
-		this.velocity.y = 0;
+	this.showing = true;
+	this.velocity.x = 0;
+	this.velocity.y = 0;
 
-		// set points to control spring
-		this.origin = new Phaser.Point(pointer.x, pointer.y);
-		this.desiredLocation = new Phaser.Point(this.origin.x + this.distanceFromPointer * Math.cos(angle),
-												this.origin.y + this.distanceFromPointer * Math.sin(angle));
+	// set points to control spring
+	this.origin = new Phaser.Point(pointer.x, pointer.y);
+	this.desiredLocation = new Phaser.Point(this.origin.x + this.distanceFromPointer * Math.cos(angle),
+											this.origin.y + this.distanceFromPointer * Math.sin(angle));
 
-		// set to origin
-		this.x = this.origin.x;
-		this.y = this.origin.y;
-	}
+	// set to origin
+	this.x = this.origin.x;
+	this.y = this.origin.y;
 };
 
 Bubble.prototype.hide = function () {
 	// pop out bubble
 	this.showing = false;
 	this.desiredLocation = new Phaser.Point(this.origin.x, this.origin.y);
+	this.origin = new Phaser.Point(this.x, this.y);
 };
 
 Bubble.prototype.highlight = function () {
