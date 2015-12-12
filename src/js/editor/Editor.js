@@ -73,8 +73,6 @@ GameStates.Editor.prototype = {
 		
 		//  Stop the following keys from propagating up to the browser
 		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
-		
-		// don't hide mouse on keypress
 	},
 	
 	preRender: function () {

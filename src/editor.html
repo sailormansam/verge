@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>verge</title>
+		<title>verge editor</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- build:css -->
@@ -9,14 +9,11 @@
 		<!-- endbuild -->
 		<script src="phaser.min.js"></script>
 		<!-- build:js -->
-		<script src="js/game/Boot.js"></script>
-		<script src="js/game/Preloader.js"></script>
-		<script src="js/game/MainMenu.js"></script>
-		<script src="js/game/Game.js"></script>
-		<script src="js/game/GameOver.js"></script>
-		<script src="js/game/Player.js"></script>
-		<script src="js/game/Teleporter.js"></script>
-		<script src="js/game/Timer.js"></script>
+		<script src="js/editor/Boot.js"></script>
+		<script src="js/editor/Preloader.js"></script>
+		<script src="js/editor/Editor.js"></script>
+		<script src="js/editor/Bubble.js"></script>
+		<script src="js/editor/BubbleController.js"></script>
 		<script src="js/lib/Block.js"></script>
 		<script src="js/lib/Inventory.js"></script>
 		<script src="js/lib/PointerController.js"></script>
@@ -27,9 +24,7 @@
 			
 			game.state.add('Boot', GameStates.Boot);
 			game.state.add('Preloader', GameStates.Preloader);
-			game.state.add('MainMenu', GameStates.MainMenu);
-			game.state.add('Game', GameStates.Game);
-			game.state.add('GameOver', GameStates.GameOver);
+			game.state.add('Editor', GameStates.Editor);
 			
 			game.state.start('Boot');
 		</script>
