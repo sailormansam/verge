@@ -82,7 +82,7 @@ Bubble.prototype.update = function () {
 
 		this.alpha = alpha;
 
-		// update foreground image
+		// update foreground image with an action object image
 	}
 };
 
@@ -111,7 +111,7 @@ Bubble.prototype.hide = function () {
 Bubble.prototype.highlight = function () {
 	var graphics = game.add.graphics(0, 0);
 
-	graphics.beginFill(0xeeeeee);
+	graphics.beginFill(0x333333);
 	graphics.drawCircle(0, 0, 45);
 	
 	this.loadTexture(graphics.generateTexture());
