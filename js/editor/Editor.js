@@ -7,6 +7,7 @@ GameStates.Editor = function (game) {
 	this.bubbleController;
 	this.bubbleShow;
 	this.previousLocation = new Phaser.Point(0, 0);
+	this.actions;
 		
 	// keys
 	this.bubbleKey;
@@ -62,17 +63,24 @@ GameStates.Editor.prototype = {
 			this.previousLocation = new Phaser.Point(x, y);
 		}, this);
 		
+		// populate actions
+		this.actions = [
+			new BlockDynamicObject(),
+		];
+		
+		// populate the bubbles with actions
 		this.bubbleController = new BubbleController();
-		this.bubbleController.add(new Bubble(null, 50));
-		this.bubbleController.add(new Bubble(null, 50));
-		this.bubbleController.add(new Bubble(null, 50));
+		this.bubbleController.add(new Bubble(this.actions[0], 50));
+//		this.bubbleController.add(new Bubble(this.actions[1], 50));
+//		this.bubbleController.add(new Bubble(this.actions[2], 50));
+//		this.bubbleController.add(new Bubble(this.actions[3], 50));
 		
 		// set up keys
-		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
 		this.bubbleKey.onDown.add(this.toggle, this);
 		
 		//  Stop the following keys from propagating up to the browser
-		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
+		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.Q ]);
 	},
 	
 	preRender: function () {

@@ -1,7 +1,4 @@
-var ActionObject = function (image) {
-	Phaser.Sprite.call(this, game, 0, 0, image);
-	game.add.existing(this);
+var ActionObject = function (sprite) {
+	this.sprite = sprite;
+	// make sure this abstraction is done correctly for js
 };
-
-ActionObject.prototype = Object.create(Phaser.Sprite.prototype);
-ActionObject.prototype.constructor = ActionObject;
