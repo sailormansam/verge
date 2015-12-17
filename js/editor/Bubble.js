@@ -1,5 +1,4 @@
 var Bubble = function (image, distanceFromPointer) {
-	this.image = image;
 	this.origin;
 	this.distanceFromPointer = distanceFromPointer;
 	this.origin;
@@ -28,6 +27,7 @@ var Bubble = function (image, distanceFromPointer) {
 	this.events.onInputOut.add(this.leave, this);
 
 	// create foreground image
+	this.image = game.add.sprite(0, 0, image);
 	
 	// on click
 	
