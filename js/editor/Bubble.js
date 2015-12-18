@@ -1,4 +1,4 @@
-var Bubble = function (image, distanceFromPointer) {
+var Bubble = function (action, distanceFromPointer) {
 	this.origin;
 	this.distanceFromPointer = distanceFromPointer;
 	this.origin;
@@ -14,27 +14,37 @@ var Bubble = function (image, distanceFromPointer) {
 	graphics.beginFill(0x999999);
 	graphics.drawCircle(0, 0, 45);
 	
-	Phaser.Sprite.call(this, game, 0, 0, graphics.generateTexture());
 	
-	graphics.destroy();
-	this.anchor.set(0.5);
-	this.scale.set(0);
-	
-	// on hover
-	this.inputEnabled = true;
-	this.input.useHandCursor = true;
-	this.events.onInputOver.add(this.highlight, this);
-	this.events.onInputOut.add(this.leave, this);
+	Phaser.Group.call(this, game);
+	game.add.existing(this);
 
 	// create foreground image
-	this.image = game.add.sprite(0, 0, image);
+	this.foreground = game.add.existing(action.sprite);
+	this.background = game.add.sprite(0, 0, graphics.generateTexture());
 	
+	
+	this.add(this.foreground);
+	this.add(this.background);
+	graphics.destroy();
+	
+	this.foreground.bringToTop();
+	
+	this.scale.set(0);
+	
+	this.background.anchor.set(0.5);
+	this.foreground.anchor.set(0.5);
+	this.foreground.scale.set(0.5);
+	
+	// on hover
+	this.background.inputEnabled = true;
+	this.background.input.useHandCursor = true;
+	this.background.events.onInputOver.add(this.highlight, this);
+	this.background.events.onInputOut.add(this.leave, this);
 	// on click
 	
-	game.add.existing(this);
 };
 
-Bubble.prototype = Object.create(Phaser.Sprite.prototype);
+Bubble.prototype = Object.create(Phaser.Group.prototype);
 Bubble.prototype.constructor = Bubble;
 
 Bubble.prototype.update = function () {
@@ -114,7 +124,7 @@ Bubble.prototype.highlight = function () {
 	graphics.beginFill(0x333333);
 	graphics.drawCircle(0, 0, 45);
 	
-	this.loadTexture(graphics.generateTexture());
+	this.background.loadTexture(graphics.generateTexture());
 	
 	graphics.destroy();
 };
@@ -125,7 +135,7 @@ Bubble.prototype.leave = function () {
 	graphics.beginFill(0x999999);
 	graphics.drawCircle(0, 0, 45);
 	
-	this.loadTexture(graphics.generateTexture());
+	this.background.loadTexture(graphics.generateTexture());
 	
 	graphics.destroy();
 };

@@ -4,10 +4,9 @@ var BlockDynamicObject = function () {
 	
 	graphics.beginFill(0x999999);
 
-	graphics.drawRect(0, 0, 20, 20);
+	graphics.drawRect(0, 0, 40, 40);
 	
-	ActionObject.call(graphics.generateTexture());
-//	game.add.existing(this);
+	ActionObject.call(this, graphics.generateTexture());
 	
 	graphics.destroy();
 };
