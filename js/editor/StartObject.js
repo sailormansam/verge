@@ -2,12 +2,11 @@ var StartObject = function (mapGrain) {
 	// create block
 	var graphics = game.add.graphics(0, 0);
 	
-	graphics.beginFill(0xff0000);
+	graphics.beginFill(0xff00ff);
 
-	graphics.drawRect(0, 0, mapGrain, mapGrain);
+	graphics.drawRect(0, 0, 40, 40);
 	
-	Phaser.Sprite.call(this, game, 0, 0, graphics.generateTexture());
-	game.add.existing(this);
+	ActionObject.call(this, graphics.generateTexture());
 	
 	graphics.destroy();
 };

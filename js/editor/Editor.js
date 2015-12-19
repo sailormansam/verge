@@ -66,14 +66,17 @@ GameStates.Editor.prototype = {
 		// populate actions
 		this.actions = [
 			new BlockDynamicObject(),
+			new BlockStaticObject(),
+			new StartObject(),
+			new TeleporterObject()
 		];
 		
 		// populate the bubbles with actions
 		this.bubbleController = new BubbleController();
 		this.bubbleController.add(new Bubble(this.actions[0], 50));
-//		this.bubbleController.add(new Bubble(this.actions[1], 50));
-//		this.bubbleController.add(new Bubble(this.actions[2], 50));
-//		this.bubbleController.add(new Bubble(this.actions[3], 50));
+		this.bubbleController.add(new Bubble(this.actions[1], 50));
+		this.bubbleController.add(new Bubble(this.actions[2], 50));
+		this.bubbleController.add(new Bubble(this.actions[3], 50));
 		
 		// set up keys
 		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
