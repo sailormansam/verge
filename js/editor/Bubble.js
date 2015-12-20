@@ -40,6 +40,8 @@ var Bubble = function (action, distanceFromPointer) {
 	this.background.input.useHandCursor = true;
 	this.background.events.onInputOver.add(this.highlight, this);
 	this.background.events.onInputOut.add(this.leave, this);
+	this.background.events.onInputDown.add(this.click, this);
+	this.background.input.priorityID = 2;
 	// on click
 	
 };
@@ -94,6 +96,10 @@ Bubble.prototype.update = function () {
 
 		// update foreground image with an action object image
 	}
+};
+
+Bubble.prototype.click = function () {
+	console.log('click');
 };
 
 Bubble.prototype.show = function (angle, pointer) {
