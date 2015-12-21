@@ -51,7 +51,7 @@ Canvas.prototype = {
 	},
 	
 	place: function () {
-		console.log(this.parent);
+		console.log(this.parent.currentAction);
 	},
 	
 	destroy: function (hitbox) {

@@ -1,8 +1,6 @@
 var Bubble = function (parent, action, distanceFromPointer) {
-//	this.origin = new Phaser.Point(0,0);
-	this.parent = parent;
-	console.log(this.parent);
-	this.origin;
+	this.editor = parent;
+	this.origin = new Phaser.Point(0, 0);
 	this.distanceFromPointer = distanceFromPointer;
 	this.showing = false;
 	this.desiredLocation = new Phaser.Point(0, 0);
@@ -45,6 +43,8 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	this.background.events.onInputDown.add(this.click, this);
 	this.background.input.priorityID = 2;
 	// on click
+	
+	this.hide();
 	
 };
 
@@ -102,14 +102,10 @@ Bubble.prototype.update = function () {
 };
 
 Bubble.prototype.click = function () {
-	this.parent.currentAction = this.action;
-	console.log(this.parent);
-	console.log(this.parent.currentAction);
+	this.editor.currentAction = this.action;
 };
 
 Bubble.prototype.show = function (angle, pointer) {
-	console.log(this.parent);
-	console.log(this.parent.currentAction);
 	this.showing = true;
 	this.velocity.x = 0;
 	this.velocity.y = 0;
