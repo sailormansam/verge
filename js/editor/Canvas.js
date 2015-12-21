@@ -1,6 +1,19 @@
-var Canvas = function () {
+var Canvas = function (parent) {
+	this.parent = parent;
 	this.data;
 	this.blocks;
+	// create block
+	var graphics = game.add.graphics(0, 0);
+	
+	graphics.beginFill(0x999999);
+
+	graphics.drawRect(0, 0, 40, 40);
+	
+	this.clickElement = game.add.sprite(0, 0);
+	this.clickElement.width = game.world.width;
+	this.clickElement.height = game.world.height;
+	
+	graphics.destroy();
 	
 	// layers
 	this.blockLayer;
@@ -19,6 +32,10 @@ Canvas.prototype = {
 		// get json
 		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
 		this.blockLayer = game.add.group();
+		
+		this.clickElement.inputEnabled = true;
+		this.clickElement.events.onInputDown.add(this.place, this);
+		this.clickElement.input.priorityID = 1;
 	},
 	
 	load: function () {
@@ -33,8 +50,8 @@ Canvas.prototype = {
 		
 	},
 	
-	place: function (action) {
-		
+	place: function () {
+		console.log(this.parent);
 	},
 	
 	destroy: function (hitbox) {

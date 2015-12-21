@@ -1,12 +1,15 @@
-var Bubble = function (action, distanceFromPointer) {
+var Bubble = function (parent, action, distanceFromPointer) {
+//	this.origin = new Phaser.Point(0,0);
+	this.parent = parent;
+	console.log(this.parent);
 	this.origin;
 	this.distanceFromPointer = distanceFromPointer;
-	this.origin;
 	this.showing = false;
 	this.desiredLocation = new Phaser.Point(0, 0);
 	this.velocity = new Phaser.Point(0, 0);
 	this.k = 300;
 	this.dampening = 0.7;
+	this.action = action;
 	
 	// create background
 	var graphics = game.add.graphics(0, 0);
@@ -21,7 +24,6 @@ var Bubble = function (action, distanceFromPointer) {
 	// create foreground image
 	this.foreground = game.add.existing(action.sprite);
 	this.background = game.add.sprite(0, 0, graphics.generateTexture());
-	
 	
 	this.add(this.foreground);
 	this.add(this.background);
@@ -80,6 +82,7 @@ Bubble.prototype.update = function () {
 		}
 		else {
 			var currentDistance = this.desiredLocation.distance(currentPoint);
+//			console.log(currentDistance);
 		}
 
 		this.scale.set(currentDistance / originDistance);
@@ -99,10 +102,14 @@ Bubble.prototype.update = function () {
 };
 
 Bubble.prototype.click = function () {
-	console.log('click');
+	this.parent.currentAction = this.action;
+	console.log(this.parent);
+	console.log(this.parent.currentAction);
 };
 
 Bubble.prototype.show = function (angle, pointer) {
+	console.log(this.parent);
+	console.log(this.parent.currentAction);
 	this.showing = true;
 	this.velocity.x = 0;
 	this.velocity.y = 0;

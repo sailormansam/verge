@@ -8,6 +8,7 @@ GameStates.Editor = function (game) {
 	this.bubbleShow;
 	this.previousLocation = new Phaser.Point(0, 0);
 	this.actions;
+	this.currentAction;
 		
 	// keys
 	this.bubbleKey;
@@ -25,6 +26,7 @@ GameStates.Editor.prototype = {
 		// reset variables
 		this.player = null;
 		this.bubbleShow = false;
+		this.currentAction = null;
 		
 		// enable physics
 		game.physics.startSystem(Phaser.Physics.P2JS);
@@ -38,7 +40,7 @@ GameStates.Editor.prototype = {
 		this.blockCollisionGroup = game.physics.p2.createCollisionGroup();
 		
 		// make level
-		this.map = new Map(this);
+		this.map = new Canvas(this);
 		
 		// set world bounds
 		game.world.setBounds(0, 0, 2000, 2000);
@@ -49,9 +51,6 @@ GameStates.Editor.prototype = {
 		// create map button
 		this.mapButton = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 		this.mapButton.onDown.add(this.saveMap, this);
-		
-		// create pointer controller
-		this.pointerController = new PointerController(this);
 		
 		// move map with middle mouse
 		game.input.addMoveCallback(function(pointer, x, y) {
@@ -73,10 +72,10 @@ GameStates.Editor.prototype = {
 		
 		// populate the bubbles with actions
 		this.bubbleController = new BubbleController();
-		this.bubbleController.add(new Bubble(this.actions[0], 50));
-		this.bubbleController.add(new Bubble(this.actions[1], 50));
-		this.bubbleController.add(new Bubble(this.actions[2], 50));
-		this.bubbleController.add(new Bubble(this.actions[3], 50));
+		this.bubbleController.add(new Bubble(this, this.actions[0], 50));
+		this.bubbleController.add(new Bubble(this, this.actions[1], 50));
+		this.bubbleController.add(new Bubble(this, this.actions[2], 50));
+		this.bubbleController.add(new Bubble(this, this.actions[3], 50));
 		
 		// set up keys
 		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
@@ -87,11 +86,9 @@ GameStates.Editor.prototype = {
 	},
 	
 	preRender: function () {
-		this.pointerController.preRender();
 	},
 	
 	update: function () {
-		this.pointerController.update();
 		
 		this.move();
 	},
