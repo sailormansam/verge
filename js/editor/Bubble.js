@@ -1,10 +1,10 @@
 var Bubble = function (parent, action, distanceFromPointer) {
 	this.editor = parent;
-	this.origin = new Phaser.Point(0, 0);
+	this.origin = new Phaser.Point(-200, -200);
 	this.distanceFromPointer = distanceFromPointer;
 	this.showing = false;
 	this.desiredLocation = new Phaser.Point(0, 0);
-	this.velocity = new Phaser.Point(0, 0);
+	this.velocity = new Phaser.Point(-100, -100);
 	this.k = 300;
 	this.dampening = 0.7;
 	this.action = action;
@@ -14,7 +14,6 @@ var Bubble = function (parent, action, distanceFromPointer) {
 
 	graphics.beginFill(0x999999);
 	graphics.drawCircle(0, 0, 45);
-	
 	
 	Phaser.Group.call(this, game);
 	game.add.existing(this);
@@ -42,10 +41,11 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	this.background.events.onInputOut.add(this.leave, this);
 	this.background.events.onInputDown.add(this.click, this);
 	this.background.input.priorityID = 2;
+	this.background.visible = false;
+	
 	// on click
 	
 	this.hide();
-	
 };
 
 Bubble.prototype = Object.create(Phaser.Group.prototype);
@@ -82,7 +82,6 @@ Bubble.prototype.update = function () {
 		}
 		else {
 			var currentDistance = this.desiredLocation.distance(currentPoint);
-//			console.log(currentDistance);
 		}
 
 		this.scale.set(currentDistance / originDistance);
@@ -92,8 +91,13 @@ Bubble.prototype.update = function () {
 		if(alpha > 1)
 			alpha = 1;
 
-		if(alpha < 0)
+		if(alpha < .1) {
 			alpha = 0;
+			this.background.visible = false
+		}
+		else {
+			this.background.visible = true;
+		}
 
 		this.alpha = alpha;
 
@@ -103,6 +107,7 @@ Bubble.prototype.update = function () {
 
 Bubble.prototype.click = function () {
 	this.editor.currentAction = this.action;
+	console.log('bubble click', this.action);
 };
 
 Bubble.prototype.show = function (angle, pointer) {

@@ -7,7 +7,7 @@ var Canvas = function (parent) {
 	
 	graphics.beginFill(0x999999);
 
-	graphics.drawRect(0, 0, 40, 40);
+	graphics.drawRect(0, 0, game.world.width, game.world.height);
 	
 	this.clickElement = game.add.sprite(0, 0);
 	this.clickElement.width = game.world.width;
@@ -51,7 +51,7 @@ Canvas.prototype = {
 	},
 	
 	place: function () {
-		console.log(this.parent.currentAction);
+		console.log('canvas click', this.parent.currentAction);
 	},
 	
 	destroy: function (hitbox) {
