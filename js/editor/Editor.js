@@ -5,7 +5,6 @@ GameStates.Editor = function (game) {
 	this.teleporter;
 	this.mapButton;
 	this.bubbleController;
-	this.bubbleShow;
 	this.previousLocation = new Phaser.Point(0, 0);
 	this.actions;
 	this.currentAction;
@@ -94,13 +93,11 @@ GameStates.Editor.prototype = {
 	},
 	
 	toggle: function () {
-		this.bubbleShow = !this.bubbleShow;
-		
-		if(this.bubbleShow) {
-			this.bubbleController.show(new Phaser.Point(game.input.x, game.input.y));
+		if(this.bubbleController.showing) {
+			this.bubbleController.hide(new Phaser.Point(game.input.x, game.input.y));
 		}
 		else {
-			this.bubbleController.hide(new Phaser.Point(game.input.x, game.input.y));
+			this.bubbleController.show(new Phaser.Point(game.input.x, game.input.y));
 		}
 	},
 	

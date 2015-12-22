@@ -1,6 +1,7 @@
 var BubbleController = function () {
 	this.bubbles;
 	this.angle;
+	this.showing;
 	
 	this.create();
 };
@@ -10,6 +11,7 @@ BubbleController.prototype = {
 		// set variables
 		this.bubbles = [];
 		this.angle = 0;
+		this.showing = false;
 	},
 	
 	add: function (bubble) {
@@ -26,6 +28,8 @@ BubbleController.prototype = {
 		for(var i = 0, len = this.bubbles.length; i < len; i++) {
 			this.bubbles[i].show(i * this.angle - Math.PI / 2, pointer);
 		}
+		
+		this.showing = true;
 	},
 	
 	hide: function () {
@@ -33,5 +37,7 @@ BubbleController.prototype = {
 		this.bubbles.forEach(function (bubble) {
 			bubble.hide();
 		});
+		
+		this.showing = false;
 	}
 };

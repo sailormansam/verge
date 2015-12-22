@@ -51,7 +51,27 @@ Canvas.prototype = {
 	},
 	
 	place: function () {
+		var pointer = game.input;
 		console.log('canvas click', this.parent.currentAction);
+		
+		// get a pointer relative to camera
+		var truePointer = {
+			x: Math.floor(((pointer.x + game.camera.x) / this.MAP_GRAIN)),
+			y: Math.floor(((pointer.y + game.camera.y) / this.MAP_GRAIN))
+		};
+		
+		// check if there is a block at pointer location
+		for(var i = 0, len = this.blocks.length; i < len; i++) {
+			if(this.blocks[i] != null
+			   && this.blocks[i].x == (truePointer.x) * this.MAP_GRAIN
+			   && this.blocks[i].y == (truePointer.y) * this.MAP_GRAIN) {
+				return;
+			}
+		}
+		
+		var newBlock = game.add.sprite(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.parent.currentAction.sprite.key);
+		this.blocks.push(newBlock);
+		this.blockLayer.add(newBlock);
 	},
 	
 	destroy: function (hitbox) {

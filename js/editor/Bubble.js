@@ -84,7 +84,17 @@ Bubble.prototype.update = function () {
 			var currentDistance = this.desiredLocation.distance(currentPoint);
 		}
 
-		this.scale.set(currentDistance / originDistance);
+		// cap scale
+		var scale = currentDistance / originDistance;
+		if(scale > 1.3) {
+			scale = 1.3
+		}
+		
+		if (scale < 0) {
+			scale = 0;
+		}
+		
+		this.scale.set(scale);
 
 		var alpha = currentDistance / originDistance;
 
@@ -108,6 +118,7 @@ Bubble.prototype.update = function () {
 Bubble.prototype.click = function () {
 	this.editor.currentAction = this.action;
 	console.log('bubble click', this.action);
+	this.editor.bubbleController.hide();
 };
 
 Bubble.prototype.show = function (angle, pointer) {
