@@ -34,7 +34,7 @@ Canvas.prototype = {
 		this.blockLayer = game.add.group();
 		
 		this.clickElement.inputEnabled = true;
-		this.clickElement.events.onInputDown.add(this.place, this);
+//		this.clickElement.input.onDown.add(this.place, this);
 		this.clickElement.input.priorityID = 1;
 	},
 	
@@ -77,7 +77,14 @@ Canvas.prototype = {
 		}
 	},
 	
-	destroy: function (hitbox) {
-		// remove elements that overlap
+	removeBlocksWithin: function (hitbox) {
+		// remove elements that overlap hitbox
+		for(var i = 0, len = this.blocks.length; i < len; i++) {
+			if(this.blocks[i] != null
+			   && Phaser.Rectangle.intersects(this.blocks[i].getBounds(), hitbox)) {
+				this.blocks[i].destroy();
+				this.blocks[i] = null;
+			}
+		}
 	}
 };

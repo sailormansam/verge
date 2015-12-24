@@ -8,6 +8,7 @@ GameStates.Editor = function (game) {
 	this.previousLocation = new Phaser.Point(0, 0);
 	this.actions;
 	this.currentAction;
+	this.pointerController;
 		
 	// keys
 	this.bubbleKey;
@@ -82,13 +83,18 @@ GameStates.Editor.prototype = {
 		
 		//  Stop the following keys from propagating up to the browser
 		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.Q ]);
+		
+		this.pointerController = new PointerController(this);
 	},
 	
 	preRender: function () {
+		this.pointerController.preRender();
 	},
 	
 	update: function () {
 		this.move();
+		
+		this.pointerController.update();
 	},
 	
 	toggle: function () {

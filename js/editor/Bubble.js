@@ -40,6 +40,7 @@ var Bubble = function (parent, action, distanceFromPointer) {
 //	this.background.events.onInputOver.add(this.highlight, this);
 //	this.background.events.onInputOut.add(this.leave, this);
 	this.background.events.onInputDown.add(this.click, this);
+	this.background.events.onInputUp.add(this.up, this);
 	this.background.input.priorityID = 2;
 	this.background.visible = false;
 	
@@ -117,6 +118,9 @@ Bubble.prototype.update = function () {
 Bubble.prototype.click = function () {
 	this.editor.currentAction = this.action;
 	console.log('bubble click', this.action);
+};
+
+Bubble.prototype.up = function () {
 	this.editor.bubbleController.hide();
 };
 

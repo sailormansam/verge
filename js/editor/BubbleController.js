@@ -24,8 +24,8 @@ BubbleController.prototype = {
 		this.group.add(bubble);
 		
 		// calculate bubbles positions based on bubble array
-//		this.angle = 2 * Math.PI / this.bubbles.length;
-		this.angle = Math.PI / 3;
+		this.angle = 2 * Math.PI / this.bubbles.length;
+//		this.angle = Math.PI / 3;
 	},
 	
 	show: function (pointer) {
