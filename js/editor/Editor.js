@@ -38,11 +38,11 @@ GameStates.Editor.prototype = {
 		this.playerCollisionGroup = game.physics.p2.createCollisionGroup();
 		this.blockCollisionGroup = game.physics.p2.createCollisionGroup();
 		
-		// make level
-		this.map = new Canvas(this);
-		
 		// set world bounds
 		game.world.setBounds(0, 0, 2000, 2000);
+		
+		// make level
+		this.map = new Canvas(this);
 		
 		// draw grid for reference
 		this.drawGrid();
@@ -88,7 +88,6 @@ GameStates.Editor.prototype = {
 	},
 	
 	update: function () {
-		
 		this.move();
 	},
 	

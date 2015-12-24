@@ -4,6 +4,8 @@ var BubbleController = function () {
 	this.showing;
 	
 	this.create();
+	this.group = game.add.group();
+	this.group.fixedToCamera = true;
 };
 
 BubbleController.prototype = {
@@ -17,6 +19,9 @@ BubbleController.prototype = {
 	add: function (bubble) {
 		// add bubble to bubbles array
 		this.bubbles.push(bubble);
+		
+		
+		this.group.add(bubble);
 		
 		// calculate bubbles positions based on bubble array
 //		this.angle = 2 * Math.PI / this.bubbles.length;

@@ -10,6 +10,7 @@ GameStates.Preloader.prototype = {
 		
 		// load images
 		game.load.image('block', 'images/block.png');
+		game.load.image('bubble', 'images/bubble.png');
 	},
 	create: function () {
 		game.state.start('Editor');

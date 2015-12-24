@@ -3,8 +3,8 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	this.origin = new Phaser.Point(-200, -200);
 	this.distanceFromPointer = distanceFromPointer;
 	this.showing = false;
-	this.desiredLocation = new Phaser.Point(0, 0);
-	this.velocity = new Phaser.Point(-100, -100);
+	this.desiredLocation = new Phaser.Point(-100, -100);
+	this.velocity = new Phaser.Point(0, 0);
 	this.k = 300;
 	this.dampening = 0.7;
 	this.action = action;
@@ -20,7 +20,7 @@ var Bubble = function (parent, action, distanceFromPointer) {
 
 	// create foreground image
 	this.foreground = game.add.existing(action.sprite);
-	this.background = game.add.sprite(0, 0, graphics.generateTexture());
+	this.background = game.add.sprite(0, 0, 'bubble');
 	
 	this.add(this.foreground);
 	this.add(this.background);
@@ -37,8 +37,8 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	// on hover
 	this.background.inputEnabled = true;
 	this.background.input.useHandCursor = true;
-	this.background.events.onInputOver.add(this.highlight, this);
-	this.background.events.onInputOut.add(this.leave, this);
+//	this.background.events.onInputOver.add(this.highlight, this);
+//	this.background.events.onInputOut.add(this.leave, this);
 	this.background.events.onInputDown.add(this.click, this);
 	this.background.input.priorityID = 2;
 	this.background.visible = false;
@@ -67,12 +67,11 @@ Bubble.prototype.update = function () {
 		this.velocity.y *= this.dampening;
 
 		// add to position
-		this.x += this.velocity.x * game.time.elapsedMS / 1000;
-		this.y += this.velocity.y * game.time.elapsedMS / 1000;
-
+		this.x += (this.velocity.x * game.time.elapsedMS / 1000);
+		this.y += (this.velocity.y * game.time.elapsedMS / 1000);
+		
 		currentPoint.x = this.x;
 		currentPoint.y = this.y;
-
 		// set scale based on distance to desiredLocation
 		var originDistance = this.origin.distance(this.desiredLocation);
 
