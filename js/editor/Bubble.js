@@ -9,6 +9,7 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	this.dampening = 0.7;
 	this.action = action;
 	this.hidden = true;
+	this.active = false;
 	
 	// create background
 	var graphics = game.add.graphics(0, 0);
@@ -77,41 +78,41 @@ Bubble.prototype.update = function () {
 		var originDistance = this.origin.distance(this.desiredLocation);
 
 //		// invert for hiding
-//		if(this.showing) {
-//			var currentDistance = this.origin.distance(currentPoint);
-//		}
-//		else {
-//			var currentDistance = this.desiredLocation.distance(currentPoint);
-//		}
-//
-//		// cap scale
-//		var scale = currentDistance / originDistance;
-//		if(scale > 1.3) {
-//			scale = 1.3
-//		}
-//		
-//		if (scale < 0) {
-//			scale = 0;
-//		}
-//		
-//		this.scale.set(scale);
-//
-//		var alpha = currentDistance / originDistance;
-//
-//		if(alpha > 1)
-//			alpha = 1;
-//
-//		if(alpha < .1) {
-//			alpha = 0;
-//			this.background.visible = false
-//		}
-//		else {
-//			this.background.visible = true;
-//		}
-//
-//		this.alpha = alpha;
-
-		// update foreground image with an action object image
+		if(!this.active) {
+			if(this.showing) {
+				var currentDistance = this.origin.distance(currentPoint);
+			}
+			else {
+				var currentDistance = this.desiredLocation.distance(currentPoint);
+			}
+	
+			// cap scale
+			var scale = currentDistance / originDistance;
+			if(scale > 1.3) {
+				scale = 1.3
+			}
+			
+			if (scale < 0) {
+				scale = 0;
+			}
+			
+			this.scale.set(scale);
+	
+			var alpha = currentDistance / originDistance;
+	
+			if(alpha > 1)
+				alpha = 1;
+	
+			if(alpha < .1) {
+				alpha = 0;
+				this.background.visible = false
+			}
+			else {
+				this.background.visible = true;
+			}
+	
+			this.alpha = alpha;
+		}
 	}
 };
 
@@ -119,7 +120,7 @@ Bubble.prototype.click = function () {
 	if(this.showing) {
 		this.editor.currentAction = this.action;
 		console.log('bubble click', this.action);
-		this.editor.bubbleController.bubbleLayer.bringToTop(this);
+		this.editor.bubbleController.setActive(this);
 		this.editor.bubbleController.hide();
 	}
 	else {

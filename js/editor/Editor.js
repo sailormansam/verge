@@ -76,6 +76,7 @@ GameStates.Editor.prototype = {
 		this.bubbleController.add(new Bubble(this, this.actions[1], 50));
 		this.bubbleController.add(new Bubble(this, this.actions[2], 50));
 		this.bubbleController.add(new Bubble(this, this.actions[3], 50));
+		this.bubbleController.setActive(this.bubbleController.bubbles[0]);
 		
 		// set up keys
 //		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);

@@ -21,7 +21,6 @@ BubbleController.prototype = {
 		// add bubble to bubbles array
 		this.bubbles.push(bubble);
 		
-		
 		this.bubbleLayer.add(bubble);
 		
 		// calculate bubbles positions based on bubble array
@@ -45,5 +44,15 @@ BubbleController.prototype = {
 		});
 		
 		this.showing = false;
+	},
+	
+	setActive: function (bubble) {
+		for(var i = 0, len = this.bubbles.length; i < len; i++) {
+			this.bubbles[i].active = false;
+		}
+		
+		this.bubbleLayer.bringToTop(bubble)
+		
+		bubble.active = true;
 	}
 };
