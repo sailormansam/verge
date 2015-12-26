@@ -2,10 +2,11 @@ var BubbleController = function () {
 	this.bubbles;
 	this.angle;
 	this.showing;
+	this.hidden = true;
 	
 	this.create();
-	this.group = game.add.group();
-	this.group.fixedToCamera = true;
+	this.bubbleLayer = game.add.group();
+	this.bubbleLayer.fixedToCamera = true;
 };
 
 BubbleController.prototype = {
@@ -21,7 +22,7 @@ BubbleController.prototype = {
 		this.bubbles.push(bubble);
 		
 		
-		this.group.add(bubble);
+		this.bubbleLayer.add(bubble);
 		
 		// calculate bubbles positions based on bubble array
 		this.angle = 2 * Math.PI / this.bubbles.length;
@@ -31,7 +32,7 @@ BubbleController.prototype = {
 	show: function (pointer) {
 		// show all bubbles and calculate positions
 		for(var i = 0, len = this.bubbles.length; i < len; i++) {
-			this.bubbles[i].show(i * this.angle - Math.PI / 2, pointer);
+			this.bubbles[i].show(i * this.angle - Math.PI / 2, new Phaser.Point(80, 80));
 		}
 		
 		this.showing = true;

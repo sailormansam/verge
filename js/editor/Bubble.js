@@ -1,13 +1,14 @@
 var Bubble = function (parent, action, distanceFromPointer) {
 	this.editor = parent;
-	this.origin = new Phaser.Point(-200, -200);
+	this.origin = new Phaser.Point(80, 80);
 	this.distanceFromPointer = distanceFromPointer;
 	this.showing = false;
-	this.desiredLocation = new Phaser.Point(-100, -100);
+	this.desiredLocation = new Phaser.Point(80, 80);
 	this.velocity = new Phaser.Point(0, 0);
 	this.k = 300;
 	this.dampening = 0.7;
 	this.action = action;
+	this.hidden = true;
 	
 	// create background
 	var graphics = game.add.graphics(0, 0);
@@ -28,7 +29,7 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	
 	this.foreground.bringToTop();
 	
-	this.scale.set(0);
+	this.scale.set(1);
 	
 	this.background.anchor.set(0.5);
 	this.foreground.anchor.set(0.5);
@@ -42,7 +43,6 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	this.background.events.onInputDown.add(this.click, this);
 	this.background.events.onInputUp.add(this.up, this);
 	this.background.input.priorityID = 2;
-	this.background.visible = false;
 	
 	// on click
 	
@@ -76,52 +76,64 @@ Bubble.prototype.update = function () {
 		// set scale based on distance to desiredLocation
 		var originDistance = this.origin.distance(this.desiredLocation);
 
-		// invert for hiding
-		if(this.showing) {
-			var currentDistance = this.origin.distance(currentPoint);
-		}
-		else {
-			var currentDistance = this.desiredLocation.distance(currentPoint);
-		}
-
-		// cap scale
-		var scale = currentDistance / originDistance;
-		if(scale > 1.3) {
-			scale = 1.3
-		}
-		
-		if (scale < 0) {
-			scale = 0;
-		}
-		
-		this.scale.set(scale);
-
-		var alpha = currentDistance / originDistance;
-
-		if(alpha > 1)
-			alpha = 1;
-
-		if(alpha < .1) {
-			alpha = 0;
-			this.background.visible = false
-		}
-		else {
-			this.background.visible = true;
-		}
-
-		this.alpha = alpha;
+//		// invert for hiding
+//		if(this.showing) {
+//			var currentDistance = this.origin.distance(currentPoint);
+//		}
+//		else {
+//			var currentDistance = this.desiredLocation.distance(currentPoint);
+//		}
+//
+//		// cap scale
+//		var scale = currentDistance / originDistance;
+//		if(scale > 1.3) {
+//			scale = 1.3
+//		}
+//		
+//		if (scale < 0) {
+//			scale = 0;
+//		}
+//		
+//		this.scale.set(scale);
+//
+//		var alpha = currentDistance / originDistance;
+//
+//		if(alpha > 1)
+//			alpha = 1;
+//
+//		if(alpha < .1) {
+//			alpha = 0;
+//			this.background.visible = false
+//		}
+//		else {
+//			this.background.visible = true;
+//		}
+//
+//		this.alpha = alpha;
 
 		// update foreground image with an action object image
 	}
 };
 
 Bubble.prototype.click = function () {
-	this.editor.currentAction = this.action;
-	console.log('bubble click', this.action);
+	if(this.showing) {
+		this.editor.currentAction = this.action;
+		console.log('bubble click', this.action);
+		this.editor.bubbleController.bubbleLayer.bringToTop(this);
+		this.editor.bubbleController.hide();
+	}
+	else {
+		this.editor.bubbleController.show();
+	}
 };
 
 Bubble.prototype.up = function () {
-	this.editor.bubbleController.hide();
+	if(this.showing) {
+		this.editor.bubbleController.hidden = false;
+	}
+	else {
+		this.editor.bubbleController.hidden = true;
+	}
 };
 
 Bubble.prototype.show = function (angle, pointer) {

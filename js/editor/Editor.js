@@ -78,11 +78,11 @@ GameStates.Editor.prototype = {
 		this.bubbleController.add(new Bubble(this, this.actions[3], 50));
 		
 		// set up keys
-		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
-		this.bubbleKey.onDown.add(this.toggle, this);
+//		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+//		this.bubbleKey.onDown.add(this.toggle, this);
 		
 		//  Stop the following keys from propagating up to the browser
-		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.Q ]);
+//		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.Q ]);
 		
 		this.pointerController = new PointerController(this);
 	},

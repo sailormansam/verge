@@ -65,7 +65,7 @@ PointerController.prototype = {
 	
 	update: function () {
 		// place blocks if mouse is down
-		if(game.input.activePointer.leftButton.isDown && !this.editor.bubbleController.showing) {
+		if(game.input.activePointer.leftButton.isDown && !this.editor.bubbleController.showing && this.editor.bubbleController.hidden) {
 			this.editor.map.place();
 		}
 	},
