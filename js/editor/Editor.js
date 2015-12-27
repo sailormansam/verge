@@ -79,11 +79,11 @@ GameStates.Editor.prototype = {
 		this.bubbleController.setActive(this.bubbleController.bubbles[0]);
 		
 		// set up keys
-//		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
-//		this.bubbleKey.onDown.add(this.toggle, this);
+		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+		this.bubbleKey.onDown.add(this.toggle, this);
 		
-		//  Stop the following keys from propagating up to the browser
-//		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.Q ]);
+		// Stop the following keys from propagating up to the browser
+		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.Q ]);
 		
 		this.pointerController = new PointerController(this);
 	},
@@ -100,10 +100,12 @@ GameStates.Editor.prototype = {
 	
 	toggle: function () {
 		if(this.bubbleController.showing) {
-			this.bubbleController.hide(new Phaser.Point(game.input.x, game.input.y));
+			this.bubbleController.hide();
+			this.bubbleController.hidden = true;
 		}
 		else {
-			this.bubbleController.show(new Phaser.Point(game.input.x, game.input.y));
+			this.bubbleController.show();
+			this.bubbleController.hidden = false;
 		}
 	},
 	

@@ -129,6 +129,7 @@ Bubble.prototype.click = function () {
 };
 
 Bubble.prototype.up = function () {
+	// this.showing gets set to its intended value before this point
 	if(this.showing) {
 		this.editor.bubbleController.hidden = false;
 	}
