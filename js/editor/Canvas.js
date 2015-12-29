@@ -51,7 +51,7 @@ Canvas.prototype = {
 	},
 	
 	place: function () {
-		if(this.editor.currentAction) {
+		if(this.editor.bubbleController.currentAction) {
 			var pointer = game.input;
 
 			// get a pointer relative to camera
@@ -69,11 +69,11 @@ Canvas.prototype = {
 				}
 			}
 
-			var newBlock = game.add.sprite(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.currentAction.sprite.key);
+			var newBlock = game.add.sprite(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key);
 			this.blocks.push(newBlock);
 			this.blockLayer.add(newBlock);
 			
-			console.log('canvas click', this.editor.currentAction);
+			console.log('canvas click', this.editor.bubbleController.currentAction);
 		}
 	},
 	

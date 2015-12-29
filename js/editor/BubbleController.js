@@ -2,7 +2,8 @@ var BubbleController = function () {
 	this.bubbles;
 	this.angle;
 	this.showing;
-	this.hidden = true;
+	this.currentAction;
+	this.hidden;
 	
 	this.create();
 	this.bubbleLayer = game.add.group();
@@ -15,6 +16,8 @@ BubbleController.prototype = {
 		this.bubbles = [];
 		this.angle = 0;
 		this.showing = false;
+		this.currentAction = null;
+		this.hidden = false;
 	},
 	
 	add: function (bubble) {
@@ -25,7 +28,6 @@ BubbleController.prototype = {
 		
 		// calculate bubbles positions based on bubble array
 		this.angle = 2 * Math.PI / this.bubbles.length;
-//		this.angle = Math.PI / 3;
 	},
 	
 	show: function (pointer) {

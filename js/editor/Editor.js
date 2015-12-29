@@ -7,7 +7,6 @@ GameStates.Editor = function (game) {
 	this.bubbleController;
 	this.previousLocation = new Phaser.Point(0, 0);
 	this.actions;
-	this.currentAction;
 	this.pointerController;
 		
 	// keys
@@ -16,9 +15,6 @@ GameStates.Editor = function (game) {
 	// collison layers
 	this.playerCollisionGroup;
 	this.blockCollisionGroup;
-	
-	// constants
-	this.GRAVITY = 1000;
 };
 
 GameStates.Editor.prototype = {
@@ -26,7 +22,6 @@ GameStates.Editor.prototype = {
 		// reset variables
 		this.player = null;
 		this.bubbleShow = false;
-		this.currentAction = null;
 		
 		// enable physics
 		game.physics.startSystem(Phaser.Physics.P2JS);
@@ -72,10 +67,12 @@ GameStates.Editor.prototype = {
 		
 		// populate the bubbles with actions
 		this.bubbleController = new BubbleController();
-		this.bubbleController.add(new Bubble(this, this.actions[0], 50));
-		this.bubbleController.add(new Bubble(this, this.actions[1], 50));
-		this.bubbleController.add(new Bubble(this, this.actions[2], 50));
-		this.bubbleController.add(new Bubble(this, this.actions[3], 50));
+		this.bubbleController.add(new Bubble(this, this.actions[0], 45));
+		this.bubbleController.add(new Bubble(this, this.actions[1], 45));
+		this.bubbleController.add(new Bubble(this, this.actions[2], 45));
+		this.bubbleController.add(new Bubble(this, this.actions[3], 45));
+		
+		// set first bubble as active
 		this.bubbleController.setActive(this.bubbleController.bubbles[0]);
 		
 		// set up keys

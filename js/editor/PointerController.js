@@ -68,6 +68,8 @@ PointerController.prototype = {
 		if(game.input.activePointer.leftButton.isDown && !this.editor.bubbleController.showing && this.editor.bubbleController.hidden) {
 			this.editor.map.place();
 		}
+		
+		// click on canvas to close bubbles when open
 	},
 	
 	drawNet: function (pointer) {
