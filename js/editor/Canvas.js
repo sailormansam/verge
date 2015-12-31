@@ -13,13 +13,16 @@ var Canvas = function (parent) {
 	this.clickElement.width = game.world.width;
 	this.clickElement.height = game.world.height;
 	
+	// click on canvas when bubbles are open to close them
+//	this.clickElement.events.onInputDown.add(this.click, this);
+	
 	graphics.destroy();
 	
 	// layers
 	this.blockLayer;
 	
 	// constants
-	this.MAP_GRAIN = 40;				// size of map blocks
+	this.MAP_GRAIN = 40;	// size of map blocks
 	
 	this.create();
 };
@@ -48,6 +51,14 @@ Canvas.prototype = {
 	
 	createLevel: function () {
 		
+	},
+	
+	click: function () {
+		// hide bubbles if they are showing
+		console.log(this.editor.bubbleController.hidden);
+		if(!this.editor.bubbleController.hidden) {
+			this.editor.bubbleController.hide();
+		}
 	},
 	
 	place: function () {

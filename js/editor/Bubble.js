@@ -1,6 +1,6 @@
 var Bubble = function (parent, action, distanceFromPointer) {
 	this.bubbleController = parent.bubbleController;
-	this.origin = new Phaser.Point(0, 0);
+	this.origin = new Phaser.Point(80, 80);
 	this.showing = false;
 	this.distanceFromPointer = distanceFromPointer;
 	this.desiredLocation = new Phaser.Point(80, 80);
@@ -33,11 +33,10 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	// on click
 	this.background.inputEnabled = true;
 	this.background.input.useHandCursor = true;
-	this.background.events.onInputDown.add(this.click, this);
 	this.background.events.onInputUp.add(this.up, this);
 	this.background.input.priorityID = 2;
 	
-//	this.hide();
+	this.hide();
 };
 
 Bubble.prototype = Object.create(Phaser.Group.prototype);
@@ -83,7 +82,7 @@ Bubble.prototype.update = function () {
 			scale = 1.3
 		}
 
-		if (scale < 0) {
+		if (scale < 0 || isNaN(scale)) {
 			scale = 0;
 		}
 
@@ -94,7 +93,7 @@ Bubble.prototype.update = function () {
 		if(alpha > 1)
 			alpha = 1;
 
-		if(alpha < .1) {
+		if(alpha < .1 || isNaN(alpha)) {
 			alpha = 0;
 			this.background.visible = false
 		}
@@ -108,7 +107,6 @@ Bubble.prototype.update = function () {
 
 Bubble.prototype.click = function () {
 	if(this.showing) {
-		this.bubbleController.currentAction = this.action;
 		console.log('bubble click', this.action);
 		this.bubbleController.setActive(this);
 		this.bubbleController.hide();

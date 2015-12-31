@@ -17,7 +17,7 @@ BubbleController.prototype = {
 		this.angle = 0;
 		this.showing = false;
 		this.currentAction = null;
-		this.hidden = false;
+		this.hidden = true;
 	},
 	
 	add: function (bubble) {
@@ -53,6 +53,10 @@ BubbleController.prototype = {
 			this.bubbles[i].active = false;
 		}
 		
+		// set current action
+		this.currentAction = bubble.action;
+		
+		// bring bubble to top of all the other bubbles
 		this.bubbleLayer.bringToTop(bubble);
 		
 		bubble.active = true;
