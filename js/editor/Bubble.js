@@ -1,6 +1,6 @@
 var Bubble = function (parent, action, distanceFromPointer) {
 	this.bubbleController = parent.bubbleController;
-	this.origin = new Phaser.Point(80, 80);
+	this.origin = new Phaser.Point(0, 0);
 	this.showing = false;
 	this.distanceFromPointer = distanceFromPointer;
 	this.desiredLocation = new Phaser.Point(80, 80);
@@ -9,7 +9,6 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	this.dampening = 0.7;
 	this.action = action;
 	this.active = false;
-	
 	
 	// call group which this extends
 	Phaser.Group.call(this, game);
@@ -38,8 +37,7 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	this.background.events.onInputUp.add(this.up, this);
 	this.background.input.priorityID = 2;
 	
-	// Don't show to start
-	this.hide();
+//	this.hide();
 };
 
 Bubble.prototype = Object.create(Phaser.Group.prototype);
@@ -77,6 +75,7 @@ Bubble.prototype.update = function () {
 		else {
 			var currentDistance = this.desiredLocation.distance(currentPoint);
 		}
+		
 
 		// cap scale
 		var scale = currentDistance / originDistance;
@@ -89,7 +88,7 @@ Bubble.prototype.update = function () {
 		}
 
 		this.scale.set(scale);
-
+		
 		var alpha = currentDistance / originDistance;
 
 		if(alpha > 1)
@@ -115,6 +114,7 @@ Bubble.prototype.click = function () {
 		this.bubbleController.hide();
 	}
 	else {
+		console.log('bubble click', this.action);
 		this.bubbleController.show();
 	}
 };

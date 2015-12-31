@@ -53,7 +53,7 @@ BubbleController.prototype = {
 			this.bubbles[i].active = false;
 		}
 		
-		this.bubbleLayer.bringToTop(bubble)
+		this.bubbleLayer.bringToTop(bubble);
 		
 		bubble.active = true;
 	}
