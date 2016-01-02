@@ -33,6 +33,7 @@ var Bubble = function (parent, action, distanceFromPointer) {
 	// on click
 	this.background.inputEnabled = true;
 	this.background.input.useHandCursor = true;
+	this.background.events.onInputDown.add(this.click, this);
 	this.background.events.onInputUp.add(this.up, this);
 	this.background.input.priorityID = 2;
 	

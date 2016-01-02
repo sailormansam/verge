@@ -37,7 +37,8 @@ Canvas.prototype = {
 		this.blockLayer = game.add.group();
 		
 		this.clickElement.inputEnabled = true;
-//		this.clickElement.input.onDown.add(this.place, this);
+		this.clickElement.events.onInputDown.add(this.click, this);
+		this.clickElement.events.onInputUp.add(this.up, this);
 		this.clickElement.input.priorityID = 1;
 	},
 	
@@ -54,10 +55,15 @@ Canvas.prototype = {
 	},
 	
 	click: function () {
-		// hide bubbles if they are showing
-		console.log(this.editor.bubbleController.hidden);
 		if(!this.editor.bubbleController.hidden) {
 			this.editor.bubbleController.hide();
+		}
+	},
+	
+	up: function () {
+		// set hidden equal to true because it will always hide bubbles when clicking on canvas
+		if(!this.editor.bubbleController.hidden) {
+			this.editor.bubbleController.hidden = true;
 		}
 	},
 	
