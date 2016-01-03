@@ -6,7 +6,7 @@ var TeleporterObject = function (mapGrain) {
 
 	graphics.drawRect(0, 0, 40, 40);
 	
-	ActionObject.call(this, graphics.generateTexture());
+	ActionObject.call(this, graphics.generateTexture(), 'TELEPORTER');
 	
 	graphics.destroy();
 };

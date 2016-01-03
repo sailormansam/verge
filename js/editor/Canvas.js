@@ -47,11 +47,7 @@ Canvas.prototype = {
 	},
 	
 	save: function () {
-		
-	},
-	
-	createLevel: function () {
-		
+		console.log(this.blocks);
 	},
 	
 	click: function () {
@@ -65,6 +61,7 @@ Canvas.prototype = {
 		if(!this.editor.bubbleController.hidden) {
 			this.editor.bubbleController.hidden = true;
 		}
+		this.save();
 	},
 	
 	place: function () {

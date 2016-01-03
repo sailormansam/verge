@@ -6,7 +6,7 @@ var BlockStaticObject = function () {
 
 	graphics.drawRect(0, 0, 40, 40);
 	
-	ActionObject.call(this, graphics.generateTexture());
+	ActionObject.call(this, graphics.generateTexture(), 'STATIC');
 	
 	graphics.destroy();
 };
