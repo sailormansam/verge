@@ -47,7 +47,22 @@ Canvas.prototype = {
 	},
 	
 	save: function () {
-		console.log(this.blocks);
+		var mapSave = {
+			levels:[
+				{
+					start: {x: 0, y: 0},
+					teleporter: {x: 0, y: 0},
+					blocks: []
+				}
+			]
+		};
+		
+		// generate blocks and print out
+		this.blocks.forEach(function(block){
+			mapSave.levels[0].blocks.push({ material: block.material, x: block.x, y: block.y });
+		});
+		
+		console.log(JSON.stringify(mapSave));
 	},
 	
 	click: function () {
@@ -82,8 +97,8 @@ Canvas.prototype = {
 					return;
 				}
 			}
-
-			var newBlock = game.add.sprite(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key);
+			
+			var newBlock = new Block(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key, this.editor.bubbleController.currentAction.material);
 			this.blocks.push(newBlock);
 			this.blockLayer.add(newBlock);
 			
