@@ -59,7 +59,15 @@ Canvas.prototype = {
 		
 		// generate blocks and print out
 		this.blocks.forEach(function(block){
-			mapSave.levels[0].blocks.push({ material: block.material, x: block.x, y: block.y });
+			if(block.material == "START") {
+				mapSave.levels[0].start = {x: block.x, y: block.y};
+			}
+			else if(block.material == "TELEPORTER") {
+				mapSave.levels[0].teleporter = {x: block.x, y: block.y};
+			}
+			else {
+				mapSave.levels[0].blocks.push({ material: block.material, x: block.x, y: block.y });
+			}
 		});
 		
 		console.log(JSON.stringify(mapSave));
