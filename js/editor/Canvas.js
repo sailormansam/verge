@@ -2,24 +2,16 @@ var Canvas = function (parent) {
 	this.editor = parent;
 	this.data;
 	this.blocks;
-	// create block
-	var graphics = game.add.graphics(0, 0);
-	
-	graphics.beginFill(0x999999);
-
-	graphics.drawRect(0, 0, game.world.width, game.world.height);
 	
 	this.clickElement = game.add.sprite(0, 0);
 	this.clickElement.width = game.world.width;
 	this.clickElement.height = game.world.height;
 	
-	// click on canvas when bubbles are open to close them
-//	this.clickElement.events.onInputDown.add(this.click, this);
-	
-	graphics.destroy();
-	
 	// layers
 	this.blockLayer;
+	
+	this.saveButton;
+	this.UIUp;
 	
 	// constants
 	this.MAP_GRAIN = 40;	// size of map blocks
@@ -31,10 +23,19 @@ Canvas.prototype = {
 	create: function () {
 		// reset variables
 		this.blocks = [];
+		this.UIUp = true;
 		
 		// get json
 		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
 		this.blockLayer = game.add.group();
+		
+		this.saveButton = game.add.sprite(game.width - 80, 80, 'bubble');
+		this.saveButton.inputEnabled = true;
+		this.saveButton.events.onInputDown.add(this.save, this);
+		this.saveButton.events.onInputUp.add(this.upSave, this);
+		this.saveButton.input.priorityID = 2;
+		this.saveButton.anchor.set(0.5);
+		this.saveButton.input.useHandCursor = true;
 		
 		this.clickElement.inputEnabled = true;
 		this.clickElement.events.onInputDown.add(this.click, this);
@@ -71,6 +72,11 @@ Canvas.prototype = {
 		});
 		
 		console.log(JSON.stringify(mapSave));
+		this.UIUp = false;
+	},
+	
+	upSave: function () {
+		this.UIUp = true;
 	},
 	
 	click: function () {
@@ -84,7 +90,6 @@ Canvas.prototype = {
 		if(!this.editor.bubbleController.hidden) {
 			this.editor.bubbleController.hidden = true;
 		}
-		this.save();
 	},
 	
 	place: function () {
@@ -109,8 +114,6 @@ Canvas.prototype = {
 			var newBlock = new Block(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key, this.editor.bubbleController.currentAction.material);
 			this.blocks.push(newBlock);
 			this.blockLayer.add(newBlock);
-			
-			console.log('canvas click', this.editor.bubbleController.currentAction);
 		}
 	},
 	

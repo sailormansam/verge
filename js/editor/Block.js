@@ -1,6 +1,5 @@
 var Block = function (x, y, key, material) {
 	this.material = material;
-	console.log(x, y, key, material);
 	Phaser.Sprite.call(this, game, x, y, key, material);
 	game.add.existing(this);
 };

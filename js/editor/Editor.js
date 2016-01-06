@@ -15,6 +15,11 @@ GameStates.Editor = function (game) {
 	// collison layers
 	this.playerCollisionGroup;
 	this.blockCollisionGroup;
+	
+	this.UILayer;
+	
+	// constants
+	this.MAP_GRAIN = 40;	// size of map blocks
 };
 
 GameStates.Editor.prototype = {
@@ -37,11 +42,11 @@ GameStates.Editor.prototype = {
 		// set world bounds
 		game.world.setBounds(0, 0, 2000, 2000);
 		
-		// make level
-		this.map = new Canvas(this);
-		
 		// draw grid for reference
 		this.drawGrid();
+		
+		// make level
+		this.map = new Canvas(this);
 		
 		// create map button
 		this.mapButton = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
@@ -83,6 +88,7 @@ GameStates.Editor.prototype = {
 		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.Q ]);
 		
 		this.pointerController = new PointerController(this);
+		
 	},
 	
 	preRender: function () {
@@ -146,17 +152,17 @@ GameStates.Editor.prototype = {
 		bmd.ctx.setLineDash([1,2]);
 		
 		// loop through grid x
-		for(var i = 0, len = game.world.width / this.map.MAP_GRAIN; i < len; i++) {
+		for(var i = 0, len = game.world.width / this.MAP_GRAIN; i < len; i++) {
 			// draw line
-			bmd.ctx.moveTo(i * this.map.MAP_GRAIN, 0);
-			bmd.ctx.lineTo(i * this.map.MAP_GRAIN, game.world.height);
+			bmd.ctx.moveTo(i * this.MAP_GRAIN, 0);
+			bmd.ctx.lineTo(i * this.MAP_GRAIN, game.world.height);
 		}
 		
 		// loop through grid y
-		for(var i = 0, len = game.world.height / this.map.MAP_GRAIN; i < len; i++) {
+		for(var i = 0, len = game.world.height / this.MAP_GRAIN; i < len; i++) {
 			// draw line
-			bmd.ctx.moveTo(0, i * this.map.MAP_GRAIN);
-			bmd.ctx.lineTo(game.world.width, i * this.map.MAP_GRAIN);
+			bmd.ctx.moveTo(0, i * this.MAP_GRAIN);
+			bmd.ctx.lineTo(game.world.width, i * this.MAP_GRAIN);
 		}
 		
 		bmd.ctx.stroke();
