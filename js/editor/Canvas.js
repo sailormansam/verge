@@ -9,7 +9,9 @@ var Canvas = function (parent) {
 	
 	// layers
 	this.blockLayer;
+	this.UILayer;
 	
+	this.loadButton;
 	this.saveButton;
 	this.UIUp;
 	
@@ -25,17 +27,30 @@ Canvas.prototype = {
 		this.blocks = [];
 		this.UIUp = true;
 		
+		this.UILayer = game.add.group();
+		this.UILayer.fixedToCamera = true;
+		
 		// get json
 		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
 		this.blockLayer = game.add.group();
 		
-		this.saveButton = game.add.sprite(game.width - 80, 80, 'bubble');
+		this.saveButton = game.add.sprite(game.width - 140, 80, 'save');
 		this.saveButton.inputEnabled = true;
 		this.saveButton.events.onInputDown.add(this.save, this);
-		this.saveButton.events.onInputUp.add(this.upSave, this);
+		this.saveButton.events.onInputUp.add(this.upUI, this);
 		this.saveButton.input.priorityID = 2;
 		this.saveButton.anchor.set(0.5);
 		this.saveButton.input.useHandCursor = true;
+		this.UILayer.add(this.saveButton);
+		
+		this.loadButton = game.add.sprite(game.width - 80, 80, 'load');
+		this.loadButton.inputEnabled = true;
+		this.loadButton.events.onInputDown.add(this.load, this);
+		this.loadButton.events.onInputUp.add(this.upUI, this);
+		this.loadButton.input.priorityID = 2;
+		this.loadButton.anchor.set(0.5);
+		this.loadButton.input.useHandCursor = true;
+		this.UILayer.add(this.loadButton);
 		
 		this.clickElement.inputEnabled = true;
 		this.clickElement.events.onInputDown.add(this.click, this);
@@ -44,7 +59,8 @@ Canvas.prototype = {
 	},
 	
 	load: function () {
-		
+		console.log('load');
+		this.UIUp = false;
 	},
 	
 	save: function () {
@@ -75,7 +91,7 @@ Canvas.prototype = {
 		this.UIUp = false;
 	},
 	
-	upSave: function () {
+	upUI: function () {
 		this.UIUp = true;
 	},
 	
