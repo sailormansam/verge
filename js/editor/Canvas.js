@@ -3,6 +3,14 @@ var Canvas = function (parent) {
 	this.data;
 	this.blocks;
 	
+	
+	this.materialKey = {
+		STATIC: this.editor.actions[0].sprite.key,
+		DYNAMIC: this.editor.actions[1].sprite.key,
+		START: this.editor.actions[2].sprite.key,
+		TELEPORTER: this.editor.actions[3].sprite.key
+	};
+	
 	this.clickElement = game.add.sprite(0, 0);
 	this.clickElement.width = game.world.width;
 	this.clickElement.height = game.world.height;
@@ -14,6 +22,7 @@ var Canvas = function (parent) {
 	this.loadButton;
 	this.saveButton;
 	this.UIUp;
+	this.levels;
 	
 	// constants
 	this.MAP_GRAIN = 40;	// size of map blocks
@@ -56,11 +65,31 @@ Canvas.prototype = {
 		this.clickElement.events.onInputDown.add(this.click, this);
 		this.clickElement.events.onInputUp.add(this.up, this);
 		this.clickElement.input.priorityID = 1;
+		
+		// get json
+		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
+		
+		// make bubbles or UI to show and click levels
+		this.level = 0;
 	},
 	
 	load: function () {
 		console.log('load');
+		
 		this.UIUp = false;
+		
+		// empty block array show warning or have undo button
+		this.blocks = [];
+		
+		// create map
+		for(var i = 0, len = this.data.level[this.level].blocks.length; i < len; i++) {
+			var newBlock = new Block(this.data.level[this.level].blocks[i].x * this.MAP_GRAIN,
+									   this.data.level[this.level].blocks[i].y * this.MAP_GRAIN,
+									   this.materialKey[this.data.level[this.level].blocks[i].material],
+									   this.data.level[this.level].blocks[i].material);
+			this.blocks.push(newBlock);
+			this.blockLayer.add(newBlock);
+		}
 	},
 	
 	save: function () {

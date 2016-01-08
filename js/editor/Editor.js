@@ -45,6 +45,15 @@ GameStates.Editor.prototype = {
 		// draw grid for reference
 		this.drawGrid();
 		
+		
+		// populate actions
+		this.actions = [
+			new BlockDynamicObject(),
+			new BlockStaticObject(),
+			new StartObject(),
+			new TeleporterObject()
+		];
+		
 		// make level
 		this.map = new Canvas(this);
 		
@@ -62,13 +71,6 @@ GameStates.Editor.prototype = {
 			this.previousLocation = new Phaser.Point(x, y);
 		}, this);
 		
-		// populate actions
-		this.actions = [
-			new BlockDynamicObject(),
-			new BlockStaticObject(),
-			new StartObject(),
-			new TeleporterObject()
-		];
 		
 		// populate the bubbles with actions
 		this.bubbleController = new BubbleController();
