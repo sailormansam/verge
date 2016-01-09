@@ -73,7 +73,8 @@ PointerController.prototype = {
 	},
 	
 	drawNet: function (pointer) {
-		this.graphics.beginFill(0xff0000);
+		this.graphics.lineStyle(1, 0x334D63, 1);
+		this.graphics.beginFill(0x398DB2);
 		this.graphics.drawRect(game.camera.x + this.originPointer.x, game.camera.y + this.originPointer.y, pointer.x - this.originPointer.x, pointer.y - this.originPointer.y);
 	}
 };

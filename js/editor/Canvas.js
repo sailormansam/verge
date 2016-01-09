@@ -36,12 +36,12 @@ Canvas.prototype = {
 		this.blocks = [];
 		this.UIUp = true;
 		
-		this.UILayer = game.add.group();
-		this.UILayer.fixedToCamera = true;
-		
 		// get json
 		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
 		this.blockLayer = game.add.group();
+		
+		this.UILayer = game.add.group();
+		this.UILayer.fixedToCamera = true;
 		
 		this.saveButton = game.add.sprite(game.width - 140, 80, 'save');
 		this.saveButton.inputEnabled = true;
