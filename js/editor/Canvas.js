@@ -43,6 +43,9 @@ Canvas.prototype = {
 		this.UILayer = game.add.group();
 		this.UILayer.fixedToCamera = true;
 		
+		this.loadLayer = game.add.group();
+		this.loadLayer.fixedToCamera = true;
+		
 		this.saveButton = game.add.sprite(game.width - 140, 80, 'save');
 		this.saveButton.inputEnabled = true;
 		this.saveButton.events.onInputDown.add(this.save, this);
@@ -71,25 +74,73 @@ Canvas.prototype = {
 		
 		// make bubbles or UI to show and click levels
 		this.level = 0;
+		
+		// create load ui
+		for(var i = 0, len = this.data.level.length; i < len; i++) {
+			this.createLoadBubble(i);
+		}
+		
+		this.loadLayer.alpha = 0;
+		this.loadLayer.visible = false;
+		
+		// load level text
+		var loadText = game.add.text(game.width * .5, 100, 'LOAD LEVEL', textStyle['large']);
+		loadText.anchor.set(0.5);
+		this.loadLayer.add(loadText);
 	},
 	
 	load: function () {
 		console.log('load');
 		
-		this.UIUp = false;
+		// bring up levels to pick from
+		this.loadLayer.alpha = 1;
+		this.loadLayer.visible = true;
 		
+		this.UIUp = false;
+	},
+	
+	createLoadBubble: function (i) {
+		var bubbleGroup = game.add.group();
+		bubbleGroup.x = i * 60 + 200;
+		bubbleGroup.y = 150;
+		
+		// create bubble
+		var bubble = game.add.sprite(0, 0, 'bubble');
+		bubble.inputEnabled = true;
+		bubble.events.onInputDown.add(function(){ this.loadLevel(i) }, this);
+		bubble.events.onInputUp.add(this.upUI, this);
+		bubble.input.priorityID = 2;
+		bubble.input.useHandCursor = true;
+		bubbleGroup.add(bubble);
+		
+		// level number
+		var levelText = game.add.text(bubble.width / 2, bubble.height / 2 + 3, i, textStyle['normal']);
+		levelText.anchor.set(0.5);
+		bubbleGroup.add(levelText)
+		
+		this.loadLayer.add(bubbleGroup);
+	},
+	
+	loadLevel: function (level) {
 		// empty block array show warning or have undo button
+		this.blocks.forEach(function (block) {
+			block.destroy();
+		});
 		this.blocks = [];
 		
 		// create map
-		for(var i = 0, len = this.data.level[this.level].blocks.length; i < len; i++) {
-			var newBlock = new Block(this.data.level[this.level].blocks[i].x * this.MAP_GRAIN,
-									   this.data.level[this.level].blocks[i].y * this.MAP_GRAIN,
-									   this.materialKey[this.data.level[this.level].blocks[i].material],
-									   this.data.level[this.level].blocks[i].material);
+		for(var i = 0, len = this.data.level[level].blocks.length; i < len; i++) {
+			var newBlock = new Block(this.data.level[level].blocks[i].x * this.MAP_GRAIN,
+									   this.data.level[level].blocks[i].y * this.MAP_GRAIN,
+									   this.materialKey[this.data.level[level].blocks[i].material],
+									   this.data.level[level].blocks[i].material);
 			this.blocks.push(newBlock);
 			this.blockLayer.add(newBlock);
 		}
+		
+		// hide load layer
+		this.loadLayer.alpha = 0;
+		this.loadLayer.visible = false;
 	},
 	
 	save: function () {
