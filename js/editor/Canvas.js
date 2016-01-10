@@ -3,7 +3,6 @@ var Canvas = function (parent) {
 	this.data;
 	this.blocks;
 	
-	
 	this.materialKey = {
 		STATIC: this.editor.actions[0].sprite.key,
 		DYNAMIC: this.editor.actions[1].sprite.key,
@@ -16,7 +15,6 @@ var Canvas = function (parent) {
 	this.clickElement.height = game.world.height;
 	
 	// layers
-	this.blockLayer;
 	this.UILayer;
 	
 	this.loadButton;
@@ -38,7 +36,6 @@ Canvas.prototype = {
 		
 		// get json
 		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
-		this.blockLayer = game.add.group();
 		
 		this.UILayer = game.add.group();
 		this.UILayer.fixedToCamera = true;
@@ -58,7 +55,6 @@ Canvas.prototype = {
 		this.loadButton = game.add.sprite(game.width - 80, 80, 'load');
 		this.loadButton.inputEnabled = true;
 		this.loadButton.events.onInputDown.add(this.load, this);
-		this.loadButton.events.onInputUp.add(this.upUI, this);
 		this.loadButton.input.priorityID = 2;
 		this.loadButton.anchor.set(0.5);
 		this.loadButton.input.useHandCursor = true;
@@ -76,6 +72,26 @@ Canvas.prototype = {
 		this.level = 0;
 		
 		// create load ui
+		// create overlay background
+		var graphics = game.add.graphics(0, 0);
+		graphics.beginFill(0xffffff);
+		graphics.drawRect(0, 0, game.width, game.height);
+
+		var background = game.add.sprite(0, 0, graphics.generateTexture());
+		background.alpha = 0.65;
+		background.inputEnabled = true;
+		background.input.priorityID = 3;
+		background.events.onInputDown.add(function(){
+			// hide load layer
+			this.loadLayer.alpha = 0;
+			this.loadLayer.visible = false;
+			this.editor.overlayActive = false;
+		}, this);
+		
+		graphics.destroy();
+		
+		this.loadLayer.add(background);
+		
 		for(var i = 0, len = this.data.level.length; i < len; i++) {
 			this.createLoadBubble(i);
 		}
@@ -97,6 +113,7 @@ Canvas.prototype = {
 		this.loadLayer.visible = true;
 		
 		this.UIUp = false;
+		this.editor.overlayActive = true;
 	},
 	
 	createLoadBubble: function (i) {
@@ -109,7 +126,7 @@ Canvas.prototype = {
 		bubble.inputEnabled = true;
 		bubble.events.onInputDown.add(function(){ this.loadLevel(i) }, this);
 		bubble.events.onInputUp.add(this.upUI, this);
-		bubble.input.priorityID = 2;
+		bubble.input.priorityID = 4;
 		bubble.input.useHandCursor = true;
 		bubbleGroup.add(bubble);
 		
@@ -135,12 +152,13 @@ Canvas.prototype = {
 									   this.materialKey[this.data.level[level].blocks[i].material],
 									   this.data.level[level].blocks[i].material);
 			this.blocks.push(newBlock);
-			this.blockLayer.add(newBlock);
+			this.editor.blockLayer.add(newBlock);
 		}
 		
 		// hide load layer
 		this.loadLayer.alpha = 0;
 		this.loadLayer.visible = false;
+		this.editor.overlayActive = false;
 	},
 	
 	save: function () {
@@ -209,7 +227,7 @@ Canvas.prototype = {
 			
 			var newBlock = new Block(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key, this.editor.bubbleController.currentAction.material);
 			this.blocks.push(newBlock);
-			this.blockLayer.add(newBlock);
+			this.editor.blockLayer.add(newBlock);
 		}
 	},
 	

@@ -7,7 +7,6 @@ var BubbleController = function () {
 	
 	this.create();
 	this.bubbleLayer = game.add.group();
-	this.bubbleLayer.fixedToCamera = true;
 };
 
 BubbleController.prototype = {

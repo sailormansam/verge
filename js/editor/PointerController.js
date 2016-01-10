@@ -2,6 +2,7 @@ var PointerController = function (parent) {
 	this.editor = parent;
 	this.graphics;
 	this.originPointer;
+	this.previousLocation = new Phaser.Point(0, 0);
 	
 	this.create();
 };
@@ -64,12 +65,18 @@ PointerController.prototype = {
 	},
 	
 	update: function () {
-		// place blocks if mouse is down
+		// place blocks with left click
 		if(game.input.activePointer.leftButton.isDown && !this.editor.bubbleController.showing && this.editor.bubbleController.hidden && this.editor.map.UIUp) {
 			this.editor.map.place();
 		}
 		
-		// click on canvas to close bubbles when open
+		// move map with middle mouse
+		if(game.input.activePointer.middleButton.isDown) {
+			game.camera.x -= game.input.x - this.previousLocation.x;
+			game.camera.y -= game.input.y - this.previousLocation.y;
+		}
+		
+		this.previousLocation = new Phaser.Point(game.input.x, game.input.y);
 	},
 	
 	drawNet: function (pointer) {

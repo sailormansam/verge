@@ -5,17 +5,15 @@ GameStates.Editor = function (game) {
 	this.teleporter;
 	this.mapButton;
 	this.bubbleController;
-	this.previousLocation = new Phaser.Point(0, 0);
 	this.actions;
 	this.pointerController;
-		
+	this.overlayActive;
+	
 	// keys
 	this.bubbleKey;
 	
-	// collison layers
-	this.playerCollisionGroup;
-	this.blockCollisionGroup;
-	
+	// layers
+	this.blockLayer;
 	this.UILayer;
 	
 	// constants
@@ -25,19 +23,8 @@ GameStates.Editor = function (game) {
 GameStates.Editor.prototype = {
 	create: function () {
 		// reset variables
-		this.player = null;
 		this.bubbleShow = false;
-		
-		// enable physics
-		game.physics.startSystem(Phaser.Physics.P2JS);
-		game.physics.p2.defaultRestitution = 1;
-		game.physics.p2.gravity.y = this.GRAVITY;
-		game.physics.p2.damping = 1;
-		
-		// turn on collision callbacks with collision groups
-		game.physics.p2.setImpactEvents(true);
-		this.playerCollisionGroup = game.physics.p2.createCollisionGroup();
-		this.blockCollisionGroup = game.physics.p2.createCollisionGroup();
+		this.screenActive = false;
 		
 		// set world bounds
 		game.world.setBounds(0, 0, 2000, 2000);
@@ -45,6 +32,9 @@ GameStates.Editor.prototype = {
 		// draw grid for reference
 		this.drawGrid();
 		
+		this.blockLayer = game.add.group();
+		this.UILayer = game.add.group();
+		this.UILayer.fixedToCamera = true;
 		
 		// populate actions
 		this.actions = [
@@ -53,24 +43,6 @@ GameStates.Editor.prototype = {
 			new StartObject(),
 			new TeleporterObject()
 		];
-		
-		// make level
-		this.map = new Canvas(this);
-		
-		// create map button
-		this.mapButton = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-		this.mapButton.onDown.add(this.saveMap, this);
-		
-		// move map with middle mouse
-		game.input.addMoveCallback(function(pointer, x, y) {
-			if(pointer.middleButton.isDown) {
-				game.camera.x -= x - this.previousLocation.x;
-				game.camera.y -= y - this.previousLocation.y;
-			}
-			
-			this.previousLocation = new Phaser.Point(x, y);
-		}, this);
-		
 		
 		// populate the bubbles with actions
 		this.bubbleController = new BubbleController();
@@ -82,46 +54,47 @@ GameStates.Editor.prototype = {
 		// set first bubble as active
 		this.bubbleController.setActive(this.bubbleController.bubbles[0]);
 		
-		// set up keys
+		// add to bubbles to UI layer
+		this.UILayer.add(this.bubbleController.bubbleLayer);
+		
+		// set up keys to active block bubbles
 		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 		this.bubbleKey.onDown.add(this.toggle, this);
 		
 		// Stop the following keys from propagating up to the browser
 		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 		
-		this.pointerController = new PointerController(this);
+		// make level
+		this.map = new Canvas(this);
 		
+		// pointer Controller
+		this.pointerController = new PointerController(this);
 	},
 	
 	preRender: function () {
-		this.pointerController.preRender();
+		if(!this.overlayActive) {
+			this.pointerController.preRender();
+		}
 	},
 	
 	update: function () {
-		this.move();
-		
-		this.pointerController.update();
+		if(!this.overlayActive) {
+			this.move();
+			this.pointerController.update();
+		}
 	},
 	
 	toggle: function () {
-		if(this.bubbleController.showing) {
-			this.bubbleController.hide();
-			this.bubbleController.hidden = true;
+		if(!this.overlayActive) {
+			if(!this.bubbleController.showing) {
+				this.bubbleController.show();
+				this.bubbleController.hidden = false;
+			}
+			else {
+				this.bubbleController.hide();
+				this.bubbleController.hidden = true;
+			}
 		}
-		else {
-			this.bubbleController.show();
-			this.bubbleController.hidden = false;
-		}
-	},
-	
-	saveMap: function () {
-		// spit out a json object
-		var blocks = [];
-		for( var i = 0, len = this.block.length; i < len; i++) {
-			blocks.push({type: 'STATIC', x:this.block[i].x, y:this.block[i].y});
-		}
-		
-		console.log(JSON.stringify({"block":blocks}));
 	},
 	
 	move: function () {
