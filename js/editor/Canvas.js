@@ -82,10 +82,7 @@ Canvas.prototype = {
 		background.inputEnabled = true;
 		background.input.priorityID = 3;
 		background.events.onInputDown.add(function(){
-			// hide load layer
-			this.loadLayer.alpha = 0;
-			this.loadLayer.visible = false;
-			this.editor.overlayActive = false;
+			this.hideLoad();
 		}, this);
 		
 		graphics.destroy();
@@ -98,6 +95,7 @@ Canvas.prototype = {
 		
 		this.loadLayer.alpha = 0;
 		this.loadLayer.visible = false;
+		this.loadLayer.cameraOffset.y = 25;
 		
 		// load level text
 		var loadText = game.add.text(game.width * .5, 100, 'LOAD LEVEL', textStyle['large']);
@@ -109,8 +107,10 @@ Canvas.prototype = {
 		console.log('load');
 		
 		// bring up levels to pick from
-		this.loadLayer.alpha = 1;
+		this.loadLayer.alpha = 0;
 		this.loadLayer.visible = true;
+		game.add.tween(this.loadLayer.cameraOffset).to({ y: 0 }, 500, Phaser.Easing.Quadratic.InOut, true);
+		game.add.tween(this.loadLayer).to({ alpha: 1 }, 500, Phaser.Easing.Quadratic.InOut, true);
 		
 		this.UIUp = false;
 		this.editor.overlayActive = true;
@@ -155,10 +155,19 @@ Canvas.prototype = {
 			this.editor.blockLayer.add(newBlock);
 		}
 		
+		this.hideLoad();
+	},
+	
+	hideLoad: function() {
 		// hide load layer
-		this.loadLayer.alpha = 0;
-		this.loadLayer.visible = false;
-		this.editor.overlayActive = false;
+		this.loadLayer.alpha = 1;
+		
+		game.add.tween(this.loadLayer.cameraOffset).to({ y: 25 }, 500, Phaser.Easing.Quadratic.InOut, true);
+		var tween = game.add.tween(this.loadLayer).to({ alpha: 0 }, 500, Phaser.Easing.Quadratic.InOut, true);
+		tween.onComplete.add(function(){
+			this.loadLayer.visible = false;
+			this.editor.overlayActive = false;
+		}, this);
 	},
 	
 	save: function () {
