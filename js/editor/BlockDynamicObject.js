@@ -6,7 +6,7 @@ var BlockDynamicObject = function () {
 
 	graphics.drawRect(0, 0, 40, 40);
 	
-	ActionObject.call(this, graphics.generateTexture(), 'DYNAMIC');
+	ActionObject.call(this, graphics.generateTexture(), 'DYNAMIC', 0);
 	
 	graphics.destroy();
 };

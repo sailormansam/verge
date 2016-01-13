@@ -216,7 +216,8 @@ Canvas.prototype = {
 	},
 	
 	place: function () {
-		if(this.editor.bubbleController.currentAction) {
+		// place block if there is an action and if it checks out with that actions verification
+		if(this.editor.bubbleController.currentAction && this.editor.bubbleController.currentAction.check(this.blocks)) {
 			var pointer = game.input;
 
 			// get a pointer relative to camera
@@ -242,11 +243,11 @@ Canvas.prototype = {
 	
 	removeBlocksWithin: function (hitbox) {
 		// remove elements that overlap hitbox
-		for(var i = 0, len = this.blocks.length; i < len; i++) {
-			if(this.blocks[i] != null
-			   && Phaser.Rectangle.intersects(this.blocks[i].getBounds(), hitbox)) {
+		var i = this.blocks.length
+		while (i--) {
+			if(Phaser.Rectangle.intersects(this.blocks[i].getBounds(), hitbox)) {
 				this.blocks[i].destroy();
-				this.blocks[i] = null;
+				this.blocks.splice(i, 1);
 			}
 		}
 	}

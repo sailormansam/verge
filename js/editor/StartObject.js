@@ -6,7 +6,7 @@ var StartObject = function (mapGrain) {
 
 	graphics.drawRect(0, 0, 40, 40);
 	
-	ActionObject.call(this, graphics.generateTexture(), 'START');
+	ActionObject.call(this, graphics.generateTexture(), 'START', 1);
 	
 	graphics.destroy();
 };
