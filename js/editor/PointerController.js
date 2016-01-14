@@ -3,6 +3,10 @@ var PointerController = function (parent) {
 	this.graphics;
 	this.originPointer;
 	this.previousLocation = new Phaser.Point(0, 0);
+	this.shiftKey;
+	this.netColor;
+	this.netBorderColor;
+	this.addBlocks = false;
 	
 	this.create();
 };
@@ -15,13 +19,24 @@ PointerController.prototype = {
 		// add graphics layer make semi transparent
 		this.graphics = game.add.graphics(0, 0);
 		this.graphics.alpha = 0.5;
+		
+		this.shiftKey = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 	},
 	
 	preRender: function () {
 		// clear graphics before potential drawing
 		this.graphics.clear();
-
-		if(game.input.activePointer.rightButton.isDown) {
+		
+		if(game.input.activePointer.rightButton.isDown || (game.input.activePointer.leftButton.isDown && this.shiftKey.isDown)) {
+			if(game.input.activePointer.rightButton.isDown) {
+				this.netColor = 0x398DB2;
+				this.netBorderColor = 0x334D63;
+				this.addBlocks = false;
+			} else if (game.input.activePointer.leftButton.isDown && this.shiftKey.isDown) {
+				this.netColor = 0x3CB58A;
+				this.netBorderColor = 0x295141;
+				this.addBlocks = true;
+			}
 			// Set the origin of the net
 			if(this.originPointer == null) {
 				this.originPointer = {
@@ -57,8 +72,13 @@ PointerController.prototype = {
 				
 				var hitbox = new Phaser.Rectangle(a.x, a.y, b.x - a.x, b.y - a.y);
 				
-				// remove blocks under net
-				this.editor.map.removeBlocksWithin(hitbox);
+				// remove or add blocks under net
+				if(this.addBlocks) {
+					this.editor.map.addBlocksWithin(hitbox);
+				}
+				else {
+					this.editor.map.removeBlocksWithin(hitbox);
+				}
 			}
 			this.originPointer = null;
 		}
@@ -66,7 +86,7 @@ PointerController.prototype = {
 	
 	update: function () {
 		// place blocks with left click
-		if(game.input.activePointer.leftButton.isDown && !this.editor.bubbleController.showing && this.editor.bubbleController.hidden && this.editor.map.UIUp) {
+		if(game.input.activePointer.leftButton.isDown && !this.editor.bubbleController.showing && this.editor.bubbleController.hidden && this.editor.map.UIUp && this.shiftKey.isUp) {
 			this.editor.map.place();
 		}
 		
@@ -80,8 +100,8 @@ PointerController.prototype = {
 	},
 	
 	drawNet: function (pointer) {
-		this.graphics.lineStyle(1, 0x334D63, 1);
-		this.graphics.beginFill(0x398DB2);
+		this.graphics.lineStyle(1, this.netBorderColor, 1);
+		this.graphics.beginFill(this.netColor);
 		this.graphics.drawRect(game.camera.x + this.originPointer.x, game.camera.y + this.originPointer.y, pointer.x - this.originPointer.x, pointer.y - this.originPointer.y);
 	}
 };

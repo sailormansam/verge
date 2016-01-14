@@ -226,11 +226,11 @@ Canvas.prototype = {
 				y: Math.floor(((pointer.y + game.camera.y) / this.MAP_GRAIN))
 			};
 
+			console.log(truePointer);
 			// check if there is a block at pointer location
 			for(var i = 0, len = this.blocks.length; i < len; i++) {
-				if(this.blocks[i] != null
-				   && this.blocks[i].x == (truePointer.x) * this.MAP_GRAIN
-				   && this.blocks[i].y == (truePointer.y) * this.MAP_GRAIN) {
+				if(this.blocks[i].x == truePointer.x * this.MAP_GRAIN
+				   && this.blocks[i].y == truePointer.y * this.MAP_GRAIN) {
 					return;
 				}
 			}
@@ -239,6 +239,27 @@ Canvas.prototype = {
 			this.blocks.push(newBlock);
 			this.editor.blockLayer.add(newBlock);
 		}
+	},
+	
+	addBlocksWithin: function (hitbox) {
+		// remove elements that overlap hitbox
+//		
+//		// find a rectangle that matches grid then fill rectangle
+//		var truePointer = new Phaser.Point(Math.floor(hitbox.x / this.MAP_GRAIN), Math.floor(hitbox.y / this.MAP_GRAIN));
+//		var trueDim = new Phaser.Point(Math.ceil((hitbox.x + hitbox.width) / this.MAP_GRAIN) + truePointer.x, Math.ceil((hitbox.y + hitbox.height) / this.MAP_GRAIN) + truePointer.y);
+//		
+//		for(var i = truePointer.x; i < trueDim.x; i++) {
+//			for(var j = truePointer.y; j < trueDim.y; j++) {
+//				for(var k = 0, len = this.blocks.length; k < len; k++) {
+//					if(this.blocks[k].x != i * this.MAP_GRAIN
+//					   || this.blocks[k].y != j * this.MAP_GRAIN) {
+//						var newBlock = new Block(i * this.MAP_GRAIN, j * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key, this.editor.bubbleController.currentAction.material);
+//						this.blocks.push(newBlock);
+//						this.editor.blockLayer.add(newBlock);
+//					}
+//				}
+//			}
+//		}
 	},
 	
 	removeBlocksWithin: function (hitbox) {
