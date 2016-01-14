@@ -226,7 +226,6 @@ Canvas.prototype = {
 				y: Math.floor(((pointer.y + game.camera.y) / this.MAP_GRAIN))
 			};
 
-			console.log(truePointer);
 			// check if there is a block at pointer location
 			for(var i = 0, len = this.blocks.length; i < len; i++) {
 				if(this.blocks[i].x == truePointer.x * this.MAP_GRAIN
@@ -243,23 +242,38 @@ Canvas.prototype = {
 	
 	addBlocksWithin: function (hitbox) {
 		// remove elements that overlap hitbox
-//		
-//		// find a rectangle that matches grid then fill rectangle
-//		var truePointer = new Phaser.Point(Math.floor(hitbox.x / this.MAP_GRAIN), Math.floor(hitbox.y / this.MAP_GRAIN));
-//		var trueDim = new Phaser.Point(Math.ceil((hitbox.x + hitbox.width) / this.MAP_GRAIN) + truePointer.x, Math.ceil((hitbox.y + hitbox.height) / this.MAP_GRAIN) + truePointer.y);
-//		
-//		for(var i = truePointer.x; i < trueDim.x; i++) {
-//			for(var j = truePointer.y; j < trueDim.y; j++) {
-//				for(var k = 0, len = this.blocks.length; k < len; k++) {
-//					if(this.blocks[k].x != i * this.MAP_GRAIN
-//					   || this.blocks[k].y != j * this.MAP_GRAIN) {
-//						var newBlock = new Block(i * this.MAP_GRAIN, j * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key, this.editor.bubbleController.currentAction.material);
-//						this.blocks.push(newBlock);
-//						this.editor.blockLayer.add(newBlock);
-//					}
-//				}
-//			}
-//		}
+		
+		// find a rectangle that matches grid then fill rectangle
+		var truePointer = new Phaser.Point(Math.floor((hitbox.x + game.camera.x) / this.MAP_GRAIN), Math.floor((hitbox.y + game.camera.y) / this.MAP_GRAIN));
+		var trueDim = new Phaser.Point(Math.ceil((hitbox.x + hitbox.width + game.camera.x) / this.MAP_GRAIN), Math.ceil((hitbox.y + hitbox.height + game.camera.y) / this.MAP_GRAIN));
+		
+		console.log(truePointer);
+		
+		// slim down list so we only check blocks within the bounds of the net
+		this.slimBlocks = [];
+		
+		for(var i = 0, len = this.blocks.length; i < len; i++) {
+			if(this.blocks[i].x > truePointer.x && this.blocks[i].x< trueDim.x
+			  && this.blocks[i].y > truePointer.y && this.blocks[i].y < trueDim.y) {
+				this.slimBlocks.push(this.blocks[i]);
+			}
+		}
+		
+		// check and place blocks
+		for(var i = truePointer.x; i < trueDim.x; i++) {
+			check: for(var j = truePointer.y; j < trueDim.y; j++) {
+				for(var k = 0, len = this.slimBlocks.length; k < len; k++) {
+					if(this.slimBlocks[k].x == i * this.MAP_GRAIN
+					   && this.slimBlocks[k].y == j * this.MAP_GRAIN) {
+						continue check;
+					}
+				}
+				
+				var newBlock = new Block(i * this.MAP_GRAIN, j * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key, this.editor.bubbleController.currentAction.material);
+				this.blocks.push(newBlock);
+				this.editor.blockLayer.add(newBlock);
+			}
+		}
 	},
 	
 	removeBlocksWithin: function (hitbox) {

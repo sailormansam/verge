@@ -27,6 +27,7 @@ PointerController.prototype = {
 		// clear graphics before potential drawing
 		this.graphics.clear();
 		
+		// make nets more obvious what they do
 		if(game.input.activePointer.rightButton.isDown || (game.input.activePointer.leftButton.isDown && this.shiftKey.isDown)) {
 			if(game.input.activePointer.rightButton.isDown) {
 				this.netColor = 0x398DB2;
