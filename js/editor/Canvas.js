@@ -109,8 +109,8 @@ Canvas.prototype = {
 		// bring up levels to pick from
 		this.loadLayer.alpha = 0;
 		this.loadLayer.visible = true;
-		game.add.tween(this.loadLayer.cameraOffset).to({ y: 0 }, 500, Phaser.Easing.Quadratic.InOut, true);
-		game.add.tween(this.loadLayer).to({ alpha: 1 }, 500, Phaser.Easing.Quadratic.InOut, true);
+		game.add.tween(this.loadLayer.cameraOffset).to({ y: 0 }, 250, Phaser.Easing.Quadratic.InOut, true);
+		game.add.tween(this.loadLayer).to({ alpha: 1 }, 250, Phaser.Easing.Quadratic.InOut, true);
 		
 		this.UIUp = false;
 		this.editor.overlayActive = true;
@@ -162,8 +162,8 @@ Canvas.prototype = {
 		// hide load layer
 		this.loadLayer.alpha = 1;
 		
-		game.add.tween(this.loadLayer.cameraOffset).to({ y: 25 }, 500, Phaser.Easing.Quadratic.InOut, true);
-		var tween = game.add.tween(this.loadLayer).to({ alpha: 0 }, 500, Phaser.Easing.Quadratic.InOut, true);
+		game.add.tween(this.loadLayer.cameraOffset).to({ y: 25 }, 250, Phaser.Easing.Quadratic.InOut, true);
+		var tween = game.add.tween(this.loadLayer).to({ alpha: 0 }, 250, Phaser.Easing.Quadratic.InOut, true);
 		tween.onComplete.add(function(){
 			this.loadLayer.visible = false;
 			this.editor.overlayActive = false;
@@ -246,8 +246,6 @@ Canvas.prototype = {
 		// find a rectangle that matches grid then fill rectangle
 		var truePointer = new Phaser.Point(Math.floor((hitbox.x + game.camera.x) / this.MAP_GRAIN), Math.floor((hitbox.y + game.camera.y) / this.MAP_GRAIN));
 		var trueDim = new Phaser.Point(Math.ceil((hitbox.x + hitbox.width + game.camera.x) / this.MAP_GRAIN), Math.ceil((hitbox.y + hitbox.height + game.camera.y) / this.MAP_GRAIN));
-		
-		console.log(truePointer);
 		
 		// slim down list so we only check blocks within the bounds of the net
 		this.slimBlocks = [];

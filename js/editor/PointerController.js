@@ -30,8 +30,8 @@ PointerController.prototype = {
 		// make nets more obvious what they do
 		if(game.input.activePointer.rightButton.isDown || (game.input.activePointer.leftButton.isDown && this.shiftKey.isDown)) {
 			if(game.input.activePointer.rightButton.isDown) {
-				this.netColor = 0x398DB2;
-				this.netBorderColor = 0x334D63;
+				this.netColor = 0xD13030;
+				this.netBorderColor = 0x7A2020;
 				this.addBlocks = false;
 			} else if (game.input.activePointer.leftButton.isDown && this.shiftKey.isDown) {
 				this.netColor = 0x3CB58A;
