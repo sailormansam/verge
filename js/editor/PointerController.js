@@ -76,9 +76,11 @@ PointerController.prototype = {
 				// remove or add blocks under net
 				if(this.addBlocks) {
 					this.editor.map.addBlocksWithin(hitbox);
+					this.pushToHistory();
 				}
 				else {
 					this.editor.map.removeBlocksWithin(hitbox);
+					this.pushToHistory();
 				}
 			}
 			this.originPointer = null;
@@ -89,6 +91,9 @@ PointerController.prototype = {
 		// place blocks with left click
 		if(game.input.activePointer.leftButton.isDown && !this.editor.bubbleController.showing && this.editor.bubbleController.hidden && this.editor.map.UIUp && this.shiftKey.isUp) {
 			this.editor.map.place();
+		}
+		else {
+			this.pushToHistory();
 		}
 		
 		// move map with middle mouse
@@ -104,5 +109,15 @@ PointerController.prototype = {
 		this.graphics.lineStyle(1, this.netBorderColor, 1);
 		this.graphics.beginFill(this.netColor);
 		this.graphics.drawRect(game.camera.x + this.originPointer.x, game.camera.y + this.originPointer.y, pointer.x - this.originPointer.x, pointer.y - this.originPointer.y);
+	},
+	
+	pushToHistory: function () {
+		// push action onto history stack
+		if(this.editor.map.actionCache.length > 0) {
+			this.editor.historyStack.push(this.editor.map.actionCache);
+
+			// clear action temp cache
+			this.editor.map.actionCache = [];
+		}
 	}
 };

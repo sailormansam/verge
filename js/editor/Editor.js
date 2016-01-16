@@ -11,10 +11,14 @@ GameStates.Editor = function (game) {
 	
 	// keys
 	this.bubbleKey;
+	this.undoKey;
 	
 	// layers
 	this.blockLayer;
 	this.UILayer;
+	
+	// history stack
+	this.historyStack;
 	
 	// constants
 	this.MAP_GRAIN = 40;	// size of map blocks
@@ -25,6 +29,7 @@ GameStates.Editor.prototype = {
 		// reset variables
 		this.bubbleShow = false;
 		this.screenActive = false;
+		this.historyStack = [];
 		
 		// set world bounds
 		game.world.setBounds(0, 0, 2000, 2000);
@@ -61,6 +66,10 @@ GameStates.Editor.prototype = {
 		this.bubbleKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 		this.bubbleKey.onDown.add(this.toggle, this);
 		
+		// ctrl z functionality
+		this.undoKey = game.input.keyboard.addKey(Phaser.Keyboard.Z);
+		this.undoKey.onDown.add(this.undo, this);
+		
 		// Stop the following keys from propagating up to the browser
 		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 		
@@ -93,6 +102,29 @@ GameStates.Editor.prototype = {
 			else {
 				this.bubbleController.hide();
 				this.bubbleController.hidden = true;
+			}
+		}
+	},
+	
+	undo: function () {
+		if(this.undoKey.ctrlKey && this.historyStack.length > 0) {
+			// pop last action on stack and undo
+			var undoElement = this.historyStack.pop();
+			
+			// remove or add based on type
+			var i = undoElement.length;
+			while(i--) {
+				switch(undoElement[i].type) {
+					case "add":
+						this.map.blocks[undoElement[i].index].destroy();
+						this.map.blocks.splice(undoElement[i].index, 1);
+						break;
+					case "remove":
+						var newBlock = new Block(undoElement[i].value.x, undoElement[i].value.y, undoElement[i].value.key, undoElement[i].value.material);
+						this.map.blocks.push(newBlock);
+						this.blockLayer.add(newBlock);
+						break;
+				}
 			}
 		}
 	},

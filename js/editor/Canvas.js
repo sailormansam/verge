@@ -22,6 +22,8 @@ var Canvas = function (parent) {
 	this.UIUp;
 	this.levels;
 	
+	this.actionCache;
+	
 	// constants
 	this.MAP_GRAIN = 40;	// size of map blocks
 	
@@ -32,6 +34,7 @@ Canvas.prototype = {
 	create: function () {
 		// reset variables
 		this.blocks = [];
+		this.actionCache = [];
 		this.UIUp = true;
 		
 		// get json
@@ -237,6 +240,7 @@ Canvas.prototype = {
 			var newBlock = new Block(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key, this.editor.bubbleController.currentAction.material);
 			this.blocks.push(newBlock);
 			this.editor.blockLayer.add(newBlock);
+			this.actionCache.push({ type: 'add', index: this.blocks.length - 1, value: newBlock });
 		}
 	},
 	
@@ -270,15 +274,17 @@ Canvas.prototype = {
 				var newBlock = new Block(i * this.MAP_GRAIN, j * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key, this.editor.bubbleController.currentAction.material);
 				this.blocks.push(newBlock);
 				this.editor.blockLayer.add(newBlock);
+				this.actionCache.push({ type: 'add', index: this.blocks.length - 1, value: newBlock });
 			}
 		}
 	},
 	
 	removeBlocksWithin: function (hitbox) {
 		// remove elements that overlap hitbox
-		var i = this.blocks.length
+		var i = this.blocks.length;
 		while (i--) {
 			if(Phaser.Rectangle.intersects(this.blocks[i].getBounds(), hitbox)) {
+				this.actionCache.push({ type: 'remove', index: i, value: this.blocks[i] });
 				this.blocks[i].destroy();
 				this.blocks.splice(i, 1);
 			}
