@@ -113,7 +113,6 @@ Bubble.prototype.click = function () {
 		this.bubbleController.hide();
 	}
 	else {
-		console.log('bubble click', this.action);
 		this.bubbleController.show();
 	}
 };

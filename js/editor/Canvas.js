@@ -1,8 +1,9 @@
 var Canvas = function (parent) {
+	// properties
 	this.editor = parent;
 	this.data;
 	this.blocks;
-	
+	this.clickElement;
 	this.materialKey = {
 		STATIC: this.editor.actions[0].sprite.key,
 		DYNAMIC: this.editor.actions[1].sprite.key,
@@ -10,19 +11,9 @@ var Canvas = function (parent) {
 		TELEPORTER: this.editor.actions[3].sprite.key
 	};
 	
-	this.clickElement = game.add.sprite(0, 0);
-	this.clickElement.width = game.world.width;
-	this.clickElement.height = game.world.height;
-	
 	// layers
-	this.UILayer;
-	
-	this.loadButton;
-	this.saveButton;
-	this.UIUp;
-	this.levels;
-	
-	this.actionCache;
+	this.gridLayer;
+	this.blockLayer;
 	
 	// constants
 	this.MAP_GRAIN = 40;	// size of map blocks
@@ -34,111 +25,21 @@ Canvas.prototype = {
 	create: function () {
 		// reset variables
 		this.blocks = [];
-		this.actionCache = [];
-		this.UIUp = true;
 		
-		// get json
-		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
-		
-		this.UILayer = game.add.group();
-		this.UILayer.fixedToCamera = true;
-		
-		this.loadLayer = game.add.group();
-		this.loadLayer.fixedToCamera = true;
-		
-		this.saveButton = game.add.sprite(game.width - 140, 80, 'save');
-		this.saveButton.inputEnabled = true;
-		this.saveButton.events.onInputDown.add(this.save, this);
-		this.saveButton.events.onInputUp.add(this.upUI, this);
-		this.saveButton.input.priorityID = 2;
-		this.saveButton.anchor.set(0.5);
-		this.saveButton.input.useHandCursor = true;
-		this.UILayer.add(this.saveButton);
-		
-		this.loadButton = game.add.sprite(game.width - 80, 80, 'load');
-		this.loadButton.inputEnabled = true;
-		this.loadButton.events.onInputDown.add(this.load, this);
-		this.loadButton.input.priorityID = 2;
-		this.loadButton.anchor.set(0.5);
-		this.loadButton.input.useHandCursor = true;
-		this.UILayer.add(this.loadButton);
-		
+		this.clickElement = game.add.sprite(0, 0);
+		this.clickElement.width = game.world.width;
+		this.clickElement.height = game.world.height;
 		this.clickElement.inputEnabled = true;
 		this.clickElement.events.onInputDown.add(this.click, this);
 		this.clickElement.events.onInputUp.add(this.up, this);
 		this.clickElement.input.priorityID = 1;
 		
-		// get json
-		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
+		// set layers
+		this.gridLayer = game.add.group();
+		this.blockLayer = game.add.group();
 		
-		// make bubbles or UI to show and click levels
-		this.level = 0;
-		
-		// create load ui
-		// create overlay background
-		var graphics = game.add.graphics(0, 0);
-		graphics.beginFill(0xffffff);
-		graphics.drawRect(0, 0, game.width, game.height);
-
-		var background = game.add.sprite(0, 0, graphics.generateTexture());
-		background.alpha = 0.65;
-		background.inputEnabled = true;
-		background.input.priorityID = 3;
-		background.events.onInputDown.add(function(){
-			this.hideLoad();
-		}, this);
-		
-		graphics.destroy();
-		
-		this.loadLayer.add(background);
-		
-		for(var i = 0, len = this.data.level.length; i < len; i++) {
-			this.createLoadBubble(i);
-		}
-		
-		this.loadLayer.alpha = 0;
-		this.loadLayer.visible = false;
-		this.loadLayer.cameraOffset.y = 25;
-		
-		// load level text
-		var loadText = game.add.text(game.width * .5, 100, 'LOAD LEVEL', textStyle['large']);
-		loadText.anchor.set(0.5);
-		this.loadLayer.add(loadText);
-	},
-	
-	load: function () {
-		console.log('load');
-		
-		// bring up levels to pick from
-		this.loadLayer.alpha = 0;
-		this.loadLayer.visible = true;
-		game.add.tween(this.loadLayer.cameraOffset).to({ y: 0 }, 250, Phaser.Easing.Quadratic.InOut, true);
-		game.add.tween(this.loadLayer).to({ alpha: 1 }, 250, Phaser.Easing.Quadratic.InOut, true);
-		
-		this.UIUp = false;
-		this.editor.overlayActive = true;
-	},
-	
-	createLoadBubble: function (i) {
-		var bubbleGroup = game.add.group();
-		bubbleGroup.x = i * 60 + 200;
-		bubbleGroup.y = 150;
-		
-		// create bubble
-		var bubble = game.add.sprite(0, 0, 'bubble');
-		bubble.inputEnabled = true;
-		bubble.events.onInputDown.add(function(){ this.loadLevel(i) }, this);
-		bubble.events.onInputUp.add(this.upUI, this);
-		bubble.input.priorityID = 4;
-		bubble.input.useHandCursor = true;
-		bubbleGroup.add(bubble);
-		
-		// level number
-		var levelText = game.add.text(bubble.width / 2, bubble.height / 2 + 3, i, textStyle['normal']);
-		levelText.anchor.set(0.5);
-		bubbleGroup.add(levelText)
-		
-		this.loadLayer.add(bubbleGroup);
+		// draw grid
+		this.drawGrid();
 	},
 	
 	loadLevel: function (level) {
@@ -146,81 +47,38 @@ Canvas.prototype = {
 		this.blocks.forEach(function (block) {
 			block.destroy();
 		});
+		
 		this.blocks = [];
 		
 		// create map
-		for(var i = 0, len = this.data.level[level].blocks.length; i < len; i++) {
-			var newBlock = new Block(this.data.level[level].blocks[i].x * this.MAP_GRAIN,
-									   this.data.level[level].blocks[i].y * this.MAP_GRAIN,
-									   this.materialKey[this.data.level[level].blocks[i].material],
-									   this.data.level[level].blocks[i].material);
+		for(var i = 0, len = this.editor.data.level[level].blocks.length; i < len; i++) {
+			var newBlock = new Block(this.editor.data.level[level].blocks[i].x * this.MAP_GRAIN,
+									   this.editor.data.level[level].blocks[i].y * this.MAP_GRAIN,
+									   this.materialKey[this.editor.data.level[level].blocks[i].material],
+									   this.editor.data.level[level].blocks[i].material);
 			this.blocks.push(newBlock);
-			this.editor.blockLayer.add(newBlock);
+			this.blockLayer.add(newBlock);
 		}
 		
-		this.hideLoad();
-	},
-	
-	hideLoad: function() {
-		// hide load layer
-		this.loadLayer.alpha = 1;
-		
-		game.add.tween(this.loadLayer.cameraOffset).to({ y: 25 }, 250, Phaser.Easing.Quadratic.InOut, true);
-		var tween = game.add.tween(this.loadLayer).to({ alpha: 0 }, 250, Phaser.Easing.Quadratic.InOut, true);
-		tween.onComplete.add(function(){
-			this.loadLayer.visible = false;
-			this.editor.overlayActive = false;
-		}, this);
-	},
-	
-	save: function () {
-		var mapSave = {
-			levels:[
-				{
-					start: {x: 0, y: 0},
-					teleporter: {x: 0, y: 0},
-					blocks: []
-				}
-			]
-		};
-		
-		// generate blocks and print out
-		this.blocks.forEach(function(block){
-			if(block.material == "START") {
-				mapSave.levels[0].start = {x: block.x, y: block.y};
-			}
-			else if(block.material == "TELEPORTER") {
-				mapSave.levels[0].teleporter = {x: block.x, y: block.y};
-			}
-			else {
-				mapSave.levels[0].blocks.push({ material: block.material, x: block.x, y: block.y });
-			}
-		});
-		
-		console.log(JSON.stringify(mapSave));
-		this.UIUp = false;
-	},
-	
-	upUI: function () {
-		this.UIUp = true;
+		this.editor.UI.loadOverlay.hide();
 	},
 	
 	click: function () {
-		if(!this.editor.bubbleController.hidden) {
-			this.editor.bubbleController.hide();
+		if(!this.editor.UI.bubbleController.hidden) {
+			this.editor.UI.bubbleController.hide();
 		}
 	},
 	
 	up: function () {
 		// set hidden equal to true because it will always hide bubbles when clicking on canvas
-		if(!this.editor.bubbleController.hidden) {
-			this.editor.bubbleController.hidden = true;
+		if(!this.editor.UI.bubbleController.hidden) {
+			this.editor.UI.bubbleController.hidden = true;
 		}
 	},
 	
 	place: function () {
 		// place block if there is an action and if it checks out with that actions verification
-		if(this.editor.bubbleController.currentAction && this.editor.bubbleController.currentAction.check(this.blocks)) {
+		if(this.editor.UI.bubbleController.currentAction && this.editor.UI.bubbleController.currentAction.check(this.blocks)) {
 			var pointer = game.input;
 
 			// get a pointer relative to camera
@@ -237,10 +95,10 @@ Canvas.prototype = {
 				}
 			}
 			
-			var newBlock = new Block(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key, this.editor.bubbleController.currentAction.material);
+			var newBlock = new Block(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.UI.bubbleController.currentAction.sprite.key, this.editor.UI.bubbleController.currentAction.material);
 			this.blocks.push(newBlock);
-			this.editor.blockLayer.add(newBlock);
-			this.actionCache.push({ type: 'add', index: this.blocks.length - 1, value: newBlock });
+			this.blockLayer.add(newBlock);
+			this.editor.history.actionCache.push({ type: 'add', index: this.blocks.length - 1, value: newBlock });
 		}
 	},
 	
@@ -271,10 +129,10 @@ Canvas.prototype = {
 					}
 				}
 				
-				var newBlock = new Block(i * this.MAP_GRAIN, j * this.MAP_GRAIN, this.editor.bubbleController.currentAction.sprite.key, this.editor.bubbleController.currentAction.material);
+				var newBlock = new Block(i * this.MAP_GRAIN, j * this.MAP_GRAIN, this.editor.UI.bubbleController.currentAction.sprite.key, this.editor.UI.bubbleController.currentAction.material);
 				this.blocks.push(newBlock);
-				this.editor.blockLayer.add(newBlock);
-				this.actionCache.push({ type: 'add', index: this.blocks.length - 1, value: newBlock });
+				this.blockLayer.add(newBlock);
+				this.editor.history.actionCache.push({ type: 'add', index: this.blocks.length - 1, value: newBlock });
 			}
 		}
 	},
@@ -284,10 +142,39 @@ Canvas.prototype = {
 		var i = this.blocks.length;
 		while (i--) {
 			if(Phaser.Rectangle.intersects(this.blocks[i].getBounds(), hitbox)) {
-				this.actionCache.push({ type: 'remove', index: i, value: this.blocks[i] });
+				this.editor.history.actionCache.push({ type: 'remove', index: i, value: this.blocks[i] });
 				this.blocks[i].destroy();
 				this.blocks.splice(i, 1);
 			}
 		}
+	},
+	
+	drawGrid: function () {
+		var bmd = game.add.bitmapData(game.world.width, game.world.height);
+
+		bmd.ctx.beginPath();
+		bmd.ctx.lineWidth = "1";
+		bmd.ctx.strokeStyle = 'e1e1e1';
+		bmd.ctx.setLineDash([1,2]);
+		
+		// loop through grid x
+		for(var i = 0, len = game.world.width / this.MAP_GRAIN; i < len; i++) {
+			// draw line
+			bmd.ctx.moveTo(i * this.MAP_GRAIN, 0);
+			bmd.ctx.lineTo(i * this.MAP_GRAIN, game.world.height);
+		}
+		
+		// loop through grid y
+		for(var i = 0, len = game.world.height / this.MAP_GRAIN; i < len; i++) {
+			// draw line
+			bmd.ctx.moveTo(0, i * this.MAP_GRAIN);
+			bmd.ctx.lineTo(game.world.width, i * this.MAP_GRAIN);
+		}
+		
+		bmd.ctx.stroke();
+		bmd.ctx.closePath();
+		
+		// add grid to stage
+		this.gridLayer.add(game.add.sprite(0, 0, bmd));
 	}
 };

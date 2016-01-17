@@ -3,7 +3,7 @@ var BlockDynamicObject = function () {
 	var graphics = game.add.graphics(0, 0);
 	
 	graphics.beginFill(0x334D63);
-
+	
 	graphics.drawRect(0, 0, 40, 40);
 	
 	ActionObject.call(this, graphics.generateTexture(), 'DYNAMIC', 0);
