@@ -47,7 +47,7 @@ History.prototype = {
 					case "remove":
 						var newBlock = new Block(undoElement[i].value.x, undoElement[i].value.y, undoElement[i].value.key, undoElement[i].value.material);
 						this.editor.canvas.blocks.push(newBlock);
-						blockLayer.add(newBlock);//this.editor.canvas.blockLayer.add(newBlock);
+						this.editor.canvas.blockLayer.add(newBlock);//this.editor.canvas.blockLayer.add(newBlock);
 						break;
 				}
 			}

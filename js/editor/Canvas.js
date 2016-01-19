@@ -1,15 +1,10 @@
-var scale = 1;
-var SCROLL_SPEED = 0.1;
-var SCALE_MIN_LIMIT = 0.4;
-var gridLayer;
-var blockLayer;
-
 var Canvas = function (parent) {
 	// properties
 	this.editor = parent;
 	this.data;
 	this.blocks;
 	this.clickElement;
+	this.scale;
 	this.materialKey = {
 		STATIC: this.editor.actions[0].sprite.key,
 		DYNAMIC: this.editor.actions[1].sprite.key,
@@ -18,11 +13,13 @@ var Canvas = function (parent) {
 	};
 	
 	// layers
-//	gridLayer;
-//	blockLayer;
+	this.gridLayer;
+	this.blockLayer;
 	
 	// constants
 	this.MAP_GRAIN = 40;	// size of map blocks
+	this.SCROLL_SPEED = 0.1;
+	this.SCALE_MIN_LIMIT = 0.4;
 	
 	this.create();
 };
@@ -31,6 +28,7 @@ Canvas.prototype = {
 	create: function () {
 		// set variables
 		this.blocks = [];
+		this.scale = 1;
 		
 		this.clickElement = game.add.sprite(0, 0);
 		this.clickElement.width = game.world.width;
@@ -41,14 +39,15 @@ Canvas.prototype = {
 		this.clickElement.input.priorityID = 1;
 		
 		// set layers
-		gridLayer = game.add.group();
-		blockLayer = game.add.group();
+		this.gridLayer = game.add.group();
+		this.blockLayer = game.add.group();
 		
 		// draw grid
 		this.drawGrid();
 		
 		// inputs
 		// zoom functionality
+		game.input.mouse.callbackContext = this;
 		game.input.mouse.mouseWheelCallback = this.zoom;
 	},
 	
@@ -67,7 +66,7 @@ Canvas.prototype = {
 									   this.materialKey[this.editor.data.level[level].blocks[i].material],
 									   this.editor.data.level[level].blocks[i].material);
 			this.blocks.push(newBlock);
-			blockLayer.add(newBlock);
+			this.blockLayer.add(newBlock);
 		}
 		
 		this.editor.UI.loadOverlay.hide();
@@ -75,18 +74,18 @@ Canvas.prototype = {
 	
 	zoom: function mouseWheel(event) {
 		// calculate scale
-		scale += game.input.mouse.wheelDelta * SCROLL_SPEED;
+		this.scale += game.input.mouse.wheelDelta * this.SCROLL_SPEED;
 		
 		// cap scale
-		if (scale > 1) {
-			scale = 1;
-		} else if (scale < SCALE_MIN_LIMIT) {
-			scale = SCALE_MIN_LIMIT;
+		if (this.scale > 1) {
+			this.scale = 1;
+		} else if (this.scale < this.SCALE_MIN_LIMIT) {
+			this.scale = this.SCALE_MIN_LIMIT;
 		}
 		
 		//set scale
-		gridLayer.scale.set(scale);
-		blockLayer.scale.set(scale);
+		this.gridLayer.scale.set(this.scale);
+		this.blockLayer.scale.set(this.scale);
 	},
 	
 	click: function () {
@@ -123,7 +122,7 @@ Canvas.prototype = {
 			
 			var newBlock = new Block(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.UI.bubbleController.currentAction.sprite.key, this.editor.UI.bubbleController.currentAction.material);
 			this.blocks.push(newBlock);
-			blockLayer.add(newBlock);
+			this.blockLayer.add(newBlock);
 			this.editor.history.actionCache.push({ type: 'add', index: this.blocks.length - 1, value: newBlock });
 		}
 	},
@@ -157,7 +156,7 @@ Canvas.prototype = {
 				
 				var newBlock = new Block(i * this.MAP_GRAIN, j * this.MAP_GRAIN, this.editor.UI.bubbleController.currentAction.sprite.key, this.editor.UI.bubbleController.currentAction.material);
 				this.blocks.push(newBlock);
-				blockLayer.add(newBlock);
+				this.blockLayer.add(newBlock);
 				this.editor.history.actionCache.push({ type: 'add', index: this.blocks.length - 1, value: newBlock });
 			}
 		}
@@ -201,6 +200,6 @@ Canvas.prototype = {
 		bmd.ctx.closePath();
 		
 		// add grid to stage
-		gridLayer.add(game.add.sprite(0, 0, bmd));
+		this.gridLayer.add(game.add.sprite(0, 0, bmd));
 	}
 };
