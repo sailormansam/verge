@@ -1,3 +1,9 @@
+var scale = 1;
+var SCROLL_SPEED = 0.1;
+var SCALE_MIN_LIMIT = 0.4;
+var gridLayer;
+var blockLayer;
+
 var Canvas = function (parent) {
 	// properties
 	this.editor = parent;
@@ -12,8 +18,8 @@ var Canvas = function (parent) {
 	};
 	
 	// layers
-	this.gridLayer;
-	this.blockLayer;
+//	gridLayer;
+//	blockLayer;
 	
 	// constants
 	this.MAP_GRAIN = 40;	// size of map blocks
@@ -23,7 +29,7 @@ var Canvas = function (parent) {
 
 Canvas.prototype = {
 	create: function () {
-		// reset variables
+		// set variables
 		this.blocks = [];
 		
 		this.clickElement = game.add.sprite(0, 0);
@@ -35,11 +41,15 @@ Canvas.prototype = {
 		this.clickElement.input.priorityID = 1;
 		
 		// set layers
-		this.gridLayer = game.add.group();
-		this.blockLayer = game.add.group();
+		gridLayer = game.add.group();
+		blockLayer = game.add.group();
 		
 		// draw grid
 		this.drawGrid();
+		
+		// inputs
+		// zoom functionality
+		game.input.mouse.mouseWheelCallback = this.zoom;
 	},
 	
 	loadLevel: function (level) {
@@ -57,10 +67,26 @@ Canvas.prototype = {
 									   this.materialKey[this.editor.data.level[level].blocks[i].material],
 									   this.editor.data.level[level].blocks[i].material);
 			this.blocks.push(newBlock);
-			this.blockLayer.add(newBlock);
+			blockLayer.add(newBlock);
 		}
 		
 		this.editor.UI.loadOverlay.hide();
+	},
+	
+	zoom: function mouseWheel(event) {
+		// calculate scale
+		scale += game.input.mouse.wheelDelta * SCROLL_SPEED;
+		
+		// cap scale
+		if (scale > 1) {
+			scale = 1;
+		} else if (scale < SCALE_MIN_LIMIT) {
+			scale = SCALE_MIN_LIMIT;
+		}
+		
+		//set scale
+		gridLayer.scale.set(scale);
+		blockLayer.scale.set(scale);
 	},
 	
 	click: function () {
@@ -97,7 +123,7 @@ Canvas.prototype = {
 			
 			var newBlock = new Block(truePointer.x * this.MAP_GRAIN, truePointer.y * this.MAP_GRAIN, this.editor.UI.bubbleController.currentAction.sprite.key, this.editor.UI.bubbleController.currentAction.material);
 			this.blocks.push(newBlock);
-			this.blockLayer.add(newBlock);
+			blockLayer.add(newBlock);
 			this.editor.history.actionCache.push({ type: 'add', index: this.blocks.length - 1, value: newBlock });
 		}
 	},
@@ -131,7 +157,7 @@ Canvas.prototype = {
 				
 				var newBlock = new Block(i * this.MAP_GRAIN, j * this.MAP_GRAIN, this.editor.UI.bubbleController.currentAction.sprite.key, this.editor.UI.bubbleController.currentAction.material);
 				this.blocks.push(newBlock);
-				this.blockLayer.add(newBlock);
+				blockLayer.add(newBlock);
 				this.editor.history.actionCache.push({ type: 'add', index: this.blocks.length - 1, value: newBlock });
 			}
 		}
@@ -175,6 +201,6 @@ Canvas.prototype = {
 		bmd.ctx.closePath();
 		
 		// add grid to stage
-		this.gridLayer.add(game.add.sprite(0, 0, bmd));
+		gridLayer.add(game.add.sprite(0, 0, bmd));
 	}
 };

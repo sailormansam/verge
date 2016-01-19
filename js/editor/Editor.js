@@ -37,8 +37,6 @@ GameStates.Editor.prototype = {
 		this.pointerController = new PointerController(this);
 		
 		// inputs
-		// zoom functionality
-		game.input.mouse.mouseWheelCallback = this.zoom;
 	},
 	
 	preRender: function () {
@@ -52,10 +50,6 @@ GameStates.Editor.prototype = {
 			this.move();
 			this.pointerController.update();
 		}
-	},
-	
-	zoom: function mouseWheel(event) {
-		console.log(game.input.mouse.wheelDelta);
 	},
 	
 	move: function () {
