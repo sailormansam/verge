@@ -6,6 +6,9 @@ GameStates.Editor = function (game) {
 	this.history;
 	this.actions;
 	this.data;
+	
+	// constants
+	this.WORLD_SIZE = 2000;
 };
 
 GameStates.Editor.prototype = {
@@ -14,7 +17,7 @@ GameStates.Editor.prototype = {
 		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
 		
 		// set world bounds
-		game.world.setBounds(0, 0, 2000, 2000);
+		game.world.setBounds(0, 0, this.WORLD_SIZE, this.WORLD_SIZE);
 		
 		// populate actions
 		this.actions = [

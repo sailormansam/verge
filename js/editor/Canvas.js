@@ -18,7 +18,7 @@ var Canvas = function (parent) {
 	
 	// constants
 	this.MAP_GRAIN = 40;	// size of map blocks
-	this.SCROLL_SPEED = 0.1;
+	this.SCROLL_SPEED = 0.02;
 	this.SCALE_MIN_LIMIT = 0.4;
 	
 	this.create();
@@ -86,6 +86,16 @@ Canvas.prototype = {
 		//set scale
 		this.gridLayer.scale.set(this.scale);
 		this.blockLayer.scale.set(this.scale);
+		
+		// set bounds based on scale
+		game.world.setBounds(0, 0, this.editor.WORLD_SIZE * this.scale, this.editor.WORLD_SIZE * this.scale);
+		console.log(game.camera.x, game.camera.y);
+		// get mouse pointer to center scaling around mouse
+//		var pointer = game.input;
+//		var scalePoint = new Phaser.Point(pointer.x / game.world.width, pointer.y / game.world.height);
+//		
+//		game.camera.x = scalePoint.x * this.editor.WORLD_SIZE - game.width / 2;
+//		game.camera.y = scalePoint.y * this.editor.WORLD_SIZE - game.height / 2;
 	},
 	
 	click: function () {
