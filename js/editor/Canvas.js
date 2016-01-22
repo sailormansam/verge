@@ -118,8 +118,8 @@ Canvas.prototype = {
 
 			// get a pointer relative to camera
 			var truePointer = {
-				x: Math.floor(((pointer.x + game.camera.x) / this.MAP_GRAIN)),
-				y: Math.floor(((pointer.y + game.camera.y) / this.MAP_GRAIN))
+				x: Math.floor(((pointer.x + game.camera.x) / this.MAP_GRAIN) / this.scale),
+				y: Math.floor(((pointer.y + game.camera.y) / this.MAP_GRAIN) / this.scale)
 			};
 
 			// check if there is a block at pointer location
