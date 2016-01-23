@@ -18,7 +18,7 @@ var Canvas = function (parent) {
 	
 	// constants
 	this.MAP_GRAIN = 40;	// size of map blocks
-	this.SCROLL_SPEED = 0.02;
+	this.SCROLL_SPEED = 0.01;
 	this.SCALE_MIN_LIMIT = 0.4;
 	
 	this.create();
@@ -73,6 +73,12 @@ Canvas.prototype = {
 	},
 	
 	zoom: function mouseWheel(event) {
+		//get camera position based on percentage
+		var currentWorldSize = this.editor.WORLD_SIZE * this.scale;
+		var scaledCamera = new Phaser.Point((game.camera.x + game.width / 2) / currentWorldSize, (game.camera.y + game.height / 2) / currentWorldSize);
+		
+//		console.log(scaledCamera);
+		
 		// calculate scale
 		this.scale += game.input.mouse.wheelDelta * this.SCROLL_SPEED;
 		
@@ -89,13 +95,16 @@ Canvas.prototype = {
 		
 		// set bounds based on scale
 		game.world.setBounds(0, 0, this.editor.WORLD_SIZE * this.scale, this.editor.WORLD_SIZE * this.scale);
-		console.log(game.camera.x, game.camera.y);
+		
+		// update worldScale
+		currentWorldSize = this.editor.WORLD_SIZE * this.scale;
+		
 		// get mouse pointer to center scaling around mouse
 //		var pointer = game.input;
 //		var scalePoint = new Phaser.Point(pointer.x / game.world.width, pointer.y / game.world.height);
 //		
-//		game.camera.x = scalePoint.x * this.editor.WORLD_SIZE - game.width / 2;
-//		game.camera.y = scalePoint.y * this.editor.WORLD_SIZE - game.height / 2;
+		game.camera.x = scaledCamera.x * currentWorldSize - game.width / 2;
+		game.camera.y = scaledCamera.y * currentWorldSize - game.height / 2;
 	},
 	
 	click: function () {
