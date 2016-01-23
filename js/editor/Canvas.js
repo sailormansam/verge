@@ -17,9 +17,10 @@ var Canvas = function (parent) {
 	this.blockLayer;
 	
 	// constants
-	this.MAP_GRAIN = 40;	// size of map blocks
-	this.SCROLL_SPEED = 0.01;
+	this.MAP_GRAIN = 40;			// size of map blocks
+	this.SCROLL_SPEED = 0.02;
 	this.SCALE_MIN_LIMIT = 0.4;
+	this.CENTERING_STRENGTH = 8;	// how fast an object gets centered when zooming higher = slower
 	
 	this.create();
 };
@@ -74,19 +75,26 @@ Canvas.prototype = {
 	
 	zoom: function mouseWheel(event) {
 		//get camera position based on percentage
-		var currentWorldSize = this.editor.WORLD_SIZE * this.scale;
-		var scaledCamera = new Phaser.Point((game.camera.x + game.width / 2) / currentWorldSize, (game.camera.y + game.height / 2) / currentWorldSize);
+		// center camera on mouse location
+		var centerPoint = new Phaser.Point(game.width / 2, game.height / 2);
+		var mousePoint = new Phaser.Point((game.input.x - centerPoint.x) + centerPoint.x , (game.input.y - centerPoint.y) + centerPoint.y);
 		
-//		console.log(scaledCamera);
+		var scaledCamera = new Phaser.Point((game.camera.x + mousePoint.x) / game.world.width, (game.camera.y + mousePoint.y) / game.world.height);
+		
+		// truncate for better accuracy
+		scaledCamera.x = scaledCamera.x.toFixed(2);
+		scaledCamera.y = scaledCamera.y.toFixed(2);
 		
 		// calculate scale
 		this.scale += game.input.mouse.wheelDelta * this.SCROLL_SPEED;
 		
-		// cap scale
+		// cap scale and don't move the camera at all
 		if (this.scale > 1) {
 			this.scale = 1;
+			return;
 		} else if (this.scale < this.SCALE_MIN_LIMIT) {
 			this.scale = this.SCALE_MIN_LIMIT;
+			return;
 		}
 		
 		//set scale
@@ -96,15 +104,20 @@ Canvas.prototype = {
 		// set bounds based on scale
 		game.world.setBounds(0, 0, this.editor.WORLD_SIZE * this.scale, this.editor.WORLD_SIZE * this.scale);
 		
-		// update worldScale
-		currentWorldSize = this.editor.WORLD_SIZE * this.scale;
+		// find the new (center point) to move the camera to
+		// this center point will be a point on the line connecting the actual center point and the cursor
+		// and it will be a set distance from the cursor
+		var newCenterPoint = centerPoint.clone();
+		if(!mousePoint.equals(newCenterPoint)) {
+			var vector = Phaser.Point.subtract(centerPoint, mousePoint);
+			var vectorLength = Phaser.Point.distance(centerPoint, mousePoint);
+			var normalized = Phaser.Point.divide(vector, new Phaser.Point(vectorLength, vectorLength));
+			var multiplied = Phaser.Point.multiply(normalized, new Phaser.Point(vectorLength / 8, vectorLength / 8));
+			newCenterPoint = Phaser.Point.add(mousePoint, multiplied);
+		}
 		
-		// get mouse pointer to center scaling around mouse
-//		var pointer = game.input;
-//		var scalePoint = new Phaser.Point(pointer.x / game.world.width, pointer.y / game.world.height);
-//		
-		game.camera.x = scaledCamera.x * currentWorldSize - game.width / 2;
-		game.camera.y = scaledCamera.y * currentWorldSize - game.height / 2;
+		game.camera.x = scaledCamera.x * game.world.width - newCenterPoint.x;
+		game.camera.y = scaledCamera.y * game.world.height - newCenterPoint.y;
 	},
 	
 	click: function () {
