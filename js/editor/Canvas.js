@@ -98,8 +98,8 @@ Canvas.prototype = {
 		}
 		
 		//set scale
-		this.gridLayer.scale.set(this.scale);
-		this.blockLayer.scale.set(this.scale);
+//		this.gridLayer.scale.set(this.scale);
+//		this.blockLayer.scale.set(this.scale);
 		
 		// set bounds based on scale
 		game.world.setBounds(0, 0, this.editor.WORLD_SIZE * this.scale, this.editor.WORLD_SIZE * this.scale);
@@ -116,8 +116,13 @@ Canvas.prototype = {
 			newCenterPoint = Phaser.Point.add(mousePoint, multiplied);
 		}
 		
+//		game.add.tween(game.camera).to({ x: scaledCamera.x * game.world.width - newCenterPoint.x, y: scaledCamera.y * game.world.height - newCenterPoint.y }, 100, Phaser.Easing.Linear.None, true);
 		game.camera.x = scaledCamera.x * game.world.width - newCenterPoint.x;
 		game.camera.y = scaledCamera.y * game.world.height - newCenterPoint.y;
+		
+		// tween scaling grid need to fix jitter
+		game.add.tween(this.gridLayer.scale).to({ x: this.scale, y: this.scale }, 100, Phaser.Easing.Quadratic.In, true);
+		game.add.tween(this.blockLayer.scale).to({ x: this.scale, y: this.scale }, 100, Phaser.Easing.Quadratic.In, true);
 	},
 	
 	click: function () {
