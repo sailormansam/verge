@@ -5,6 +5,7 @@ var Canvas = function (parent) {
 	this.blocks;
 	this.clickElement;
 	this.scale;
+	this.zoomed;
 	this.materialKey = {
 		STATIC: this.editor.actions[0].sprite.key,
 		DYNAMIC: this.editor.actions[1].sprite.key,
@@ -18,7 +19,7 @@ var Canvas = function (parent) {
 	
 	// constants
 	this.MAP_GRAIN = 40;			// size of map blocks
-	this.SCROLL_SPEED = 0.02;
+	this.SCROLL_SPEED = 0.03;
 	this.SCALE_MIN_LIMIT = 0.4;
 	this.CENTERING_STRENGTH = 8;	// how fast an object gets centered when zooming higher = slower
 	
@@ -73,7 +74,12 @@ Canvas.prototype = {
 		this.editor.UI.loadOverlay.hide();
 	},
 	
-	zoom: function mouseWheel(event) {
+	zoom: function (event) {
+		// we want to call all of the logic during the update loop not when this is fired
+		this.zoomed = true;
+	},
+	
+	updateZoom: function () {
 		//get camera position based on percentage
 		// center camera on mouse location
 		var centerPoint = new Phaser.Point(game.width / 2, game.height / 2);
@@ -98,8 +104,8 @@ Canvas.prototype = {
 		}
 		
 		//set scale
-//		this.gridLayer.scale.set(this.scale);
-//		this.blockLayer.scale.set(this.scale);
+		this.gridLayer.scale.set(this.scale);
+		this.blockLayer.scale.set(this.scale);
 		
 		// set bounds based on scale
 		game.world.setBounds(0, 0, this.editor.WORLD_SIZE * this.scale, this.editor.WORLD_SIZE * this.scale);
@@ -120,9 +126,17 @@ Canvas.prototype = {
 		game.camera.x = scaledCamera.x * game.world.width - newCenterPoint.x;
 		game.camera.y = scaledCamera.y * game.world.height - newCenterPoint.y;
 		
-		// tween scaling grid need to fix jitter
-		game.add.tween(this.gridLayer.scale).to({ x: this.scale, y: this.scale }, 100, Phaser.Easing.Quadratic.In, true);
-		game.add.tween(this.blockLayer.scale).to({ x: this.scale, y: this.scale }, 100, Phaser.Easing.Quadratic.In, true);
+		// tween scaling grid
+//		game.add.tween(this.gridLayer.scale).to({ x: this.scale, y: this.scale }, 100, Phaser.Easing.Quadratic.In, true);
+//		game.add.tween(this.blockLayer.scale).to({ x: this.scale, y: this.scale }, 100, Phaser.Easing.Quadratic.In, true);
+		
+		this.zoomed = false;
+	},
+	
+	update: function () {
+		if(this.zoomed) {
+			this.updateZoom();
+		}
 	},
 	
 	click: function () {

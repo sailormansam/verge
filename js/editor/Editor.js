@@ -52,6 +52,7 @@ GameStates.Editor.prototype = {
 		if(!this.UI.overlayActive) {
 			this.move();
 			this.pointerController.update();
+			this.canvas.update();
 		}
 	},
 	
