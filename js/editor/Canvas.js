@@ -178,12 +178,33 @@ Canvas.prototype = {
 		}
 	},
 	
+	remove: function () {
+		var pointer = game.input;
+
+		// get a pointer relative to camera
+		var truePointer = {
+			x: Math.floor(((pointer.x + game.camera.x) / this.MAP_GRAIN) / this.scale),
+			y: Math.floor(((pointer.y + game.camera.y) / this.MAP_GRAIN) / this.scale)
+		};
+
+		// check if there is a block at pointer location
+		for(var i = 0, len = this.blocks.length; i < len; i++) {
+			if(this.blocks[i].x == truePointer.x * this.MAP_GRAIN
+			   && this.blocks[i].y == truePointer.y * this.MAP_GRAIN) {
+				this.editor.history.actionCache.push({ type: 'remove', index: i, value: this.blocks[i] });
+				this.blocks[i].destroy();
+				this.blocks.splice(i, 1);
+				return;
+			}
+		}
+	},
+	
 	addBlocksWithin: function (hitbox) {
 		// remove elements that overlap hitbox
 		
 		// find a rectangle that matches grid then fill rectangle
-		var truePointer = new Phaser.Point(Math.floor((hitbox.x + game.camera.x) / this.MAP_GRAIN), Math.floor((hitbox.y + game.camera.y) / this.MAP_GRAIN));
-		var trueDim = new Phaser.Point(Math.ceil((hitbox.x + hitbox.width + game.camera.x) / this.MAP_GRAIN), Math.ceil((hitbox.y + hitbox.height + game.camera.y) / this.MAP_GRAIN));
+		var truePointer = new Phaser.Point(Math.floor(((hitbox.x + game.camera.x) / this.MAP_GRAIN) / this.scale), Math.floor(((hitbox.y + game.camera.y) / this.MAP_GRAIN) / this.scale));
+		var trueDim = new Phaser.Point(Math.ceil(((hitbox.x + hitbox.width + game.camera.x) / this.MAP_GRAIN) / this.scale), Math.ceil(((hitbox.y + hitbox.height + game.camera.y) / this.MAP_GRAIN) / this.scale));
 		
 		// slim down list so we only check blocks within the bounds of the net
 		this.slimBlocks = [];

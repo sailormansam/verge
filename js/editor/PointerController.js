@@ -28,8 +28,9 @@ PointerController.prototype = {
 		this.graphics.clear();
 		
 		// make nets more obvious what they do
-		if(game.input.activePointer.rightButton.isDown || (game.input.activePointer.leftButton.isDown && this.shiftKey.isDown)) {
-			if(game.input.activePointer.rightButton.isDown) {
+		if((game.input.activePointer.rightButton.isDown && this.shiftKey.isDown)
+		   || (game.input.activePointer.leftButton.isDown && this.shiftKey.isDown)) {
+			if(game.input.activePointer.rightButton.isDown && this.shiftKey.isDown) {
 				this.netColor = 0xD13030;
 				this.netBorderColor = 0x7A2020;
 				this.addBlocks = false;
@@ -91,6 +92,9 @@ PointerController.prototype = {
 		// place blocks with left click
 		if(game.input.activePointer.leftButton.isDown && !this.editor.UI.bubbleController.showing && this.editor.UI.bubbleController.hidden && this.editor.UI.UIUp && this.shiftKey.isUp) {
 			this.editor.canvas.place();
+		}
+		else if(game.input.activePointer.rightButton.isDown && !this.editor.UI.bubbleController.showing && this.editor.UI.bubbleController.hidden && this.editor.UI.UIUp && this.shiftKey.isUp) {
+			this.editor.canvas.remove();
 		}
 		else {
 			this.editor.history.pushCache();
