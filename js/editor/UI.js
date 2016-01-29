@@ -103,7 +103,11 @@ UI.prototype = {
 			}
 		});
 		
-		console.log(JSON.stringify(mapSave));
+        // save to local storage
+        var storage = localStorage;
+        
+        localStorage.setItem('level', JSON.stringify(mapSave));
+        
 		this.UIUp = false;
 	},
 	
