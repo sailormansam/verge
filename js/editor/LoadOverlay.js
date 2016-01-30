@@ -19,8 +19,8 @@ var LoadOverlay = function (parent) {
 	graphics.destroy();
 
 	this.add(background);
-
-	for(var i = 0, len = this.UI.editor.data.level.length; i < len; i++) {
+    
+	for(var i = 0, len = this.UI.editor.data.levels.length; i < len; i++) {
 		this.createLevelBubble(i);
 	}
 	

@@ -29,7 +29,7 @@ Map.prototype = {
 	},
 	
 	hasNextLevel: function () {
-		return this.data.level[this.level + 1]
+		return this.data.levels[this.level + 1]
 	},
 	
 	incrementLevel: function () {
@@ -55,26 +55,26 @@ Map.prototype = {
 		
 		// create player
 		if(this.gameState.player) {
-			this.gameState.player.moveToStart(this.data.level[this.level].start.x * this.MAP_GRAIN + 0.5, this.data.level[this.level].start.y * this.MAP_GRAIN + 0.5);
+			this.gameState.player.moveToStart(this.data.levels[this.level].start.x * this.MAP_GRAIN + 0.5, this.data.levels[this.level].start.y * this.MAP_GRAIN + 0.5);
 		}
 		else {
-			this.gameState.player = new Player(this.gameState, this.data.level[this.level].start.x * this.MAP_GRAIN + 0.5, this.data.level[this.level].start.y * this.MAP_GRAIN + 0.5);
+			this.gameState.player = new Player(this.gameState, this.data.levels[this.level].start.x * this.MAP_GRAIN + 0.5, this.data.levels[this.level].start.y * this.MAP_GRAIN + 0.5);
 		}
 		
 		this.gameState.player.inventory.clear();
 		
 		// create map
-		for(var i = 0, len = this.data.level[this.level].blocks.length; i < len; i++) {
+		for(var i = 0, len = this.data.levels[this.level].blocks.length; i < len; i++) {
 			this.blocks.push(new Block(this.gameState,
-									   this.data.level[this.level].blocks[i].x,
-									   this.data.level[this.level].blocks[i].y,
+									   this.data.levels[this.level].blocks[i].x,
+									   this.data.levels[this.level].blocks[i].y,
 									   this.MAP_GRAIN,
-									   this.data.level[this.level].blocks[i].material));
+									   this.data.levels[this.level].blocks[i].material));
 		}
 		
 		// create teleporter for this level
-		this.gameState.teleporter = new Teleporter(this.data.level[this.level].teleporter.x,
-										 this.data.level[this.level].teleporter.y,
+		this.gameState.teleporter = new Teleporter(this.data.levels[this.level].teleporter.x,
+										 this.data.levels[this.level].teleporter.y,
 										 this.MAP_GRAIN);
 		
 		//  find the greatest x and y position of blocks

@@ -81,32 +81,35 @@ UI.prototype = {
 	
 	save: function () {
 		var mapSave = {
-			levels:[
-				{
-					start: {x: 0, y: 0},
-					teleporter: {x: 0, y: 0},
-					blocks: []
-				}
-			]
+            start: {x: 0, y: 0},
+            teleporter: {x: 0, y: 0},
+            blocks: []
 		};
 		
 		// generate blocks and print out
+        
+        
 		this.editor.canvas.blocks.forEach(function(block){
 			if(block.material == "START") {
-				mapSave.levels[0].start = {x: block.x, y: block.y};
+				mapSave.start = {x: block.x / this.editor.canvas.MAP_GRAIN, y: block.y / this.editor.canvas.MAP_GRAIN};
 			}
 			else if(block.material == "TELEPORTER") {
-				mapSave.levels[0].teleporter = {x: block.x, y: block.y};
+				mapSave.teleporter = {x: block.x / this.editor.canvas.MAP_GRAIN, y: block.y / this.editor.canvas.MAP_GRAIN};
 			}
 			else {
-				mapSave.levels[0].blocks.push({ material: block.material, x: block.x, y: block.y });
+				mapSave.blocks.push({ material: block.material, x: block.x / this.editor.canvas.MAP_GRAIN, y: block.y / this.editor.canvas.MAP_GRAIN });
 			}
-		});
+		}, this);
 		
         // save to local storage
         var storage = localStorage;
         
-        localStorage.setItem('level', JSON.stringify(mapSave));
+        var newLevels = this.editor.data.levels;
+        newLevels[this.editor.canvas.level] = mapSave;
+        
+        localStorage.setItem('levels', JSON.stringify(newLevels));
+        
+        this.editor.data = { "levels": newLevels };
         
 		this.UIUp = false;
 	},

@@ -6,6 +6,7 @@ var Canvas = function (parent) {
 	this.clickElement;
 	this.scale;
 	this.zoomed;
+    this.level;
 	this.materialKey = {
 		STATIC: this.editor.actions[0].sprite.key,
 		DYNAMIC: this.editor.actions[1].sprite.key,
@@ -31,6 +32,9 @@ Canvas.prototype = {
 		// set variables
 		this.blocks = [];
 		this.scale = 1;
+        
+        // start level at high index for save
+        this.level = this.editor.data.levels.length;
 		
 		this.clickElement = game.add.sprite(0, 0);
 		this.clickElement.width = game.world.width;
@@ -54,6 +58,8 @@ Canvas.prototype = {
 	},
 	
 	loadLevel: function (level) {
+        this.level = level;
+        
 		// empty block array show warning or have undo button
 		this.blocks.forEach(function (block) {
 			block.destroy();
@@ -62,11 +68,11 @@ Canvas.prototype = {
 		this.blocks = [];
 		
 		// create map
-		for(var i = 0, len = this.editor.data.level[level].blocks.length; i < len; i++) {
-			var newBlock = new Block(this.editor.data.level[level].blocks[i].x * this.MAP_GRAIN,
-									   this.editor.data.level[level].blocks[i].y * this.MAP_GRAIN,
-									   this.materialKey[this.editor.data.level[level].blocks[i].material],
-									   this.editor.data.level[level].blocks[i].material);
+		for(var i = 0, len = this.editor.data.levels[level].blocks.length; i < len; i++) {
+			var newBlock = new Block(this.editor.data.levels[level].blocks[i].x * this.MAP_GRAIN,
+									   this.editor.data.levels[level].blocks[i].y * this.MAP_GRAIN,
+									   this.materialKey[this.editor.data.levels[level].blocks[i].material],
+									   this.editor.data.levels[level].blocks[i].material);
 			this.blocks.push(newBlock);
 			this.blockLayer.add(newBlock);
 		}

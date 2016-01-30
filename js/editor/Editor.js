@@ -15,14 +15,26 @@ GameStates.Editor.prototype = {
 	create: function () {
 		// get json
 		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
+        
+        // load levels into local storage
+        var storage = localStorage;
+        
+        var getLevels = localStorage.getItem('levels');
+        
+        if (getLevels === null) {
+            localStorage.setItem('levels', JSON.stringify(game.cache.getJSON('map')));
+        }
+        else {
+            this.data = { "levels": JSON.parse(getLevels) };
+        }
 		
 		// set world bounds
 		game.world.setBounds(0, 0, this.WORLD_SIZE, this.WORLD_SIZE);
 		
 		// populate actions
 		this.actions = [
-			new BlockDynamicObject(),
 			new BlockStaticObject(),
+			new BlockDynamicObject(),
 			new StartObject(),
 			new TeleporterObject()
 		];

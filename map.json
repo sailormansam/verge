@@ -1,5 +1,5 @@
 {
-	"level": [
+	"levels": [
 		{
 			"start": {"x": 8, "y": 4},
 			"teleporter": {"x": 20, "y": 7},
