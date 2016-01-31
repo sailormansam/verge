@@ -10,6 +10,7 @@ var UI = function (parent) {
 	
 	// overlays
 	this.loadOverlay;
+    this.rotationOverlay;
 	
 	// layers
 	this.UILayer;
@@ -49,6 +50,14 @@ UI.prototype = {
 		this.UILayer.add(this.bubbleController.bubbleLayer);
 		
 		// save and load buttons
+		this.loadButton = game.add.sprite(game.width - 80, 80, 'load');
+		this.loadButton.inputEnabled = true;
+		this.loadButton.events.onInputDown.add(this.load, this);
+		this.loadButton.input.priorityID = 2;
+		this.loadButton.anchor.set(0.5);
+		this.loadButton.input.useHandCursor = true;
+		this.UILayer.add(this.loadButton);
+        
 		this.saveButton = game.add.sprite(game.width - 140, 80, 'save');
 		this.saveButton.inputEnabled = true;
 		this.saveButton.events.onInputDown.add(this.save, this);
@@ -57,18 +66,20 @@ UI.prototype = {
 		this.saveButton.anchor.set(0.5);
 		this.saveButton.input.useHandCursor = true;
 		this.UILayer.add(this.saveButton);
-		
-		this.loadButton = game.add.sprite(game.width - 80, 80, 'load');
-		this.loadButton.inputEnabled = true;
-		this.loadButton.events.onInputDown.add(this.load, this);
-		this.loadButton.input.priorityID = 2;
-		this.loadButton.anchor.set(0.5);
-		this.loadButton.input.useHandCursor = true;
-		this.UILayer.add(this.loadButton);
+        
+        this.rotationButton = game.add.sprite(game.width - 200, 80, 'bubble');
+		this.rotationButton.inputEnabled = true;
+		this.rotationButton.events.onInputDown.add(this.rotate, this);
+		this.rotationButton.events.onInputUp.add(this.upUI, this);
+		this.rotationButton.input.priorityID = 2;
+		this.rotationButton.anchor.set(0.5);
+		this.rotationButton.input.useHandCursor = true;
+		this.UILayer.add(this.rotationButton);
 		
 		// overlays
 		// create load overlay
 		this.loadOverlay = new LoadOverlay(this);
+        this.rotationOverlay = new RotationOverlay(this);
 		
 		//inputs
 		// set up keys to active block bubbles
@@ -78,6 +89,14 @@ UI.prototype = {
 		// Stop the following keys from propagating up to the browser
 		game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 	},
+    
+    rotate: function () {
+        // set rotation amount for level
+        
+        
+        this.rotationOverlay.show();
+        this.UIUp = false;
+    },
 	
 	save: function () {
 		var mapSave = {
