@@ -45,6 +45,13 @@ RotationOverlay.prototype.update = function () {
     // clear graphics
     this.rotationGraphics.clear();
     
+    
+    // draw small circle for appearance
+    this.rotationGraphics.beginFill(0x202529);
+    this.rotationGraphics.lineStyle(0, 0x202529, 1);
+    this.rotationGraphics.drawCircle(game.width / 2, game.height / 2, 5);
+    this.rotationGraphics.endFill();
+    
     // set line style
     this.rotationGraphics.lineStyle(5, 0x202529, 1);
     
@@ -79,6 +86,4 @@ RotationOverlay.prototype.update = function () {
     }
         
     this.rotationGraphics.arc(centerPoint.x, centerPoint.y, 100, 0, radians, antiClockwise);
-    
-    this.rotationGraphics.endFill();
 };
