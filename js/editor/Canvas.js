@@ -7,6 +7,7 @@ var Canvas = function (parent) {
 	this.scale;
 	this.zoomed;
     this.level;
+    this.rot;
 	this.materialKey = {
 		STATIC: this.editor.actions[0].sprite.key,
 		DYNAMIC: this.editor.actions[1].sprite.key,
@@ -143,6 +144,7 @@ Canvas.prototype = {
 		if(this.zoomed) {
 			this.updateZoom();
 		}
+        console.log(this.rot);
 	},
 	
 	click: function () {

@@ -2,6 +2,7 @@ var RotationOverlay = function (parent) {
 	// properties
 	this.UI = parent;
     this.rotationGraphics;
+    this.rot;
     
 	Overlay.call(this, parent);
 	
@@ -14,6 +15,7 @@ var RotationOverlay = function (parent) {
 	background.inputEnabled = true;
 	background.input.priorityID = 3;
 	background.events.onInputDown.add(function(){
+        this.UI.editor.canvas.rot = this.rot;
 		this.hide();
 	}, this);
 
@@ -84,6 +86,10 @@ RotationOverlay.prototype.update = function () {
     if (radians > 0) {
         antiClockwise = false;
     }
-        
+    
+    // save angle
+    this.rot = angle;
+    
+    // display arc
     this.rotationGraphics.arc(centerPoint.x, centerPoint.y, 100, 0, radians, antiClockwise);
 };
