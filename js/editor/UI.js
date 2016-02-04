@@ -102,12 +102,16 @@ UI.prototype = {
 		var mapSave = {
             start: {x: 0, y: 0},
             teleporter: {x: 0, y: 0},
+            rotation: { theta: 0 },
             blocks: []
 		};
+        
+        // set rotation
+        if(this.editor.canvas.rot) {
+            mapSave.rotation.theta = this.editor.canvas.rot;
+        }
 		
 		// generate blocks and print out
-        
-        
 		this.editor.canvas.blocks.forEach(function(block){
 			if(block.material == "START") {
 				mapSave.start = {x: block.x / this.editor.canvas.MAP_GRAIN, y: block.y / this.editor.canvas.MAP_GRAIN};
@@ -126,7 +130,7 @@ UI.prototype = {
         var newLevels = this.editor.data.levels;
         newLevels[this.editor.canvas.level] = mapSave;
         
-        localStorage.setItem('levels', JSON.stringify(newLevels));
+        localStorage.setItem('levels', JSON.stringify({ "levels": newLevels }));
         
         this.editor.data = { "levels": newLevels };
         

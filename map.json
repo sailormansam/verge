@@ -3,6 +3,7 @@
 		{
 			"start": {"x": 8, "y": 4},
 			"teleporter": {"x": 20, "y": 7},
+            "rotation": { "theta": 0 },
 			"blocks": [
 				{"material": "DYNAMIC", "x": 2,"y": 2},
 				{"material": "DYNAMIC", "x": 3,"y": 3},
@@ -30,6 +31,7 @@
 		{
 			"start": {"x": 4, "y": 4},
 			"teleporter": {"x": 15, "y": 7},
+            "rotation": { "theta": 0 },
 			"blocks": [
 				{"material": "STATIC", "x": 1,"y": 8},
 				{"material": "STATIC", "x": 2,"y": 8},

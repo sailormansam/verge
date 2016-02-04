@@ -47,7 +47,6 @@ RotationOverlay.prototype.update = function () {
     // clear graphics
     this.rotationGraphics.clear();
     
-    
     // draw small circle for appearance
     this.rotationGraphics.beginFill(0x202529);
     this.rotationGraphics.lineStyle(0, 0x202529, 1);
@@ -88,7 +87,7 @@ RotationOverlay.prototype.update = function () {
     }
     
     // save angle
-    this.rot = angle;
+    this.rot = angle.toFixed(0);
     
     // display arc
     this.rotationGraphics.arc(centerPoint.x, centerPoint.y, 100, 0, radians, antiClockwise);

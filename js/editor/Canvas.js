@@ -144,7 +144,6 @@ Canvas.prototype = {
 		if(this.zoomed) {
 			this.updateZoom();
 		}
-        console.log(this.rot);
 	},
 	
 	click: function () {
