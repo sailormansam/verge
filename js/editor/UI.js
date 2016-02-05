@@ -67,7 +67,7 @@ UI.prototype = {
 		this.saveButton.input.useHandCursor = true;
 		this.UILayer.add(this.saveButton);
         
-        this.rotationButton = game.add.sprite(game.width - 200, 80, 'bubble');
+        this.rotationButton = game.add.sprite(game.width - 200, 80, 'rotation');
 		this.rotationButton.inputEnabled = true;
 		this.rotationButton.events.onInputDown.add(this.rotate, this);
 		this.rotationButton.events.onInputUp.add(this.upUI, this);

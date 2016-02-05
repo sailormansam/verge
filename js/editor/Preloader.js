@@ -13,6 +13,7 @@ GameStates.Preloader.prototype = {
 		game.load.image('bubble', 'images/bubble.png');
 		game.load.image('save', 'images/save.png');
 		game.load.image('load', 'images/load.png');
+		game.load.image('rotation', 'images/rotation.png');
 	},
 	create: function () {
 		game.state.start('Editor');
