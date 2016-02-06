@@ -1,7 +1,29 @@
 var Overlay = function (parent) {
 	Phaser.Group.call(this, game);
 	game.add.existing(this);
-	
+    
+    // add background
+	var graphics = game.add.graphics(0, 0);
+	graphics.beginFill(0xffffff);
+	graphics.drawRect(0, 0, game.width, game.height);
+
+	var background = game.add.sprite(0, 0, graphics.generateTexture());
+	background.alpha = 0.65;
+
+	graphics.destroy();
+
+	this.add(background);
+    
+    // add close button
+    this.closeButton = game.add.sprite(game.width - 80, 80, 'close');
+	this.closeButton.inputEnabled = true;
+    this.closeButton.events.onInputDown.add(this.hide, this);
+    this.closeButton.input.priorityID = 3;
+    this.closeButton.anchor.set(0.5);
+    this.closeButton.input.useHandCursor = true;
+    
+    this.add(this.closeButton);
+    
 	// properties
 	this.UI = parent;
 };

@@ -92,8 +92,6 @@ UI.prototype = {
     
     rotate: function () {
         // set rotation amount for level
-        
-        
         this.rotationOverlay.show();
         this.UIUp = false;
     },
@@ -130,9 +128,11 @@ UI.prototype = {
         var newLevels = this.editor.data.levels;
         newLevels[this.editor.canvas.level] = mapSave;
         
-        localStorage.setItem('levels', JSON.stringify({ "levels": newLevels }));
+        newLevels = { 'levels': newLevels };
         
-        this.editor.data = { "levels": newLevels };
+        localStorage.setItem('levels', JSON.stringify(newLevels));
+        
+        this.editor.data = newLevels;
         
 		this.UIUp = false;
 	},

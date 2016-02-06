@@ -14,7 +14,7 @@ GameStates.Editor = function (game) {
 GameStates.Editor.prototype = {
 	create: function () {
 		// get json
-		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
+		this.data = game.cache.getJSON('map');
         
         // load levels into local storage
         var storage = localStorage;
@@ -25,7 +25,7 @@ GameStates.Editor.prototype = {
             localStorage.setItem('levels', JSON.stringify(game.cache.getJSON('map')));
         }
         else {
-            this.data = { "levels": JSON.parse(getLevels) };
+            this.data = JSON.parse(getLevels);
         }
 		
 		// set world bounds

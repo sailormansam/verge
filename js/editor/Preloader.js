@@ -14,6 +14,7 @@ GameStates.Preloader.prototype = {
 		game.load.image('save', 'images/save.png');
 		game.load.image('load', 'images/load.png');
 		game.load.image('rotation', 'images/rotation.png');
+		game.load.image('close', 'images/close.png');
 	},
 	create: function () {
 		game.state.start('Editor');

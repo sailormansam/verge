@@ -3,22 +3,6 @@ var LoadOverlay = function (parent) {
 	this.UI = parent;
 	
 	Overlay.call(this, parent);
-	
-	var graphics = game.add.graphics(0, 0);
-	graphics.beginFill(0xffffff);
-	graphics.drawRect(0, 0, game.width, game.height);
-
-	var background = game.add.sprite(0, 0, graphics.generateTexture());
-	background.alpha = 0.65;
-	background.inputEnabled = true;
-	background.input.priorityID = 3;
-	background.events.onInputDown.add(function(){
-		this.hide();
-	}, this);
-
-	graphics.destroy();
-
-	this.add(background);
     
 	for(var i = 0, len = this.UI.editor.data.levels.length; i < len; i++) {
 		this.createLevelBubble(i);
