@@ -57,6 +57,7 @@ UI.prototype = {
 		this.loadButton.anchor.set(0.5);
 		this.loadButton.input.useHandCursor = true;
 		this.UILayer.add(this.loadButton);
+        this.editor.toolTipManager.add(this.loadButton, 'Load');
         
 		this.saveButton = game.add.sprite(game.width - 140, 80, 'save');
 		this.saveButton.inputEnabled = true;
@@ -66,6 +67,7 @@ UI.prototype = {
 		this.saveButton.anchor.set(0.5);
 		this.saveButton.input.useHandCursor = true;
 		this.UILayer.add(this.saveButton);
+        this.editor.toolTipManager.add(this.saveButton, 'Save');
         
         this.rotationButton = game.add.sprite(game.width - 200, 80, 'rotation');
 		this.rotationButton.inputEnabled = true;
@@ -75,6 +77,7 @@ UI.prototype = {
 		this.rotationButton.anchor.set(0.5);
 		this.rotationButton.input.useHandCursor = true;
 		this.UILayer.add(this.rotationButton);
+        this.editor.toolTipManager.add(this.rotationButton, 'Rotate');
 		
 		// overlays
 		// create load overlay

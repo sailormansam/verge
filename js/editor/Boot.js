@@ -1,5 +1,6 @@
 var GameStates = GameStates || {};
 var textStyle = {
+    'small': { font: "2em squada one", fill: "#202529"},
 	'normal': { font: "3em squada one", fill: "#202529"},
 	'large': { font: "6em squada one", fill: "#202529"}
 };

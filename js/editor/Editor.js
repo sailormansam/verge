@@ -6,6 +6,7 @@ GameStates.Editor = function (game) {
 	this.history;
 	this.actions;
 	this.data;
+    this.toolTipManager;
 	
 	// constants
 	this.WORLD_SIZE = 2000;
@@ -42,6 +43,9 @@ GameStates.Editor.prototype = {
 		// make level
 		this.canvas = new Canvas(this);
 		
+		// start tip manager
+        this.toolTipManager = new ToolTip();
+		
 		// create UI
 		this.UI = new UI(this);
 		
@@ -50,8 +54,6 @@ GameStates.Editor.prototype = {
 		
 		// pointer Controller
 		this.pointerController = new PointerController(this);
-		
-		// inputs
 	},
 	
 	preRender: function () {
