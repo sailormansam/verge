@@ -45,6 +45,12 @@ UI.prototype = {
 		
 		// set first bubble as active
 		this.bubbleController.setActive(this.bubbleController.bubbles[0]);
+        
+        // add tool tips
+        this.editor.toolTipManager.add(this.bubbleController.bubbles[0].background, 'Static', this.bubbleController.bubbles[0]);
+        this.editor.toolTipManager.add(this.bubbleController.bubbles[1].background, 'Dynamic', this.bubbleController.bubbles[1]);
+        this.editor.toolTipManager.add(this.bubbleController.bubbles[2].background, 'Start', this.bubbleController.bubbles[2]);
+        this.editor.toolTipManager.add(this.bubbleController.bubbles[3].background, 'Teleporter', this.bubbleController.bubbles[3]);
 		
 		// add to bubbles to UI layer
 		this.UILayer.add(this.bubbleController.bubbleLayer);
