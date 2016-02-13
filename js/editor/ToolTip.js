@@ -17,14 +17,19 @@ ToolTip.prototype = {
 
                 text.x = locationTarget.x;
                 text.y = locationTarget.y + 40;
+                text.alpha = 0;
                 text.visible = true;
+                game.add.tween(text).to({ alpha: 1 }, 250, Phaser.Easing.Quadratic.Out, true);
             }, this);
             
         }), this, 0, hoverTarget, locationTarget);
         
         hoverTarget.events.onInputOut.add((function(){
-            text.visible = false;
             game.time.events.remove(this.timer);
+            var tween = game.add.tween(text).to({ alpha: 0 }, 250, Phaser.Easing.Quadratic.In, true);
+            tween.onComplete.add(function(){
+                text.visible = false;
+            }, this);
         }), this);
     }
 };
