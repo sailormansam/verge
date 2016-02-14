@@ -1,4 +1,5 @@
-var BubbleController = function () {
+var BubbleController = function (toolTipManager) {
+    this.toolTips = toolTipManager;
 	this.bubbles;
 	this.angle;
 	this.showing;
@@ -36,6 +37,9 @@ BubbleController.prototype = {
 		}
 		
 		this.showing = true;
+        
+        // clear tool tips
+        this.toolTips.clearTimer();
 	},
 	
 	hide: function () {
@@ -45,6 +49,9 @@ BubbleController.prototype = {
 		});
 		
 		this.showing = false;
+        
+        // clear tool tips
+        this.toolTips.clearTimer();
 	},
 	
 	setActive: function (bubble) {

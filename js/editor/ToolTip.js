@@ -1,5 +1,6 @@
 var ToolTip = function () {
     this.timer;
+    this.tips = [];
 };
 
 ToolTip.prototype = {
@@ -8,9 +9,11 @@ ToolTip.prototype = {
         text.anchor.set(0.5);
         text.visible = false;
         
+        this.tips.push(text);
+        
         hoverTarget.events.onInputOver.add((function(){
             
-            this.timer = game.time.events.add(Phaser.Timer.SECOND * 2, function(){
+            this.timer = game.time.events.add(Phaser.Timer.SECOND * 1, function(){
                 if(!locationTarget) {
                     locationTarget = hoverTarget;
                 }
@@ -31,5 +34,16 @@ ToolTip.prototype = {
                 text.visible = false;
             }, this);
         }), this);
+    },
+    
+    clearTimer: function () {
+        if(this.timer) {
+            game.time.events.remove(this.timer);
+            
+            // hide all tips too
+            this.tips.forEach(function(tip){
+                tip.visible = false;
+            });
+        }
     }
 };

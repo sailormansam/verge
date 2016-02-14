@@ -37,7 +37,7 @@ UI.prototype = {
 		this.overlayLayer.cameraOffset.y = 25;
 		
 		// populate the bubbles with actions
-		this.bubbleController = new BubbleController();
+		this.bubbleController = new BubbleController(this.editor.toolTipManager);
 		this.bubbleController.add(new Bubble(this, this.editor.actions[0], 45));
 		this.bubbleController.add(new Bubble(this, this.editor.actions[1], 45));
 		this.bubbleController.add(new Bubble(this, this.editor.actions[2], 45));
@@ -103,6 +103,9 @@ UI.prototype = {
         // set rotation amount for level
         this.rotationOverlay.show();
         this.UIUp = false;
+        
+        // clear tool tip timer or else tips will get stuck
+        this.editor.toolTipManager.clearTimer();
     },
 	
 	save: function () {
@@ -144,11 +147,17 @@ UI.prototype = {
         this.editor.data = newLevels;
         
 		this.UIUp = false;
+        
+        // clear tool tip timer or else tips will get stuck
+        this.editor.toolTipManager.clearTimer();
 	},
 	
 	load: function () {
 		//show overlay
 		this.loadOverlay.show();
+        
+        // clear tool tip timer or else tips will get stuck
+        this.editor.toolTipManager.clearTimer();
 	},
 	
 	hideLoad: function() {
@@ -170,6 +179,10 @@ UI.prototype = {
 				this.bubbleController.hide();
 				this.bubbleController.hidden = true;
 			}
+            
+            console.log('toggle');
+            // clear tool tip timer or else tips will get stuck
+            this.editor.toolTipManager.clearTimer();
 		}
 	}
 };
