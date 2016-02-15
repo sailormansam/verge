@@ -7,6 +7,9 @@ var PointerController = function (parent) {
 	this.netColor;
 	this.netBorderColor;
 	this.addBlocks = false;
+    this.vx = 0;
+    this.vy = 0;
+    this.average = [];
 	
 	this.create();
 };
@@ -102,9 +105,42 @@ PointerController.prototype = {
 		
 		// move map with middle mouse
 		if(game.input.activePointer.middleButton.isDown) {
-			game.camera.x -= game.input.x - this.previousLocation.x;
-			game.camera.y -= game.input.y - this.previousLocation.y;
+            this.vx = game.input.x - this.previousLocation.x;
+            this.vy = game.input.y - this.previousLocation.y;
+			game.camera.x -= this.vx;
+			game.camera.y -= this.vy;
+            
+            this.average.push(new Phaser.Point(this.vx, this.vy));
 		}
+        else {
+            // average velocity of drag
+            if(this.average.length) {
+                var averageX = 0;
+                var averageY = 0;
+                
+                this.average.forEach(function(point){
+                    averageX += point.x;
+                    averageY += point.y;
+                });
+                
+                this.vx = averageX / this.average.length;
+                this.vy = averageY / this.average.length;
+                
+                this.average = [];
+            }
+            
+            this.vx *= 0.9;
+            this.vy *= 0.9;
+            
+            if(Math.abs(this.vx) <= 0.1)
+                this.vx = 0;
+            
+            if(Math.abs(this.vy) <= 0.1)
+                this.vy = 0;
+            
+            game.camera.x -= this.vx;
+            game.camera.y -= this.vy;
+        }
 		
 		this.previousLocation = new Phaser.Point(game.input.x, game.input.y);
 	},
