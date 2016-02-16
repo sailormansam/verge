@@ -17,7 +17,7 @@ var Player = function (gameState, x, y) {
 	
 	this.ACCELERATION = 50;
 	this.MAX_SPEED = 300;
-	this.JUMP = -450;
+	this.JUMP = -400;
 	this.IN_AIR_SPEED = 0.3;
 	
 	game.add.existing(this);
@@ -105,7 +105,7 @@ Player.prototype.move = function () {
 
 
 			// start jump animation
-			var t = game.add.tween(this.scale).to({ x: 0.9, y: 1.3}, 100, Phaser.Easing.Quadratic.In)
+			var t = game.add.tween(this.scale).to({ x: 0.7, y: 1.3}, 100, Phaser.Easing.Quadratic.In)
 													 .to({ x: 1, y: 1}, 100, Phaser.Easing.Quadratic.In);
 			t.start();
 		}
