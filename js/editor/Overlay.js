@@ -8,7 +8,7 @@ var Overlay = function (parent) {
 	graphics.drawRect(0, 0, game.width, game.height);
 
 	var background = game.add.sprite(0, 0, graphics.generateTexture());
-	background.alpha = 0.65;
+	background.alpha = 0.8;
 
 	graphics.destroy();
 
