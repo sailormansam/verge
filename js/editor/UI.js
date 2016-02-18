@@ -7,6 +7,7 @@ var UI = function (parent) {
 	this.loadButton;
 	this.saveButton;
 	this.UIUp;
+    this.toolTipManager;
 	
 	// overlays
 	this.loadOverlay;
@@ -35,9 +36,12 @@ UI.prototype = {
 		this.overlayLayer = game.add.group();
 		this.overlayLayer.fixedToCamera = true;
 		this.overlayLayer.cameraOffset.y = 25;
+        
+		// start tip manager
+        this.toolTipManager = new ToolTip(this);
 		
 		// populate the bubbles with actions
-		this.bubbleController = new BubbleController(this.editor.toolTipManager);
+		this.bubbleController = new BubbleController(this.toolTipManager);
 		this.bubbleController.add(new Bubble(this, this.editor.actions[0], 45));
 		this.bubbleController.add(new Bubble(this, this.editor.actions[1], 45));
 		this.bubbleController.add(new Bubble(this, this.editor.actions[2], 45));
@@ -46,14 +50,14 @@ UI.prototype = {
 		// set first bubble as active
 		this.bubbleController.setActive(this.bubbleController.bubbles[0]);
         
-        // add tool tips
-        this.editor.toolTipManager.add(this.bubbleController.bubbles[0].background, 'Static', this.bubbleController.bubbles[0]);
-        this.editor.toolTipManager.add(this.bubbleController.bubbles[1].background, 'Dynamic', this.bubbleController.bubbles[1]);
-        this.editor.toolTipManager.add(this.bubbleController.bubbles[2].background, 'Start', this.bubbleController.bubbles[2]);
-        this.editor.toolTipManager.add(this.bubbleController.bubbles[3].background, 'End', this.bubbleController.bubbles[3]);
-		
 		// add to bubbles to UI layer
 		this.UILayer.add(this.bubbleController.bubbleLayer);
+        
+        // add tool tips
+        this.toolTipManager.add(this.bubbleController.bubbles[0].background, 'Static', this.bubbleController.bubbles[0]);
+        this.toolTipManager.add(this.bubbleController.bubbles[1].background, 'Dynamic', this.bubbleController.bubbles[1]);
+        this.toolTipManager.add(this.bubbleController.bubbles[2].background, 'Start', this.bubbleController.bubbles[2]);
+        this.toolTipManager.add(this.bubbleController.bubbles[3].background, 'End', this.bubbleController.bubbles[3]);
 		
 		// save and load buttons
 		this.loadButton = game.add.sprite(game.width - 80, 80, 'load');
@@ -63,7 +67,7 @@ UI.prototype = {
 		this.loadButton.anchor.set(0.5);
 		this.loadButton.input.useHandCursor = true;
 		this.UILayer.add(this.loadButton);
-        this.editor.toolTipManager.add(this.loadButton, 'Load');
+        this.toolTipManager.add(this.loadButton, 'Load');
         
 		this.saveButton = game.add.sprite(game.width - 140, 80, 'save');
 		this.saveButton.inputEnabled = true;
@@ -73,7 +77,7 @@ UI.prototype = {
 		this.saveButton.anchor.set(0.5);
 		this.saveButton.input.useHandCursor = true;
 		this.UILayer.add(this.saveButton);
-        this.editor.toolTipManager.add(this.saveButton, 'Save');
+        this.toolTipManager.add(this.saveButton, 'Save');
         
         this.rotationButton = game.add.sprite(game.width - 200, 80, 'rotation');
 		this.rotationButton.inputEnabled = true;
@@ -83,7 +87,7 @@ UI.prototype = {
 		this.rotationButton.anchor.set(0.5);
 		this.rotationButton.input.useHandCursor = true;
 		this.UILayer.add(this.rotationButton);
-        this.editor.toolTipManager.add(this.rotationButton, 'Rotate');
+        this.toolTipManager.add(this.rotationButton, 'Rotate');
 		
 		// overlays
 		// create load overlay
@@ -105,7 +109,7 @@ UI.prototype = {
         this.UIUp = false;
         
         // clear tool tip timer or else tips will get stuck
-        this.editor.toolTipManager.clearTimer();
+        this.toolTipManager.clearTimer();
     },
 	
 	save: function () {
@@ -149,7 +153,7 @@ UI.prototype = {
 		this.UIUp = false;
         
         // clear tool tip timer or else tips will get stuck
-        this.editor.toolTipManager.clearTimer();
+        this.toolTipManager.clearTimer();
 	},
 	
 	load: function () {
@@ -157,7 +161,7 @@ UI.prototype = {
 		this.loadOverlay.show();
         
         // clear tool tip timer or else tips will get stuck
-        this.editor.toolTipManager.clearTimer();
+        this.toolTipManager.clearTimer();
 	},
 	
 	hideLoad: function() {
@@ -182,7 +186,7 @@ UI.prototype = {
             
             console.log('toggle');
             // clear tool tip timer or else tips will get stuck
-            this.editor.toolTipManager.clearTimer();
+            this.toolTipManager.clearTimer();
 		}
 	}
 };

@@ -1,4 +1,5 @@
-var ToolTip = function () {
+var ToolTip = function (parent) {
+    this.UI = parent;
     this.timer;
     this.tips = [];
 };
@@ -6,6 +7,7 @@ var ToolTip = function () {
 ToolTip.prototype = {
     add: function (hoverTarget, tip, locationTarget) {
         var text = game.add.text(hoverTarget.x, hoverTarget.y + 40, tip, textStyle.small);
+        this.UI.UILayer.add(text);
         text.anchor.set(0.5);
         text.visible = false;
         
@@ -13,7 +15,7 @@ ToolTip.prototype = {
         
         hoverTarget.events.onInputOver.add((function(){
             
-            this.timer = game.time.events.add(Phaser.Timer.SECOND * 1, function(){
+            this.timer = game.time.events.add(Phaser.Timer.SECOND * 0.9, function(){
                 if(!locationTarget) {
                     locationTarget = hoverTarget;
                 }

@@ -43,9 +43,6 @@ GameStates.Editor.prototype = {
 		// make level
 		this.canvas = new Canvas(this);
 		
-		// start tip manager
-        this.toolTipManager = new ToolTip();
-		
 		// create UI
 		this.UI = new UI(this);
 		
