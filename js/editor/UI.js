@@ -42,10 +42,10 @@ UI.prototype = {
 		
 		// populate the bubbles with actions
 		this.bubbleController = new BubbleController(this.toolTipManager);
-		this.bubbleController.add(new Bubble(this, this.editor.actions[0], 45));
-		this.bubbleController.add(new Bubble(this, this.editor.actions[1], 45));
-		this.bubbleController.add(new Bubble(this, this.editor.actions[2], 45));
-		this.bubbleController.add(new Bubble(this, this.editor.actions[3], 45));
+		this.bubbleController.add(new Bubble(this, this.editor.actions[0], 100));
+		this.bubbleController.add(new Bubble(this, this.editor.actions[1], 100));
+		this.bubbleController.add(new Bubble(this, this.editor.actions[2], 100));
+		this.bubbleController.add(new Bubble(this, this.editor.actions[3], 100));
 		
 		// set first bubble as active
 		this.bubbleController.setActive(this.bubbleController.bubbles[0]);
@@ -60,7 +60,7 @@ UI.prototype = {
         this.toolTipManager.add(this.bubbleController.bubbles[3].background, 'End', this.bubbleController.bubbles[3]);
 		
 		// save and load buttons
-		this.loadButton = game.add.sprite(game.width - 80, 80, 'load');
+		this.loadButton = game.add.sprite(game.width - 40, 40, 'load');
 		this.loadButton.inputEnabled = true;
 		this.loadButton.events.onInputDown.add(this.load, this);
 		this.loadButton.input.priorityID = 2;
@@ -69,7 +69,7 @@ UI.prototype = {
 		this.UILayer.add(this.loadButton);
         this.toolTipManager.add(this.loadButton, 'Load');
         
-		this.saveButton = game.add.sprite(game.width - 140, 80, 'save');
+		this.saveButton = game.add.sprite(game.width - 100, 40, 'save');
 		this.saveButton.inputEnabled = true;
 		this.saveButton.events.onInputDown.add(this.save, this);
 		this.saveButton.events.onInputUp.add(this.upUI, this);
@@ -79,7 +79,7 @@ UI.prototype = {
 		this.UILayer.add(this.saveButton);
         this.toolTipManager.add(this.saveButton, 'Save');
         
-        this.rotationButton = game.add.sprite(game.width - 200, 80, 'rotation');
+        this.rotationButton = game.add.sprite(game.width - 160, 40, 'rotation');
 		this.rotationButton.inputEnabled = true;
 		this.rotationButton.events.onInputDown.add(this.rotate, this);
 		this.rotationButton.events.onInputUp.add(this.upUI, this);

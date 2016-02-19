@@ -27,13 +27,13 @@ BubbleController.prototype = {
 		this.bubbleLayer.add(bubble);
 		
 		// calculate bubbles positions based on bubble array
-		this.angle = 2 * Math.PI / this.bubbles.length;
+		this.angle = (Math.PI / 2) / (this.bubbles.length - 1);
 	},
 	
 	show: function (pointer) {
 		// show all bubbles and calculate positions
 		for(var i = 0, len = this.bubbles.length; i < len; i++) {
-			this.bubbles[i].show(i * this.angle - Math.PI / 2, new Phaser.Point(80, 80));
+			this.bubbles[i].show(i * this.angle, new Phaser.Point(40, 40));
 		}
 		
 		this.showing = true;

@@ -1,9 +1,9 @@
 var Bubble = function (parent, action, distanceFromPointer) {
 	this.bubbleController = parent.bubbleController;
-	this.origin = new Phaser.Point(80, 80);
+	this.origin = new Phaser.Point(40, 40);
 	this.showing = false;
 	this.distanceFromPointer = distanceFromPointer;
-	this.desiredLocation = new Phaser.Point(80, 80);
+	this.desiredLocation = new Phaser.Point(40, 40);
 	this.velocity = new Phaser.Point(0, 0);
 	this.k = 300;
 	this.dampening = 0.7;
