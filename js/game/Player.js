@@ -31,12 +31,7 @@ Player.prototype.constructor = Player;
 Player.prototype.create = function () {
 
 	// enable physics
-	game.physics.p2.enable(this);
-
-	// player physics settings
-	this.body.mass = 1;
-
-	this.body.setCollisionGroup(this.gameState.playerCollisionGroup);
+    game.physics.arcade.enable(this);
 
 	// set up inventory
 	this.inventory = new Inventory();
@@ -48,9 +43,6 @@ Player.prototype.preRender = function () {
 };
 
 Player.prototype.update = function () {
-	this.body.setZeroRotation();
-	this.body.rotation = 0;
-
 	this.move();
 
 	// reset jump if key is up

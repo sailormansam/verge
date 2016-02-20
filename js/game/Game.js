@@ -20,15 +20,9 @@ GameStates.Game.prototype = {
 		this.player = null;
 		
 		// enable physics
-		game.physics.startSystem(Phaser.Physics.P2JS);
-		game.physics.p2.defaultRestitution = 1;
-		game.physics.p2.gravity.y = this.GRAVITY;
-		game.physics.p2.damping = 1;
-		
-		// turn on collision callbacks with collision groups
-		game.physics.p2.setImpactEvents(true);
-		this.playerCollisionGroup = game.physics.p2.createCollisionGroup();
-		this.blockCollisionGroup = game.physics.p2.createCollisionGroup();
+		game.physics.startSystem(Phaser.Physics.ARCADE);
+        
+        game.physics.arcade.gravity.y = this.GRAVITY;
 		
 		// make level
 		this.map = new Map(this);
@@ -38,7 +32,6 @@ GameStates.Game.prototype = {
 		this.pointerController = new PointerController(this);
 		
 		// set up jump event for player scope callback function to player
-		this.player.body.collides(this.blockCollisionGroup, this.player.checkJump, this.player);
 		
 		// set up gameplay timer
 		this.timer = new Timer(game, game.width - 60, 20);
@@ -49,6 +42,13 @@ GameStates.Game.prototype = {
 	},
 	
 	update: function () {
+        // update physics
+        game.physics.arcade.collide(this.player, this.map.blocks);
+        
+        if(this.player.body.touching.down) {
+            this.player.checkJump();
+        }
+        
 		// incremement timer
 		this.timer.update(game.time.elapsedMS);
 		

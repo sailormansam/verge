@@ -32,12 +32,7 @@ Block.prototype.constructor = Block;
 
 Block.prototype.create = function () {
 	// enable physics
-	game.physics.p2.enable(this);
-
-	// make sure block doesn't move
-	this.body.dynamic = false;
-
-	// add to collision group and then make sure that the block collides with the player
-	this.body.setCollisionGroup(this.gameState.blockCollisionGroup);
-	this.body.collides([this.gameState.blockCollisionGroup, this.gameState.playerCollisionGroup]);
+	game.physics.arcade.enable(this);
+    this.body.allowGravity = false;
+	this.body.immovable = true;
 };
