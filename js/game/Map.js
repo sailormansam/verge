@@ -1,6 +1,8 @@
 var Map = function (gameState) {
 	this.gameState = gameState;
 	this.blocks;
+    this.blocks2d;
+    this.collidableBlocks;
 	this.data;
 	this.level;
 	
@@ -19,6 +21,13 @@ Map.prototype = {
 	create: function () {
 		// reset variables
 		this.blocks = [];
+        this.blocks2d = [];
+        this.collidableBlocks = [];
+        
+        for (var i = 0; i < 40; i++) {
+            this.blocks2d[i] = new Array(40);
+        }
+        
 		this.level = 0;
 		
 		// get json
@@ -53,30 +62,57 @@ Map.prototype = {
 			this.gameState.teleporter.destroy();
 		}
 		
-		// create player
-		if(this.gameState.player) {
-			this.gameState.player.moveToStart(this.data.levels[this.level].start.x * this.MAP_GRAIN + 0.5, this.data.levels[this.level].start.y * this.MAP_GRAIN + 0.5);
-		}
-		else {
-			this.gameState.player = new Player(this.gameState, this.data.levels[this.level].start.x * this.MAP_GRAIN + 0.5, this.data.levels[this.level].start.y * this.MAP_GRAIN + 0.5);
-		}
-		
-		this.gameState.player.inventory.clear();
-		
 		// create map
 		for(var i = 0, len = this.data.levels[this.level].blocks.length; i < len; i++) {
-			this.blocks.push(new Block(this.gameState,
-									   this.data.levels[this.level].blocks[i].x,
-									   this.data.levels[this.level].blocks[i].y,
-									   this.MAP_GRAIN,
-									   this.data.levels[this.level].blocks[i].material));
+            // create player
+            if(this.data.levels[this.level].blocks[i].material == 'START') {
+                if(this.gameState.player) {
+                    this.gameState.player.moveToStart(this.data.levels[this.level].blocks[i].x * this.MAP_GRAIN + 0.5, this.data.levels[this.level].blocks[i].y * this.MAP_GRAIN + 0.5);
+                }
+                else {
+                    this.gameState.player = new Player(this.gameState, this.data.levels[this.level].blocks[i].x * this.MAP_GRAIN + 0.5, this.data.levels[this.level].blocks[i].y * this.MAP_GRAIN + 0.5);
+                }
+
+                this.gameState.player.inventory.clear();
+            }
+            else if(this.data.levels[this.level].blocks[i].material == 'TELEPORTER') {
+                // create teleporter for this level
+                this.gameState.teleporter = new Teleporter(this.data.levels[this.level].blocks[i].x,
+                                                           this.data.levels[this.level].blocks[i].y,
+                                                           this.MAP_GRAIN);
+            }
+            else {
+                this.blocks.push(new Block(this.gameState,
+                                           this.data.levels[this.level].blocks[i].x,
+                                           this.data.levels[this.level].blocks[i].y,
+                                           this.MAP_GRAIN,
+                                           this.data.levels[this.level].blocks[i].material));
+            }
 		}
-		
-		// create teleporter for this level
-		this.gameState.teleporter = new Teleporter(this.data.levels[this.level].teleporter.x,
-										 this.data.levels[this.level].teleporter.y,
-										 this.MAP_GRAIN);
-		
+        
+        for(var i = 0, len = this.blocks.length; i < len; i++) {
+            // create 2d array to more efficiently locate blocks that need colliders
+            if(this.blocks[i].material == 'STATIC') {
+                this.blocks2d[this.blocks[i].x / this.MAP_GRAIN][this.blocks[i].y / this.MAP_GRAIN] = i;
+            }
+        }
+        
+        // loop through 2d block array to find blocks that need colliders
+        for(var i = 1, len = this.blocks2d.length - 1; i < len; i++) {
+            for(var j = 1, len = this.blocks2d.length - 1; j < len; j++) {
+                // if there is a no neighbor either up down left or right, this block gets a collider
+                if((this.blocks2d[i - 1][j] == undefined
+                   || this.blocks2d[i + 1][j] == undefined
+                   || this.blocks2d[i][j - 1] == undefined
+                   || this.blocks2d[i][j + 1] == undefined)
+                   && this.blocks2d[i][j] != undefined){
+                    this.collidableBlocks.push(this.blocks[this.blocks2d[i][j]]);
+                    
+                    this.blocks[this.blocks2d[i][j]].tint = 0xff0000;
+                }
+            }
+        }
+        
 		//  find the greatest x and y position of blocks
 		var greatestX = 0;
 		var greatestY = 0;

@@ -1,7 +1,5 @@
 var Block = function (gameState, x, y, mapGrain, material) {
 	// align to zero
-	x += 0.5;
-	y += 0.5;
 	this.gameState = gameState;
 	this.material = material;
 	

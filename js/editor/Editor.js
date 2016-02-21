@@ -29,7 +29,7 @@ GameStates.Editor.prototype = {
         
         var getLevels = localStorage.getItem('levels');
         
-        if (getLevels == 'null') {
+        if (getLevels == null) {
             localStorage.setItem('levels', JSON.stringify(game.cache.getJSON('map')));
         }
         else {

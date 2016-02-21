@@ -72,15 +72,19 @@ Player.prototype.move = function () {
 			   || game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) {
 			this.body.velocity.x += this.ACCELERATION * multiplier;
 		}
+        else {
+            this.body.velocity.x *= 0.9;
+        }
 
 		// check for max speed
 		if(this.body.velocity.x > this.MAX_SPEED) {
 			this.body.velocity.x = this.MAX_SPEED;
 		}
-
-		if(this.body.velocity.x < -this.MAX_SPEED) {
+        
+        if(this.body.velocity.x < -this.MAX_SPEED) {
 			this.body.velocity.x = -this.MAX_SPEED;
 		}
+        
 		// jump
 		if((game.input.keyboard.isDown(Phaser.Keyboard.W)
 		  || game.input.keyboard.isDown(Phaser.Keyboard.UP))
