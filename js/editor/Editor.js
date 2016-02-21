@@ -17,12 +17,19 @@ GameStates.Editor.prototype = {
 		// get json
 		this.data = game.cache.getJSON('map');
         
+        // make an empty level array if nothing is found
+        if(Object.keys(this.data).length == 0) {
+            this.data = {
+                levels: []
+            }
+        }
+        
         // load levels into local storage
         var storage = localStorage;
         
         var getLevels = localStorage.getItem('levels');
         
-        if (getLevels === null) {
+        if (getLevels == 'null') {
             localStorage.setItem('levels', JSON.stringify(game.cache.getJSON('map')));
         }
         else {

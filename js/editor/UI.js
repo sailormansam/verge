@@ -114,8 +114,6 @@ UI.prototype = {
 	
 	save: function () {
 		var mapSave = {
-            start: {x: 0, y: 0},
-            teleporter: {x: 0, y: 0},
             rotation: { theta: 0 },
             blocks: []
 		};
@@ -127,15 +125,7 @@ UI.prototype = {
 		
 		// generate blocks and print out
 		this.editor.canvas.blocks.forEach(function(block){
-			if(block.material == "START") {
-				mapSave.start = {x: block.x / this.editor.canvas.MAP_GRAIN, y: block.y / this.editor.canvas.MAP_GRAIN};
-			}
-			else if(block.material == "TELEPORTER") {
-				mapSave.teleporter = {x: block.x / this.editor.canvas.MAP_GRAIN, y: block.y / this.editor.canvas.MAP_GRAIN};
-			}
-			else {
-				mapSave.blocks.push({ material: block.material, x: block.x / this.editor.canvas.MAP_GRAIN, y: block.y / this.editor.canvas.MAP_GRAIN });
-			}
+            mapSave.blocks.push({ material: block.material, x: block.x / this.editor.canvas.MAP_GRAIN, y: block.y / this.editor.canvas.MAP_GRAIN });
 		}, this);
 		
         // save to local storage

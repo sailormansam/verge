@@ -132,10 +132,10 @@ PointerController.prototype = {
             this.vx *= 0.9;
             this.vy *= 0.9;
             
-            if(Math.abs(this.vx) <= 0.1)
+            if(Math.abs(this.vx) <= 1)
                 this.vx = 0;
             
-            if(Math.abs(this.vy) <= 0.1)
+            if(Math.abs(this.vy) <= 1)
                 this.vy = 0;
             
             game.camera.x -= this.vx;
