@@ -6,7 +6,7 @@ var Teleporter = function (x, y, mapGrain) {
 	// create player
 	var graphics = game.add.graphics(0, 0);
 
-	graphics.beginFill(0xff0000);
+	graphics.beginFill(0xE05140);
 	graphics.drawRect(0, 0, mapGrain, mapGrain);
 	
 	// call extending constructor

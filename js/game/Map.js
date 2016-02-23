@@ -67,10 +67,10 @@ Map.prototype = {
             // create player
             if(this.data.levels[this.level].blocks[i].material == 'START') {
                 if(this.gameState.player) {
-                    this.gameState.player.moveToStart(this.data.levels[this.level].blocks[i].x * this.MAP_GRAIN + 0.5, this.data.levels[this.level].blocks[i].y * this.MAP_GRAIN + 0.5);
+                    this.gameState.player.moveToStart(this.data.levels[this.level].blocks[i].x * this.MAP_GRAIN, this.data.levels[this.level].blocks[i].y * this.MAP_GRAIN);
                 }
                 else {
-                    this.gameState.player = new Player(this.gameState, this.data.levels[this.level].blocks[i].x * this.MAP_GRAIN + 0.5, this.data.levels[this.level].blocks[i].y * this.MAP_GRAIN + 0.5);
+                    this.gameState.player = new Player(this.gameState, this.data.levels[this.level].blocks[i].x * this.MAP_GRAIN, this.data.levels[this.level].blocks[i].y * this.MAP_GRAIN);
                 }
 
                 this.gameState.player.inventory.clear();
@@ -107,8 +107,6 @@ Map.prototype = {
                    || this.blocks2d[i][j + 1] == undefined)
                    && this.blocks2d[i][j] != undefined){
                     this.collidableBlocks.push(this.blocks[this.blocks2d[i][j]]);
-                    
-                    this.blocks[this.blocks2d[i][j]].tint = 0xff0000;
                 }
             }
         }
@@ -166,8 +164,8 @@ Map.prototype = {
 		// check if there is a block at pointer location
 		for(var i = 0, len = this.blocks.length; i < len; i++) {
 			if(this.blocks[i] != null
-			   && this.blocks[i].x == (truePointer.x + 0.5) * this.MAP_GRAIN
-			   && this.blocks[i].y == (truePointer.y + 0.5) * this.MAP_GRAIN) {
+			   && this.blocks[i].x == (truePointer.x) * this.MAP_GRAIN
+			   && this.blocks[i].y == (truePointer.y) * this.MAP_GRAIN) {
 				return;
 			}
 		}

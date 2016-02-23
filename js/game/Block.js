@@ -7,7 +7,7 @@ var Block = function (gameState, x, y, mapGrain, material) {
 	var graphics = game.add.graphics(0, 0);
 
 	if(this.material == blockType.STATIC) {
-		graphics.beginFill(0x666666);
+		graphics.beginFill(0x12738A);
 		
 	}
 	else {

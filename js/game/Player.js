@@ -2,13 +2,15 @@ var Player = function (gameState, x, y) {
 	// create player
 	var graphics = game.add.graphics(0, 0);
 
-	graphics.beginFill(0x333333);
+	graphics.beginFill(0xffffff);
 	graphics.drawRect(0, 0, 25, 40);
 	
 	Phaser.Sprite.call(this, game, x, y, graphics.generateTexture());
 	
 	graphics.destroy();
 	
+    this.anchor.set(0.5);
+    
 	this.gameState = gameState;
 	this.canJump = false;
 	this.canMove = false;
@@ -101,8 +103,8 @@ Player.prototype.move = function () {
 
 
 			// start jump animation
-			var t = game.add.tween(this.scale).to({ x: 0.7, y: 1.3}, 100, Phaser.Easing.Quadratic.In)
-													 .to({ x: 1, y: 1}, 100, Phaser.Easing.Quadratic.In);
+			var t = game.add.tween(this.scale).to({ x: 0.7, y: 1.3}, 100, Phaser.Easing.Quadratic.Out)
+													 .to({ x: 1, y: 1}, 120, Phaser.Easing.Bounce.Out);
 			t.start();
 		}
 	}
