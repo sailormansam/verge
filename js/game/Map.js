@@ -129,13 +129,13 @@ Map.prototype = {
         var workingArray = [];
         
         // find a block search down until no block, create
-        for(var i = 0; i < this.blocks2d.length; i++) {
-            for(var j = 0; j < this.blocks2d.length; j++) {
+        for(var i = 1; i < this.blocks2d.length; i++) {
+            for(var j = 1; j < this.blocks2d.length; j++) {
                 // make sure there are at least two blocks, or else you get a lot of 1 block columns
-                if(this.blocks2d[i][j] == false || 
-                   (workingArray.length > 0 && this.blocks2d[i][j] == false && this.blocks2d[i][j + 1] == false)) {
+                if((this.blocks2d[i][j] === false && this.blocks2d[i][j + 1] === false) || 
+                   (workingArray.length > 0 && this.blocks2d[i][j] === false)) {
+                    this.blocks2d[i][j] = true;
                     workingArray.push(this.blocks2d[i][j]);
-                    this.blocks2d[i][j] == true;
                 }
                 else {
                     // if working array is not empty
