@@ -111,6 +111,45 @@ Map.prototype = {
             }
         }
         
+        // do a pass to simplify geometry even further by creating vertical and horizontal colliding rectangles
+        // vertical pass
+        
+        // reset 2d array for use with new collidable blocks
+        for(var i = 0; i < this.blocks2d.length; i++) {
+            this.blocks2d[i] = new Array(40);
+        }
+        
+        this.collidableBlocks.forEach(function(block){
+            this.blocks2d[block.x / this.MAP_GRAIN][block.y / this.MAP_GRAIN] = false;
+        }, this);
+        
+        console.log(this.blocks2d);
+        
+        var totalArrays = [];
+        var workingArray = [];
+        
+        // find a block search down until no block, create
+        for(var i = 0; i < this.blocks2d.length; i++) {
+            for(var j = 0; j < this.blocks2d.length; j++) {
+                // make sure there are at least two blocks, or else you get a lot of 1 block columns
+                if(this.blocks2d[i][j] == false || 
+                   (workingArray.length > 0 && this.blocks2d[i][j] == false && this.blocks2d[i][j + 1] == false)) {
+                    workingArray.push(this.blocks2d[i][j]);
+                    this.blocks2d[i][j] == true;
+                }
+                else {
+                    // if working array is not empty
+                    if(workingArray.length > 0) {
+                        // push working array to total array and then clear
+                        totalArrays.push(workingArray);
+                        workingArray = [];
+                    }
+                }
+            }
+        }
+        
+        console.log(totalArrays);
+        
 		//  find the greatest x and y position of blocks
 		var greatestX = 0;
 		var greatestY = 0;
