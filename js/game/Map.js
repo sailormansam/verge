@@ -148,6 +148,28 @@ Map.prototype = {
             }
         }
         
+        // horizontal pass
+        for(var j = 1; j < this.blocks2d.length; j++) {
+            for(var i = 1; i < this.blocks2d.length; i++) {
+                // make sure there are at least two blocks, or else you get a lot of 1 block columns
+                if((this.blocks2d[i][j] === false && this.blocks2d[i + 1][j] === false) || 
+                   (workingArray.length > 0 && this.blocks2d[i][j] === false)) {
+                    this.blocks2d[i][j] = true;
+                    workingArray.push(this.blocks2d[i][j]);
+                }
+                else {
+                    // if working array is not empty
+                    if(workingArray.length > 0) {
+                        // push working array to total array and then clear
+                        totalArrays.push(workingArray);
+                        workingArray = [];
+                    }
+                }
+            }
+        }
+        
+        
+        
         console.log(totalArrays);
         
 		//  find the greatest x and y position of blocks
