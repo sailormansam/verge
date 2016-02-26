@@ -135,12 +135,12 @@ Player.prototype.checkJump = function () {
 Player.prototype.doParticles = function () {
 	// emit a little particle effect for jumping and landing
 	// emitter for the left side of the player
-	emitterLeft = game.add.emitter(this.body.x + 20, this.body.y + (this.height / 2) - 8, 200);
+	emitterLeft = game.add.emitter(this.x + 20, this.body.y + this.height, 20);
 
 	emitterLeft.makeParticles('block');
 
 	emitterLeft.setXSpeed(0, 0);
-	emitterLeft.setYSpeed(0, 0);
+	emitterLeft.setYSpeed(-120, -120);
 
 	emitterLeft.bringToTop = true;
 	emitterLeft.setRotation(0, 0);
@@ -148,15 +148,15 @@ Player.prototype.doParticles = function () {
 	emitterLeft.setScale(0.2, 0.25, 0.2, 0.25, 500);
 	emitterLeft.gravity = -50;
 
-	emitterLeft.start(true, 300, null, 2);
+	emitterLeft.start(true, 300, null, 1);
 
 	// emitter for the right side of the player
-	emitterRight = game.add.emitter(this.body.x - 20, this.body.y + (this.height / 2) - 8, 200);
+	emitterRight = game.add.emitter(this.x - 20, this.body.y + this.height, 20);
 
 	emitterRight.makeParticles('block');
 
 	emitterRight.setXSpeed(0, 0);
-	emitterRight.setYSpeed(0, 0);
+	emitterRight.setYSpeed(-120, -120);
 
 	emitterRight.bringToTop = true;
 	emitterRight.setRotation(0, 0);
@@ -164,5 +164,5 @@ Player.prototype.doParticles = function () {
 	emitterRight.setScale(0.2, 0.25, 0.2, 0.25, 500);
 	emitterRight.gravity = -50;
 
-	emitterRight.start(true, 300, null, 2);
+	emitterRight.start(true, 300, null, 1);
 };

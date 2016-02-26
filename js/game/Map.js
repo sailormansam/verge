@@ -168,8 +168,6 @@ Map.prototype = {
             }
         }
         
-        
-        
         console.log(totalArrays);
         
 		//  find the greatest x and y position of blocks
