@@ -103,9 +103,9 @@ Player.prototype.move = function () {
 
 
 			// start jump animation
-			var t = game.add.tween(this.scale).to({ x: 0.7, y: 1.3}, 100, Phaser.Easing.Quadratic.Out)
-													 .to({ x: 1, y: 1}, 120, Phaser.Easing.Bounce.Out);
-			t.start();
+//			var t = game.add.tween(this.scale).to({ x: 0.7, y: 1.3}, 100, Phaser.Easing.Quadratic.Out)
+//													 .to({ x: 1, y: 1}, 120, Phaser.Easing.Bounce.Out);
+//			t.start();
 		}
 	}
 };

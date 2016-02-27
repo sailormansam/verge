@@ -197,7 +197,7 @@ Map.prototype = {
 		// set the world bounds based on level
 		// added a little to the game height so the camera follows the player a little before allowing the player to fall off screen and reset
 		// add a half of a block to the width because the blocks are centered on position
-		game.world.setBounds(0, 0, greatestX + this.MAP_GRAIN / 2, greatestY + this.FALL_BUFFER);
+		game.world.setBounds(0, 0, greatestX + this.MAP_GRAIN + 200, greatestY + this.FALL_BUFFER);
 		
 		// set camera follow to null to tween camera
 		game.camera.follow(null);
