@@ -203,14 +203,16 @@ Map.prototype = {
 		game.camera.follow(null);
 		
 		// change the game camera for tween
-		game.camera.x = 20;
+		game.camera.x = 0;
 		
 		// tween in world
 		game.add.tween(game.world).to({ alpha: 1}, 500).start();
 		var t = game.add.tween(game.camera).to({ x: 0}, 300);
-		
+//		
 		t.start();
 		t.onComplete.add((function() {game.camera.follow(this.gameState.player);}), this);
+        
+//        game.camera.follow(this.gameState.player);
 	},
 	
 	placeBlock: function (pointer) {
