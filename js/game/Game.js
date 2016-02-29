@@ -43,7 +43,7 @@ GameStates.Game.prototype = {
 	
 	update: function () {
         // update physics
-        game.physics.arcade.collide(this.player, this.map.collidableBlocks);
+        game.physics.arcade.collide(this.player, this.map.collision);
         
         if(this.player.body.touching.down) {
             this.player.checkJump();

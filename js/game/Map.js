@@ -3,6 +3,7 @@ var Map = function (gameState) {
 	this.blocks;
     this.blocks2d;
     this.collidableBlocks;
+    this.collision;
 	this.data;
 	this.level;
 	
@@ -23,6 +24,7 @@ Map.prototype = {
 		this.blocks = [];
         this.blocks2d = [];
         this.collidableBlocks = [];
+        this.collision = [];
         
         for (var i = 0; i < 40; i++) {
             this.blocks2d[i] = new Array(40);
@@ -123,8 +125,6 @@ Map.prototype = {
             this.blocks2d[block.x / this.MAP_GRAIN][block.y / this.MAP_GRAIN] = false;
         }, this);
         
-        console.log(this.blocks2d);
-        
         var totalArrays = [];
         var workingArray = [];
         
@@ -135,7 +135,7 @@ Map.prototype = {
                 if((this.blocks2d[i][j] === false && this.blocks2d[i][j + 1] === false) || 
                    (workingArray.length > 0 && this.blocks2d[i][j] === false)) {
                     this.blocks2d[i][j] = true;
-                    workingArray.push(this.blocks2d[i][j]);
+                    workingArray.push({x: i, y: j});
                 }
                 else {
                     // if working array is not empty
@@ -147,6 +147,20 @@ Map.prototype = {
                 }
             }
         }
+        
+        // create sprites based on the vertical pass
+        for(var i = 0; i < totalArrays.length; i++) {
+            var origin = new Phaser.Point(totalArrays[i][0].x, totalArrays[i][0].y);
+            
+            var sprite = game.add.sprite(origin.x * this.MAP_GRAIN, origin.y * this.MAP_GRAIN);
+            sprite.width = this.MAP_GRAIN;
+            sprite.height = totalArrays[i].length * this.MAP_GRAIN;
+            this.collision.push(sprite);
+            this.blockLayer.add(sprite);
+        }
+        
+        totalArrays = [];
+        
         
         // horizontal pass
         for(var j = 1; j < this.blocks2d.length; j++) {
@@ -155,7 +169,7 @@ Map.prototype = {
                 if((this.blocks2d[i][j] === false && this.blocks2d[i + 1][j] === false) || 
                    (workingArray.length > 0 && this.blocks2d[i][j] === false)) {
                     this.blocks2d[i][j] = true;
-                    workingArray.push(this.blocks2d[i][j]);
+                    workingArray.push({x: i, y: j});
                 }
                 else {
                     // if working array is not empty
@@ -168,7 +182,26 @@ Map.prototype = {
             }
         }
         
-        console.log(totalArrays);
+        // create sprites based on the vertical pass
+        for(var i = 0; i < totalArrays.length; i++) {
+            var origin = new Phaser.Point(totalArrays[i][0].x, totalArrays[i][0].y);
+            
+            var sprite = game.add.sprite(origin.x * this.MAP_GRAIN, origin.y * this.MAP_GRAIN);
+            sprite.height = this.MAP_GRAIN;
+            sprite.width = totalArrays[i].length * this.MAP_GRAIN;
+            this.collision.push(sprite);
+            this.blockLayer.add(sprite);
+        }
+        
+        console.log(this.collision)
+        
+        // enable collisions
+        this.collision.forEach(function(sprite){
+            // enable physics
+            game.physics.arcade.enable(sprite);
+            sprite.body.allowGravity = false;
+            sprite.body.immovable = true;
+        });
         
 		//  find the greatest x and y position of blocks
 		var greatestX = 0;
