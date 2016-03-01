@@ -95,6 +95,22 @@
             "material": "TELEPORTER",
             "x": 16,
             "y": 11
+        }, {
+            "material": "STATIC",
+            "x": 4,
+            "y": 8
+        }, {
+            "material": "STATIC",
+            "x": 18,
+            "y": 8
+        }, {
+            "material": "STATIC",
+            "x": 4,
+            "y": 7
+        }, {
+            "material": "STATIC",
+            "x": 18,
+            "y": 7
         }]
     }]
 }

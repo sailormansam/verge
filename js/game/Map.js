@@ -193,8 +193,6 @@ Map.prototype = {
             this.blockLayer.add(sprite);
         }
         
-        console.log(this.collision)
-        
         // enable collisions
         this.collision.forEach(function(sprite){
             // enable physics
@@ -240,12 +238,7 @@ Map.prototype = {
 		
 		// tween in world
 		game.add.tween(game.world).to({ alpha: 1}, 500).start();
-		var t = game.add.tween(game.camera).to({ x: 0}, 300);
-//		
-		t.start();
-		t.onComplete.add((function() {game.camera.follow(this.gameState.player);}), this);
-        
-//        game.camera.follow(this.gameState.player);
+        game.camera.follow(this.gameState.player);
 	},
 	
 	placeBlock: function (pointer) {
