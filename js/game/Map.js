@@ -32,8 +32,19 @@ Map.prototype = {
         
 		this.level = 0;
 		
-		// get json
-		this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
+		// get levels from local storage or json
+        var storage = localStorage;
+        
+        var getLevels = localStorage.getItem('levels');
+        
+        if (getLevels == null) {
+            this.data = JSON.parse(JSON.stringify(game.cache.getJSON('map')));
+        }
+        else {
+            this.data = JSON.parse(getLevels);
+        }
+        
+        console.log(this.data);
 		
 		// create a layer for moveable blocks to live on
 		this.blockLayer = game.add.group();
@@ -58,6 +69,13 @@ Map.prototype = {
 			}
 		});
 		this.blocks = [];
+        this.blocks2d = [];
+        
+        for (var i = 0; i < 40; i++) {
+            this.blocks2d[i] = new Array(40);
+        }
+        
+        console.log(this.blocks2d);
 		
 		// clear teleporter
 		if(this.gameState.teleporter) {
