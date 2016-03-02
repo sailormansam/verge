@@ -112,5 +112,74 @@
             "x": 18,
             "y": 7
         }]
+    }, {
+        "rotation": {
+            "theta": 0
+        },
+        "blocks": [{
+            "material": "START",
+            "x": 18,
+            "y": 20
+        }, {
+            "material": "TELEPORTER",
+            "x": 27,
+            "y": 20
+        }, {
+            "material": "STATIC",
+            "x": 16,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 17,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 18,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 19,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 20,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 21,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 22,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 23,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 24,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 25,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 26,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 27,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 28,
+            "y": 21
+        }, {
+            "material": "STATIC",
+            "x": 29,
+            "y": 21
+        }]
     }]
 }

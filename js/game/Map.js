@@ -26,8 +26,8 @@ Map.prototype = {
         this.collidableBlocks = [];
         this.collision = [];
         
-        for (var i = 0; i < 40; i++) {
-            this.blocks2d[i] = new Array(40);
+        for (var i = 0; i < 60; i++) {
+            this.blocks2d[i] = new Array(60);
         }
         
 		this.level = 0;
@@ -70,12 +70,12 @@ Map.prototype = {
 		});
 		this.blocks = [];
         this.blocks2d = [];
+        this.collidableBlocks = [];
+        this.collision = [];
         
-        for (var i = 0; i < 40; i++) {
-            this.blocks2d[i] = new Array(40);
+        for (var i = 0; i < 60; i++) {
+            this.blocks2d[i] = new Array(60);
         }
-        
-        console.log(this.blocks2d);
 		
 		// clear teleporter
 		if(this.gameState.teleporter) {
