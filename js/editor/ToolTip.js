@@ -5,8 +5,11 @@ var ToolTip = function (parent) {
 };
 
 ToolTip.prototype = {
-    add: function (hoverTarget, tip, locationTarget) {
-        var text = game.add.text(hoverTarget.x, hoverTarget.y + 40, tip, textStyle.small);
+    add: function (hoverTarget, tip, locationTarget, offset) {
+        // set offset to default below
+        offset = (typeof offset === 'undefined') ? new Phaser.Point(0, 40): offset;
+        
+        var text = game.add.text(hoverTarget.x + offset.x, hoverTarget.y + offset.y, tip, textStyle.small);
         this.UI.UILayer.add(text);
         text.anchor.set(0.5);
         text.visible = false;
@@ -20,8 +23,8 @@ ToolTip.prototype = {
                     locationTarget = hoverTarget;
                 }
 
-                text.x = locationTarget.x;
-                text.y = locationTarget.y + 40;
+                text.x = locationTarget.x + offset.x;
+                text.y = locationTarget.y + offset.y;
                 text.alpha = 0;
                 text.visible = true;
                 game.add.tween(text).to({ alpha: 1 }, 250, Phaser.Easing.Quadratic.Out, true);

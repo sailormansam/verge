@@ -2,7 +2,7 @@ var BlockDynamicObject = function () {
 	// create block
 	var graphics = game.add.graphics(0, 0);
 	
-	graphics.beginFill(0xD3902F);
+	graphics.beginFill(0xE6D645);
 	
 	graphics.drawRect(0, 0, 40, 40);
 	

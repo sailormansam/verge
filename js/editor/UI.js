@@ -54,10 +54,10 @@ UI.prototype = {
 		this.UILayer.add(this.bubbleController.bubbleLayer);
         
         // add tool tips
-        this.toolTipManager.add(this.bubbleController.bubbles[0].background, 'Static', this.bubbleController.bubbles[0]);
-        this.toolTipManager.add(this.bubbleController.bubbles[1].background, 'Dynamic', this.bubbleController.bubbles[1]);
-        this.toolTipManager.add(this.bubbleController.bubbles[2].background, 'Start', this.bubbleController.bubbles[2]);
-        this.toolTipManager.add(this.bubbleController.bubbles[3].background, 'End', this.bubbleController.bubbles[3]);
+        this.toolTipManager.add(this.bubbleController.bubbles[0].background, 'Static', this.bubbleController.bubbles[0], new Phaser.Point(55, 0));
+        this.toolTipManager.add(this.bubbleController.bubbles[1].background, 'Dynamic', this.bubbleController.bubbles[1], new Phaser.Point(55, 0));
+        this.toolTipManager.add(this.bubbleController.bubbles[2].background, 'Start', this.bubbleController.bubbles[2], new Phaser.Point(55, 0));
+        this.toolTipManager.add(this.bubbleController.bubbles[3].background, 'End', this.bubbleController.bubbles[3], new Phaser.Point(55, 0));
 		
 		// save and load buttons
 		this.loadButton = game.add.sprite(game.width - 40, 40, 'load');

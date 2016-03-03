@@ -1,8 +1,8 @@
 var GameStates = GameStates || {};
 var textStyle = {
-    'small': { font: "2em squada one", fill: "#202529"},
-	'normal': { font: "3em squada one", fill: "#202529"},
-	'large': { font: "6em squada one", fill: "#202529"}
+    'small': { font: "2em squada one", fill: "#ffffff"},
+	'normal': { font: "3em squada one", fill: "#334D62"},
+	'large': { font: "6em squada one", fill: "#334D62"}
 };
 
 var blockType = {
@@ -15,7 +15,7 @@ GameStates.Boot = function (game) {};
 GameStates.Boot.prototype = {
 	init: function () {
 		this.input.maxPointers = 1;
-		game.stage.backgroundColor = '#ffffff';
+		game.stage.backgroundColor = '#4AC5D0';
 		
 		// block default right click to use for other actions
 		game.canvas.oncontextmenu = function (e) { e.preventDefault(); }

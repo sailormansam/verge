@@ -2,7 +2,7 @@ var TeleporterObject = function (mapGrain) {
 	// create block
 	var graphics = game.add.graphics(0, 0);
 	
-	graphics.beginFill(0x3CB58A);
+	graphics.beginFill(0xE05140);
 
 	graphics.drawRect(0, 0, 40, 40);
 	
