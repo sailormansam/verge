@@ -22,19 +22,26 @@ LoadOverlay.prototype.constructor = LoadOverlay;
 
 LoadOverlay.prototype.createLevelBubble = function (i) {
 	var bubbleGroup = game.add.group();
-	bubbleGroup.x = i * 60 + 200;
-	bubbleGroup.y = 150;
+    
+    var newLine = Math.floor(i / 4);
+    
+	bubbleGroup.x = (i - (newLine * 4)) * 60 + 225;
+	bubbleGroup.y = 180 + newLine * 70;
 
 	// create bubble
 	var bubble = game.add.sprite(0, 0, 'bubble');
 	bubble.inputEnabled = true;
-	bubble.events.onInputDown.add(function(){ this.UI.editor.canvas.loadLevel(i) }, this);
+	bubble.events.onInputDown.add(function(){ 
+        this.UI.editor.canvas.loadLevel(i);          
+        game.add.tween(bubble.scale).to({ x: 1.1, y: 1.1}, 100, Phaser.Easing.Quadratic.Out).to({ x: 1, y: 1}, 120, Phaser.Easing.Bounce.Out, true);
+    }, this);
 	bubble.input.priorityID = 4;
 	bubble.input.useHandCursor = true;
+    bubble.anchor.set(0.5);
 	bubbleGroup.add(bubble);
 
 	// level number
-	var levelText = game.add.text(bubble.width / 2, bubble.height / 2 + 3, i, textStyle['normal']);
+	var levelText = game.add.text(0, 3, i, textStyle['normal']);
 	levelText.anchor.set(0.5);
 	bubbleGroup.add(levelText)
 

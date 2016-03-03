@@ -2,7 +2,7 @@ var GameStates = GameStates || {};
 var textStyle = {
     'small': { font: "2em squada one", fill: "#ffffff"},
 	'normal': { font: "3em squada one", fill: "#334D62"},
-	'large': { font: "6em squada one", fill: "#334D62"}
+	'large': { font: "6em squada one", fill: "#ffffff"}
 };
 
 var blockType = {

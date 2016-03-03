@@ -7,11 +7,12 @@ var ToolTip = function (parent) {
 ToolTip.prototype = {
     add: function (hoverTarget, tip, locationTarget, offset) {
         // set offset to default below
-        offset = (typeof offset === 'undefined') ? new Phaser.Point(0, 40): offset;
+        var anchor = (typeof offset === 'undefined' ? new Phaser.Point(0.5, 0): new Phaser.Point(0, 0.5))
+        offset = (typeof offset === 'undefined') ? new Phaser.Point(0, 30): offset;
         
         var text = game.add.text(hoverTarget.x + offset.x, hoverTarget.y + offset.y, tip, textStyle.small);
         this.UI.UILayer.add(text);
-        text.anchor.set(0.5);
+        text.anchor.set(anchor.x, anchor.y);
         text.visible = false;
         
         this.tips.push(text);

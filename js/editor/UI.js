@@ -54,10 +54,10 @@ UI.prototype = {
 		this.UILayer.add(this.bubbleController.bubbleLayer);
         
         // add tool tips
-        this.toolTipManager.add(this.bubbleController.bubbles[0].background, 'Static', this.bubbleController.bubbles[0], new Phaser.Point(55, 0));
-        this.toolTipManager.add(this.bubbleController.bubbles[1].background, 'Dynamic', this.bubbleController.bubbles[1], new Phaser.Point(55, 0));
-        this.toolTipManager.add(this.bubbleController.bubbles[2].background, 'Start', this.bubbleController.bubbles[2], new Phaser.Point(55, 0));
-        this.toolTipManager.add(this.bubbleController.bubbles[3].background, 'End', this.bubbleController.bubbles[3], new Phaser.Point(55, 0));
+        this.toolTipManager.add(this.bubbleController.bubbles[0].background, 'Static', this.bubbleController.bubbles[0], new Phaser.Point(30, 5));
+        this.toolTipManager.add(this.bubbleController.bubbles[1].background, 'Dynamic', this.bubbleController.bubbles[1], new Phaser.Point(30, 10));
+        this.toolTipManager.add(this.bubbleController.bubbles[2].background, 'Start', this.bubbleController.bubbles[2], new Phaser.Point(25, 25));
+        this.toolTipManager.add(this.bubbleController.bubbles[3].background, 'End', this.bubbleController.bubbles[3], new Phaser.Point(0, 40));
 		
 		// save and load buttons
 		this.loadButton = game.add.sprite(game.width - 40, 40, 'load');
@@ -110,6 +110,9 @@ UI.prototype = {
         
         // clear tool tip timer or else tips will get stuck
         this.toolTipManager.clearTimer();
+        
+        game.add.tween(this.rotationButton.scale).to({ x: 1.1, y: 1.1}, 100, Phaser.Easing.Quadratic.Out).to({ x: 1, y: 1}, 120, Phaser.Easing.Bounce.Out, true);
+    
     },
 	
 	save: function () {
@@ -144,6 +147,8 @@ UI.prototype = {
         
         // clear tool tip timer or else tips will get stuck
         this.toolTipManager.clearTimer();
+        
+        game.add.tween(this.saveButton.scale).to({ x: 1.1, y: 1.1}, 100, Phaser.Easing.Quadratic.Out).to({ x: 1, y: 1}, 120, Phaser.Easing.Bounce.Out, true);
 	},
 	
 	load: function () {
@@ -152,6 +157,8 @@ UI.prototype = {
         
         // clear tool tip timer or else tips will get stuck
         this.toolTipManager.clearTimer();
+        
+        game.add.tween(this.loadButton.scale).to({ x: 1.1, y: 1.1}, 100, Phaser.Easing.Quadratic.Out).to({ x: 1, y: 1}, 120, Phaser.Easing.Bounce.Out, true);
 	},
 	
 	hideLoad: function() {

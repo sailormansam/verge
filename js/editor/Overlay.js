@@ -4,18 +4,18 @@ var Overlay = function (parent) {
     
     // add background
 	var graphics = game.add.graphics(0, 0);
-	graphics.beginFill(0xffffff);
+	graphics.beginFill(0x4AC5D0);
 	graphics.drawRect(0, 0, game.width, game.height);
 
 	var background = game.add.sprite(0, 0, graphics.generateTexture());
-	background.alpha = 0.8;
+	background.alpha = 0.9;
 
 	graphics.destroy();
 
 	this.add(background);
     
     // add close button
-    this.closeButton = game.add.sprite(game.width - 80, 80, 'close');
+    this.closeButton = game.add.sprite(game.width - 40, 40, 'close');
 	this.closeButton.inputEnabled = true;
     this.closeButton.events.onInputDown.add(this.hide, this);
     this.closeButton.input.priorityID = 3;
@@ -49,6 +49,8 @@ Overlay.prototype.hide = function () {
 
 	game.add.tween(this.UI.overlayLayer.cameraOffset).to({ y: 25 }, 250, Phaser.Easing.Quadratic.In, true);
 	var tween = game.add.tween(this.UI.overlayLayer).to({ alpha: 0 }, 250, Phaser.Easing.Quadratic.In, true);
+    
+    game.add.tween(this.closeButton.scale).to({ x: 1.1, y: 1.1}, 100, Phaser.Easing.Quadratic.Out).to({ x: 1, y: 1}, 120, Phaser.Easing.Bounce.Out, true);
 
 	tween.onComplete.add(function(){
 		this.UI.overlayLayer.visible = false;
