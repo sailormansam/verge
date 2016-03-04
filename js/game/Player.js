@@ -125,6 +125,9 @@ Player.prototype.moveToStart = function (x, y) {
 Player.prototype.checkJump = function () {
 	if(!this.canJump) {
 		this.doParticles();
+        var t = game.add.tween(this.scale).to({ x: 1, y: 0.9}, 100, Phaser.Easing.Quadratic.Out)
+													 .to({ x: 1, y: 1}, 120, Phaser.Easing.Bounce.Out);
+			t.start();
 	}
 
 	// allow another jump if the jump key is no longer down
