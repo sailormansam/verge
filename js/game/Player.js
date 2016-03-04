@@ -9,7 +9,7 @@ var Player = function (gameState, x, y) {
 	
 	graphics.destroy();
 	
-    this.anchor.set(0.5);
+    this.anchor.set(0.5, 1);
     
 	this.gameState = gameState;
 	this.canJump = false;
@@ -125,7 +125,7 @@ Player.prototype.moveToStart = function (x, y) {
 Player.prototype.checkJump = function () {
 	if(!this.canJump) {
 		this.doParticles();
-        var t = game.add.tween(this.scale).to({ x: 1, y: 0.9}, 100, Phaser.Easing.Quadratic.Out)
+        var t = game.add.tween(this.scale).to({ x: 1.2, y: 0.9}, 100, Phaser.Easing.Quadratic.Out)
 													 .to({ x: 1, y: 1}, 120, Phaser.Easing.Bounce.Out);
 			t.start();
 	}
