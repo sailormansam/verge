@@ -26,8 +26,8 @@ Map.prototype = {
         this.collidableBlocks = [];
         this.collision = [];
         
-        for (var i = 0; i < 60; i++) {
-            this.blocks2d[i] = new Array(60);
+        for (var i = 0; i < 50; i++) {
+            this.blocks2d[i] = new Array(50);
         }
         
 		this.level = 0;
@@ -73,8 +73,8 @@ Map.prototype = {
         this.collidableBlocks = [];
         this.collision = [];
         
-        for (var i = 0; i < 60; i++) {
-            this.blocks2d[i] = new Array(60);
+        for (var i = 0; i < 50; i++) {
+            this.blocks2d[i] = new Array(50);
         }
 		
 		// clear teleporter
@@ -118,16 +118,23 @@ Map.prototype = {
         }
         
         // loop through 2d block array to find blocks that need colliders
-        for(var i = 1, len = this.blocks2d.length - 1; i < len; i++) {
-            for(var j = 1, len = this.blocks2d.length - 1; j < len; j++) {
+        for(var i = 0, len = this.blocks2d.length; i < len; i++) {
+            for(var j = 0, len = this.blocks2d.length; j < len; j++) {
                 // if there is a no neighbor either up down left or right, this block gets a collider
-                if((this.blocks2d[i - 1][j] == undefined
-                   || this.blocks2d[i + 1][j] == undefined
-                   || this.blocks2d[i][j - 1] == undefined
-                   || this.blocks2d[i][j + 1] == undefined)
-                   && this.blocks2d[i][j] != undefined){
-                    this.collidableBlocks.push(this.blocks[this.blocks2d[i][j]]);
-                }
+				if(i == 0 || j == 0 || i == this.blocks2d.length - 1 || i == this.blocks2d.length - 1) {
+					if(this.blocks2d[i][j] != undefined) {
+						this.collidableBlocks.push(this.blocks[this.blocks2d[i][j]]);
+					}
+				}
+				else {
+					if((this.blocks2d[i - 1][j] == undefined
+					   || this.blocks2d[i + 1][j] == undefined
+					   || this.blocks2d[i][j - 1] == undefined
+					   || this.blocks2d[i][j + 1] == undefined)
+					   && this.blocks2d[i][j] != undefined){
+						this.collidableBlocks.push(this.blocks[this.blocks2d[i][j]]);
+					}
+				}
             }
         }
         
@@ -136,9 +143,9 @@ Map.prototype = {
         
         // reset 2d array for use with new collidable blocks
         for(var i = 0; i < this.blocks2d.length; i++) {
-            this.blocks2d[i] = new Array(40);
+            this.blocks2d[i] = new Array(50);
         }
-        
+		
         this.collidableBlocks.forEach(function(block){
             this.blocks2d[block.x / this.MAP_GRAIN][block.y / this.MAP_GRAIN] = false;
         }, this);
@@ -147,8 +154,8 @@ Map.prototype = {
         var workingArray = [];
         
         // find a block search down until no block, create
-        for(var i = 1; i < this.blocks2d.length; i++) {
-            for(var j = 1; j < this.blocks2d.length; j++) {
+        for(var i = 0; i < this.blocks2d.length; i++) {
+            for(var j = 0; j < this.blocks2d.length - 1; j++) {
                 // make sure there are at least two blocks, or else you get a lot of 1 block columns
                 if((this.blocks2d[i][j] === false && this.blocks2d[i][j + 1] === false) || 
                    (workingArray.length > 0 && this.blocks2d[i][j] === false)) {
@@ -181,8 +188,8 @@ Map.prototype = {
         
         
         // horizontal pass
-        for(var j = 1; j < this.blocks2d.length; j++) {
-            for(var i = 1; i < this.blocks2d.length; i++) {
+        for(var j = 0; j < this.blocks2d.length; j++) {
+            for(var i = 0; i < this.blocks2d.length - 1; i++) {
                 // make sure there are at least two blocks, or else you get a lot of 1 block columns
                 if((this.blocks2d[i][j] === false && this.blocks2d[i + 1][j] === false) || 
                    (workingArray.length > 0 && this.blocks2d[i][j] === false)) {
