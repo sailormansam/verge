@@ -93,10 +93,6 @@ Player.prototype.move = function () {
 		  && ((this.canJump && this.jumpKeyUp) || this.continueJump)) {
 			this.body.velocity.y = this.JUMP;
 
-//				if(this.canJump) {
-//					this.doParticles();
-//				}
-
 			this.canJump = false;
 			this.continueJump = true;
 			game.time.events.add(Phaser.Timer.SECOND / 4, this.stopJump, this).autoDestroy = true;

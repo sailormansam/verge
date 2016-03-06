@@ -21,8 +21,8 @@ GameStates.Game.prototype = {
 		
 		// enable physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
-        
-        game.physics.arcade.gravity.y = this.GRAVITY;
+
+		game.physics.arcade.gravity.y = this.GRAVITY;
 		
 		// make level
 		this.map = new Map(this);
@@ -42,13 +42,13 @@ GameStates.Game.prototype = {
 	},
 	
 	update: function () {
-        // update physics
-        game.physics.arcade.collide(this.player, this.map.collision);
-        
-        if(this.player.body.touching.down) {
-            this.player.checkJump();
-        }
-        
+		// update physics
+		game.physics.arcade.collide(this.player, this.map.collision);
+
+		if(this.player.body.touching.down) {
+			this.player.checkJump();
+		}
+
 		// incremement timer
 		this.timer.update(game.time.elapsedMS);
 		
@@ -69,7 +69,15 @@ GameStates.Game.prototype = {
 		
 		// check if player falls too far to reset level
 		if(this.player.body.y > game.world.height + this.map.WORLD_PADDING_BOTTOM + this.player.height) {
-			this.map.createCurrentLevel();
+			
+			// shake screen
+			game.camera.follow(null);
+			var t = game.add.tween(game.camera).to( { x: game.camera.x + 10 }, 50, "Quart.easeOut").to( { x: game.camera.x - 40 }, 50, "Quart.easeIn").loop();
+			t.start();
+			
+			t.onComplete.add(function(){
+				this.map.createCurrentLevel();
+			}, this);
 		}
 	}
 };
