@@ -68,21 +68,22 @@ GameStates.Game.prototype = {
 		}
 		
 		// check if player falls too far to reset level
-		if(this.player.body.y > game.world.height + this.map.WORLD_PADDING_BOTTOM + this.player.height) {
+		if(this.player.body.y > game.world.height + this.map.WORLD_PADDING_BOTTOM + this.player.height && !this.player.dead) {
 			
 			// shake screen
 			game.camera.follow(null);
 			var t = game.add.tween(game.camera)
-                .to( { x: 10 }, 100, "Quart.easeOut")
-                .to( { x: 40 }, 100, "Quart.easeIn")
-                .to( { x: 10 }, 100, "Quart.easeOut")
-                .to( { x: 40 }, 100, "Quart.easeIn");
+                .to( { x: game.camera.x + 5, y: game.camera.y + 10 }, 50, Phaser.Easing.Linear.None)
+                .to( { x: game.camera.x - 10, y: game.camera.y - 20  }, 50, Phaser.Easing.Linear.None);
             
+            t.repeatAll(1);
 			t.start();
 			
 			t.onComplete.add(function(){
 				this.map.createCurrentLevel();
 			}, this);
+            
+            this.player.dead = true;
 		}
 	}
 };

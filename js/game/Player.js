@@ -16,6 +16,7 @@ var Player = function (gameState, x, y) {
 	this.canMove = false;
 	this.jumpKeyUp = false;
 	this.continueJump = false;
+    this.dead = false;
 	
 	this.ACCELERATION = 50;
 	this.MAX_SPEED = 300;
@@ -116,6 +117,8 @@ Player.prototype.moveToStart = function (x, y) {
 
 	this.body.velocity.x = 0;
 	this.body.velocity.y = 0;
+    
+    this.dead = false;
 };
 
 Player.prototype.checkJump = function () {
