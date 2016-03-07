@@ -72,7 +72,12 @@ GameStates.Game.prototype = {
 			
 			// shake screen
 			game.camera.follow(null);
-			var t = game.add.tween(game.camera).to( { x: game.camera.x + 10 }, 50, "Quart.easeOut").to( { x: game.camera.x - 40 }, 50, "Quart.easeIn").loop();
+			var t = game.add.tween(game.camera)
+                .to( { x: 10 }, 100, "Quart.easeOut")
+                .to( { x: 40 }, 100, "Quart.easeIn")
+                .to( { x: 10 }, 100, "Quart.easeOut")
+                .to( { x: 40 }, 100, "Quart.easeIn");
+            
 			t.start();
 			
 			t.onComplete.add(function(){
