@@ -5,6 +5,7 @@ GameStates.Game = function (game) {
 	this.teleporter;
 	this.timer;
 	this.pointerController;
+    this.dyingTimer;
 	
 	// collison layers
 	this.playerCollisionGroup;
@@ -69,18 +70,31 @@ GameStates.Game.prototype = {
 		
 		// check if player falls too far to reset level
 		if(this.player.body.y > game.world.height + this.map.WORLD_PADDING_BOTTOM + this.player.height && !this.player.dead) {
-			
+			// emitter for the right side of the player
+            var emitter = game.add.emitter(this.player.body.x, this.camera.y + this.game.height);
+
+            emitter.makeParticles('block');
+
+            emitter.bringToTop = true;
+            emitter.setRotation(0, 0);
+            emitter.setAlpha(1, 1, 500);
+            emitter.setScale(0.2, 0.25, 0.2, 0.25, 500);
+            emitter.setYSpeed(-150, -420);
+
+            emitter.start(true, 300, null, 10);
+            
+            
 			// shake screen
 			game.camera.follow(null);
 			var t = game.add.tween(game.camera)
                 .to( { x: game.camera.x + 5, y: game.camera.y + 10 }, 50, Phaser.Easing.Linear.None)
-                .to( { x: game.camera.x - 10, y: game.camera.y - 20  }, 50, Phaser.Easing.Linear.None);
+                .to( { x: game.camera.x - 5, y: game.camera.y - 10  }, 50, Phaser.Easing.Linear.None);
             
-            t.repeatAll(1);
+            t.repeatAll(2);
 			t.start();
 			
 			t.onComplete.add(function(){
-				this.map.createCurrentLevel();
+                this.map.createCurrentLevel();
 			}, this);
             
             this.player.dead = true;

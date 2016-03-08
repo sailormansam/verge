@@ -137,7 +137,7 @@ Player.prototype.checkJump = function () {
 Player.prototype.doParticles = function () {
 	// emit a little particle effect for jumping and landing
 	// emitter for the left side of the player
-	emitterLeft = game.add.emitter(this.x + 20, this.body.y + this.height, 20);
+	var emitterLeft = game.add.emitter(this.x + 20, this.body.y + this.height, 20);
 
 	emitterLeft.makeParticles('block');
 
@@ -153,7 +153,7 @@ Player.prototype.doParticles = function () {
 	emitterLeft.start(true, 300, null, 1);
 
 	// emitter for the right side of the player
-	emitterRight = game.add.emitter(this.x - 20, this.body.y + this.height, 20);
+	var emitterRight = game.add.emitter(this.x - 20, this.body.y + this.height, 20);
 
 	emitterRight.makeParticles('block');
 
