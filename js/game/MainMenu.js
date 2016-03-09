@@ -1,6 +1,7 @@
 GameStates.MainMenu = function (game) {
 	this.titleText;
 	this.playText;
+    this.pressed = false;
 };
 
 GameStates.MainMenu.prototype = {
@@ -16,21 +17,24 @@ GameStates.MainMenu.prototype = {
 		
 		// tween in title and play button
 		game.add.tween(this.titleText).to( { alpha: 1, x: game.width * .2 }, 500, Phaser.Easing.Quadratic.InOut, true);
-		game.add.tween(this.playText).to( { alpha: 1, x: game.width * .2 }, 500, Phaser.Easing.Quadratic.InOut, true, 200);
+		var t = game.add.tween(this.playText).to( { alpha: 1, x: game.width * .2 }, 500, Phaser.Easing.Quadratic.InOut, true, 200);
+        
+        t.onComplete.add(function () { 
+		  this.playText.events.onInputDown.add(this.play, this);
+        }, this);
 		
 		// click event to play
 		this.playText.inputEnabled = true;
 		this.playText.input.useHandCursor = true;
-		this.playText.events.onInputDown.add(this.play, this);
-
-		// lock mouse pointer to canvas
-//		game.canvas.addEventListener('mousedown', function () { game.input.mouse.requestPointerLock(); });
 	},
 	
 	play: function () {
-		// tween the text out and then start game
-		game.add.tween(this.titleText).to( { alpha: 0, x: game.width * .15 }, 500, Phaser.Easing.Quadratic.InOut, true);
-		var t = game.add.tween(this.playText).to( { alpha: 0, x: game.width * .15 }, 500, Phaser.Easing.Quadratic.InOut, true, 200);
-		t.onComplete.add(function () { game.state.start('Game'); }, this);
+        if(!this.pressed) {
+            // tween the text out and then start game
+            game.add.tween(this.titleText).to( { alpha: 0, x: game.width * .15 }, 500, Phaser.Easing.Quadratic.InOut, true);
+            var t = game.add.tween(this.playText).to( { alpha: 0, x: game.width * .15 }, 500, Phaser.Easing.Quadratic.InOut, true, 200);
+            t.onComplete.add(function () { game.state.start('Game'); }, this);
+            this.pressed = true;
+        }
 	}
 };
