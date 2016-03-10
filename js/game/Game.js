@@ -99,5 +99,11 @@ GameStates.Game.prototype = {
             
             this.player.dead = true;
 		}
-	}
+	},
+    
+    render: function () {
+        game.debug.body(this.map.collision[0]);
+        game.debug.body(this.map.collision[1]);
+        game.debug.body(this.map.collision[2]);
+    }
 };

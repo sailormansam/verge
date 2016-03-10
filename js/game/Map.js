@@ -220,6 +220,7 @@ Map.prototype = {
 		this.collision.forEach(function(sprite){
 			// enable physics
 			game.physics.arcade.enable(sprite);
+            sprite.body.rotation = 5;
 			sprite.body.allowGravity = false;
 			sprite.body.immovable = true;
 		});
@@ -262,6 +263,9 @@ Map.prototype = {
 		// tween in world
 		game.add.tween(game.world).to({ alpha: 1}, 500).start();
 		game.camera.follow(this.gameState.player);
+        
+        game.world.angle = -5;
+        console.log(this.collision);
 	},
 	
 	placeBlock: function (pointer) {
