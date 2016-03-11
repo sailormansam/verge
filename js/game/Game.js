@@ -99,11 +99,14 @@ GameStates.Game.prototype = {
             
             this.player.dead = true;
 		}
-	},
-    
-    render: function () {
-        game.debug.body(this.map.collision[0]);
-        game.debug.body(this.map.collision[1]);
-        game.debug.body(this.map.collision[2]);
-    }
+        
+        this.texture = new Phaser.RenderTexture(game, game.width, game.height);
+        this.texture.renderXY(game.world, 0, 0);
+        var spriter = game.add.sprite(0, 0, this.texture);
+        spriter.fixedToCamera = true;
+        spriter.tint = 0xff0000;
+        spriter.angle = -5;
+        spriter.width = 320;
+        
+	}
 };

@@ -184,7 +184,6 @@ Map.prototype = {
 
 		totalArrays = [];
 
-
 		// horizontal pass
 		for(var j = 0; j < this.blocks2d.length; j++) {
 			for(var i = 0; i < this.blocks2d.length - 1; i++) {
@@ -264,7 +263,6 @@ Map.prototype = {
 		game.add.tween(game.world).to({ alpha: 1}, 500).start();
 		game.camera.follow(this.gameState.player);
         
-        game.world.angle = -5;
         console.log(this.collision);
 	},
 	
