@@ -102,11 +102,13 @@ GameStates.Game.prototype = {
         
         this.texture = new Phaser.RenderTexture(game, game.width, game.height);
         this.texture.renderXY(game.world, 0, 0);
-        var spriter = game.add.sprite(0, 0, this.texture);
-        spriter.fixedToCamera = true;
-        spriter.tint = 0xff0000;
-        spriter.angle = -5;
-        spriter.width = 320;
         
+        if(this.spriter){
+            this.spriter.destroy();
+        }
+        
+        this.spriter = game.add.sprite(0, 0, this.texture);
+        this.spriter.fixedToCamera = true;
+        this.spriter.angle = -5;
 	}
 };
