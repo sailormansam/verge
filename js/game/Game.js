@@ -36,6 +36,14 @@ GameStates.Game.prototype = {
 		
 		// set up gameplay timer
 		this.timer = new Timer(game, game.width - 60, 20);
+        
+        this.frontLayer = game.add.group();
+        
+        this.texture = new Phaser.RenderTexture(game, game.width, game.height);
+        this.spriter = game.add.sprite(0, 0, this.texture);
+        this.spriter.fixedToCamera = true;
+        this.spriter.tint = 0xff0000;
+        this.frontLayer.add(this.spriter);
 	},
 	
 	preRender: function () {
@@ -100,15 +108,8 @@ GameStates.Game.prototype = {
             this.player.dead = true;
 		}
         
-        this.texture = new Phaser.RenderTexture(game, game.width, game.height);
-        this.texture.renderXY(game.world, 0, 0);
-        
-        if(this.spriter){
-            this.spriter.destroy();
-        }
-        
-        this.spriter = game.add.sprite(0, 0, this.texture);
-        this.spriter.fixedToCamera = true;
-        this.spriter.angle = -5;
+//        this.texture.renderXY(this.player, 0, 0);
+//        
+//        this.spriter.loadTexture(this.texture);
 	}
 };

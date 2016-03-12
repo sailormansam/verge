@@ -204,7 +204,7 @@ Map.prototype = {
 			}
 		}
 
-		// create sprites based on the vertical pass
+		// create sprites based on the horizontal pass
 		for(var i = 0; i < totalArrays.length; i++) {
 			var origin = new Phaser.Point(totalArrays[i][0].x, totalArrays[i][0].y);
 
@@ -262,8 +262,6 @@ Map.prototype = {
 		// tween in world
 		game.add.tween(game.world).to({ alpha: 1}, 500).start();
 		game.camera.follow(this.gameState.player);
-        
-        console.log(this.collision);
 	},
 	
 	placeBlock: function (pointer) {
