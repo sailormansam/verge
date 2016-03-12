@@ -18,7 +18,6 @@ GameStates.Game = function (game) {
 GameStates.Game.prototype = {
 	create: function () {
 		// reset variables
-        this.playerLayer = game.add.group();
 		this.player = null;
 		
 		// enable physics
@@ -39,7 +38,7 @@ GameStates.Game.prototype = {
 		this.timer = new Timer(game, game.width - 60, 20);
         this.frontLayer = game.add.group();
         
-        this.textitup = new Phaser.RenderTexture(game, game.width, game.height);
+        this.textitup = new Phaser.RenderTexture(game, game.width + 60, game.height+ 60);
         
         this.spriter = game.add.sprite(0, 0);
         this.spriter.anchor.set(0.5);
@@ -111,7 +110,7 @@ GameStates.Game.prototype = {
             this.player.dead = true;
 		}
         
-        this.textitup.renderXY(this.playerLayer, 0, 0, true);
+        this.textitup.renderXY(game.world, 0, 0, true);
         
         this.spriter.loadTexture(this.textitup);
 	}
