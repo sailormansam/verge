@@ -24,6 +24,9 @@ GameStates.Game.prototype = {
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		game.physics.arcade.gravity.y = this.GRAVITY;
+        
+        
+        this.spriter = game.add.sprite(0, 0);
 		
 		// make level
 		this.map = new Map(this);
@@ -32,19 +35,31 @@ GameStates.Game.prototype = {
 		// create pointer controller
 		this.pointerController = new PointerController(this);
 		
-		// set up jump event for player scope callback function to player
+        // hide layer
+        this.hideLayer = game.add.group();
+        
+        // set up background color to hide actual game
+//        var graphics = game.add.graphics(0, 0);
+//
+//        graphics.beginFill(0x4AC5D0);
+//        graphics.drawRect(0, 0, game.width, game.height);
+//        
+//        this.background = game.add.sprite(0, 0, graphics.generateTexture());
+//        
+//        graphics.destroy();
+//        
+//        this.background.fixedToCamera = true;
 		
 		// set up gameplay timer
 		this.timer = new Timer(game, game.width - 60, 20);
         this.frontLayer = game.add.group();
         
-        this.textitup = new Phaser.RenderTexture(game, game.width + 60, game.height+ 60);
+        this.textitup = new Phaser.RenderTexture(game, 2000,2000);
         
-        this.spriter = game.add.sprite(0, 0);
         this.spriter.anchor.set(0.5);
         this.spriter.fixedToCamera = true;
-        this.spriter.cameraOffset = new Phaser.Point(game.width / 2, game.height / 2);
         this.spriter.angle = -5;
+        
         this.frontLayer.add(this.spriter);
 	},
 	
@@ -109,9 +124,19 @@ GameStates.Game.prototype = {
             
             this.player.dead = true;
 		}
-        
+//        
+//        // hide background so we can take a shot of the game
+//        this.background.alpha = 0;
         this.textitup.renderXY(game.world, 0, 0, true);
         
+        
         this.spriter.loadTexture(this.textitup);
+		game.world.setBounds(0, 0, this.map.worldBounds.x, this.map.worldBounds.y);
+//        
+//        // cover the game up
+//        this.background.alpha = 1;
+//        
+//        // update frame
+//        this.spriter.cameraOffset = new Phaser.Point(-game.camera.x + game.width / 1.3, -game.camera.y + game.height / 2);
 	}
 };

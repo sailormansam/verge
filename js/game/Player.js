@@ -167,4 +167,7 @@ Player.prototype.doParticles = function () {
 	emitterRight.gravity = -50;
 
 	emitterRight.start(true, 300, null, 1);
+    
+    this.gameState.hideLayer.add(emitterLeft);
+    this.gameState.hideLayer.add(emitterRight);
 };
