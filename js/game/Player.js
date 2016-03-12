@@ -7,6 +7,7 @@ var Player = function (gameState, x, y) {
 	
 	Phaser.Sprite.call(this, game, x, y, graphics.generateTexture());
 	
+    this.gooberGuy = new Phaser.Sprite(game, 0, 0, graphics.generateTexture());
 	graphics.destroy();
 	
     this.anchor.set(0.5, 1);
@@ -24,6 +25,8 @@ var Player = function (gameState, x, y) {
 	this.IN_AIR_SPEED = 0.3;
 	
 	game.add.existing(this);
+    
+    gameState.playerLayer.add(this);
 	
 	this.create();
 };

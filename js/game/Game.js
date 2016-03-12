@@ -18,6 +18,7 @@ GameStates.Game = function (game) {
 GameStates.Game.prototype = {
 	create: function () {
 		// reset variables
+        this.playerLayer = game.add.group();
 		this.player = null;
 		
 		// enable physics
@@ -36,13 +37,15 @@ GameStates.Game.prototype = {
 		
 		// set up gameplay timer
 		this.timer = new Timer(game, game.width - 60, 20);
-        
         this.frontLayer = game.add.group();
         
-        this.texture = new Phaser.RenderTexture(game, game.width, game.height);
-        this.spriter = game.add.sprite(0, 0, this.texture);
+        this.textitup = new Phaser.RenderTexture(game, game.width, game.height);
+        
+        this.spriter = game.add.sprite(0, 0);
+        this.spriter.anchor.set(0.5);
         this.spriter.fixedToCamera = true;
-        this.spriter.tint = 0xff0000;
+        this.spriter.cameraOffset = new Phaser.Point(game.width / 2, game.height / 2);
+        this.spriter.angle = -5;
         this.frontLayer.add(this.spriter);
 	},
 	
@@ -108,8 +111,8 @@ GameStates.Game.prototype = {
             this.player.dead = true;
 		}
         
-//        this.texture.renderXY(this.player, 0, 0);
-//        
-//        this.spriter.loadTexture(this.texture);
+        this.textitup.renderXY(this.playerLayer, 0, 0, true);
+        
+        this.spriter.loadTexture(this.textitup);
 	}
 };
