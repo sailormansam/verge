@@ -96,13 +96,17 @@ Map.prototype = {
 				this.gameState.teleporter = new Teleporter(this.data.levels[this.level].blocks[i].x,
 														   this.data.levels[this.level].blocks[i].y,
 														   this.MAP_GRAIN);
+                this.blockLayer.add(this.gameState.teleporter);
 			}
 			else {
-				this.blocks.push(new Block(this.gameState,
+                var tempBlock = new Block(this.gameState,
 										   this.data.levels[this.level].blocks[i].x,
 										   this.data.levels[this.level].blocks[i].y,
 										   this.MAP_GRAIN,
-										   this.data.levels[this.level].blocks[i].material));
+										   this.data.levels[this.level].blocks[i].material);
+                
+				this.blocks.push(tempBlock);
+                this.blockLayer.add(tempBlock);
 			}
 		}
 
@@ -252,13 +256,9 @@ Map.prototype = {
         this.worldBounds = new Phaser.Point(greatestX + this.MAP_GRAIN + 200, greatestY + this.FALL_BUFFER);
 		game.world.setBounds(0, 0, this.worldBounds.x, this.worldBounds.y);
 		
-		// set camera follow to null to tween camera
-		game.camera.unfollow();
-		
 		// tween in world
         this.gameState.spriter.alpha = 0;
 		game.add.tween(this.gameState.spriter).to({ alpha: 1}, 500).start();
-		game.camera.follow(this.gameState.player);
 	},
 	
 	placeBlock: function (pointer) {
