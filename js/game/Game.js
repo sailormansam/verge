@@ -88,11 +88,11 @@ GameStates.Game.prototype = {
 				game.state.start('GameOver');
 			}
 		}
-		
+        
 		// check if player falls too far to reset level
 		if(this.player.body.y > game.world.height + this.map.WORLD_PADDING_BOTTOM + this.player.height && !this.player.dead) {
 			// emitter for the right side of the player
-            var emitter = game.add.emitter(this.player.body.x, this.camera.y + this.game.height);
+            var emitter = game.add.emitter(this.player.body.x, game.world.height);
 
             emitter.makeParticles('block');
 
@@ -104,11 +104,12 @@ GameStates.Game.prototype = {
 
             emitter.start(true, 300, null, 10);
             
+            this.hideLayer.add(emitter);
             
 			// shake screen
-			var t = game.add.tween(game.camera)
-                .to( { x: game.camera.x + 5, y: game.camera.y + 10 }, 50, Phaser.Easing.Linear.None)
-                .to( { x: game.camera.x - 5, y: game.camera.y - 10  }, 50, Phaser.Easing.Linear.None);
+			var t = game.add.tween(this.spriter)
+                .to( { x: this.spriter.x + 5, y: this.spriter.y + 8 }, 50, Phaser.Easing.Linear.None)
+                .to( { x: this.spriter.x - 5, y: this.spriter.y - 8  }, 50, Phaser.Easing.Linear.None);
             
             t.repeatAll(2);
 			t.start();
@@ -133,7 +134,33 @@ GameStates.Game.prototype = {
         this.timer.visual.alpha = 1;
         
         // update 'camera'
-        this.spriter.x = -this.player.x + game.height / 2;
-        this.spriter.y = -this.player.y + game.width / 2;
+        // get position relative to camera
+        var cameraPos = new Phaser.Point(-(-this.player.x + game.width / 2), -(-this.player.y + game.height / 2));
+        
+        // check camera collisions with world
+        if(cameraPos.x + game.width > game.world.width) {
+            this.spriter.x = -(game.world.width - game.width);
+        }
+        else if(cameraPos.x < 0) {
+            this.spriter.x = 0;
+        }
+        else {
+            this.spriter.x = -cameraPos.x;
+        }
+        
+        // account for angle of level to keep player centered
+        // will not work for 90 or -90
+        var degrees = -5 * (Math.PI / 180)
+        var angleDif = this.player.x * Math.tan(degrees);
+        
+        if(cameraPos.y + game.height > game.world.height) {
+            this.spriter.y = -(game.world.height - game.height) - angleDif;
+        }
+        else if(cameraPos.y < 0) {
+            this.spriter.y = 0;
+        }
+        else {
+            this.spriter.y = -cameraPos.y - angleDif;
+        }
 	}
 };

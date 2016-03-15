@@ -255,6 +255,9 @@ Map.prototype = {
 		// add a half of a block to the width because the blocks are centered on position
         this.worldBounds = new Phaser.Point(greatestX + this.MAP_GRAIN + 200, greatestY + this.FALL_BUFFER);
 		game.world.setBounds(0, 0, this.worldBounds.x, this.worldBounds.y);
+        
+        // set render texture dimensions
+        this.gameState.textitup = new Phaser.RenderTexture(game, game.world.width, game.world.height);
 		
 		// tween in world
         this.gameState.spriter.alpha = 0;
