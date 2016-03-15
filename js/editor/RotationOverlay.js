@@ -80,6 +80,9 @@ RotationOverlay.prototype.update = function () {
 
         // save angle
         this.rot = angle.toFixed(0);
+        
+        // save rotation
+        this.UI.editor.canvas.rot = this.rot;
 
         // display arc
         this.rotationGraphics.arc(centerPoint.x, centerPoint.y, 100, 0, this.radians, antiClockwise);

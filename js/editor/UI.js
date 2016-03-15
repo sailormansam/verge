@@ -117,13 +117,13 @@ UI.prototype = {
 	
 	save: function () {
 		var mapSave = {
-            rotation: { theta: 0 },
+            rotation: 0,
             blocks: []
 		};
         
         // set rotation
         if(this.editor.canvas.rot) {
-            mapSave.rotation.theta = this.editor.canvas.rot;
+            mapSave.rotation = this.editor.canvas.rot;
         }
 		
 		// generate blocks and print out

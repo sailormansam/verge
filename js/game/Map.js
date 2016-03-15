@@ -258,6 +258,9 @@ Map.prototype = {
         
         // set render texture dimensions
         this.gameState.textitup = new Phaser.RenderTexture(game, game.world.width, game.world.height);
+        
+        // set camera rotation
+        this.gameState.spriter.angle = this.data.levels[this.level].rotation;
 		
 		// tween in world
         this.gameState.spriter.alpha = 0;

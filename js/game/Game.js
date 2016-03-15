@@ -54,8 +54,6 @@ GameStates.Game.prototype = {
         
         this.textitup = new Phaser.RenderTexture(game, game.world.width, game.world.height);
         
-        this.spriter.angle = -5;
-        
         this.frontLayer.add(this.spriter);
 	},
 	
@@ -150,7 +148,7 @@ GameStates.Game.prototype = {
         
         // account for angle of level to keep player centered
         // will not work for 90 or -90
-        var degrees = -5 * (Math.PI / 180)
+        var degrees = this.spriter.angle * (Math.PI / 180)
         var angleDif = this.player.x * Math.tan(degrees);
         
         if(cameraPos.y + game.height > game.world.height) {

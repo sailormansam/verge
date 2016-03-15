@@ -1,8 +1,6 @@
 {
     "levels": [{
-        "rotation": {
-            "theta": 0
-        },
+        "rotation": -5,
         "blocks": [{
             "material": "STATIC",
             "x": 4,
@@ -113,9 +111,7 @@
             "y": 7
         }]
     }, {
-        "rotation": {
-            "theta": 0
-        },
+        "rotation": 0,
         "blocks": [{
             "material": "START",
             "x": 18,
