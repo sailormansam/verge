@@ -7,6 +7,7 @@ var Map = function (gameState) {
 	this.data;
 	this.level;
     this.worldBounds;
+    this.rotation;
 	
 	// layers
 	this.blockLayer;
@@ -26,6 +27,7 @@ Map.prototype = {
 		this.blocks2d = [];
 		this.collidableBlocks = [];
 		this.collision = [];
+        this.rotation = 0;
 
 		for (var i = 0; i < 50; i++) {
 			this.blocks2d[i] = new Array(50);
@@ -221,7 +223,6 @@ Map.prototype = {
 		this.collision.forEach(function(sprite){
 			// enable physics
 			game.physics.arcade.enable(sprite);
-            sprite.body.rotation = 5;
 			sprite.body.allowGravity = false;
 			sprite.body.immovable = true;
 		});
@@ -260,7 +261,8 @@ Map.prototype = {
         this.gameState.textitup = new Phaser.RenderTexture(game, game.world.width, game.world.height);
         
         // set camera rotation
-        this.gameState.spriter.angle = this.data.levels[this.level].rotation;
+        this.rotation = this.data.levels[this.level].rotation
+        this.gameState.spriter.angle = this.rotation;
 		
 		// tween in world
         this.gameState.spriter.alpha = 0;

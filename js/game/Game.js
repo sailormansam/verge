@@ -6,6 +6,7 @@ GameStates.Game = function (game) {
 	this.timer;
 	this.pointerController;
     this.dyingTimer;
+    this.cameraPos;
 	
 	// collison layers
 	this.playerCollisionGroup;
@@ -19,6 +20,7 @@ GameStates.Game.prototype = {
 	create: function () {
 		// reset variables
 		this.player = null;
+        this.cameraPos = new Phaser.Point();
 		
 		// enable physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -133,17 +135,17 @@ GameStates.Game.prototype = {
         
         // update 'camera'
         // get position relative to camera
-        var cameraPos = new Phaser.Point(-(-this.player.x + game.width / 2), -(-this.player.y + game.height / 2));
+        this.cameraPos = new Phaser.Point(-(-this.player.x + game.width / 2), -(-this.player.y + game.height / 2));
         
         // check camera collisions with world
-        if(cameraPos.x + game.width > game.world.width) {
+        if(this.cameraPos.x + game.width > game.world.width) {
             this.spriter.x = -(game.world.width - game.width);
         }
-        else if(cameraPos.x < 0) {
+        else if(this.cameraPos.x < 0) {
             this.spriter.x = 0;
         }
         else {
-            this.spriter.x = -cameraPos.x;
+            this.spriter.x = -this.cameraPos.x;
         }
         
         // account for angle of level to keep player centered
@@ -151,14 +153,14 @@ GameStates.Game.prototype = {
         var degrees = this.spriter.angle * (Math.PI / 180)
         var angleDif = this.player.x * Math.tan(degrees);
         
-        if(cameraPos.y + game.height > game.world.height) {
+        if(this.cameraPos.y + game.height > game.world.height) {
             this.spriter.y = -(game.world.height - game.height) - angleDif;
         }
-        else if(cameraPos.y < 0) {
+        else if(this.cameraPos.y < 0) {
             this.spriter.y = 0;
         }
         else {
-            this.spriter.y = -cameraPos.y - angleDif;
+            this.spriter.y = -this.cameraPos.y - angleDif;
         }
 	}
 };
