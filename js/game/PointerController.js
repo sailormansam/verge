@@ -89,6 +89,6 @@ PointerController.prototype = {
         var x = Math.cos(angle) * distance;
         var y = Math.sin(angle) * distance;
         
-        return new Phaser.Point(x,y);
+        return new Phaser.Point(x - distance, y - distance);
     }
 };
