@@ -137,21 +137,26 @@ GameStates.Game.prototype = {
         // get position relative to camera
         this.cameraPos = new Phaser.Point(-(-this.player.x + game.width / 2), -(-this.player.y + game.height / 2));
         
+        // correct for angle of level
+        var degrees = this.spriter.angle * (Math.PI / 180);
+        var playerPoint = new Phaser.Point(this.player.x, this.player.y);
+        var playerDistance = playerPoint.distance(new Phaser.Point(0,0));
+        var angleDif = Math.cos(degrees) * playerDistance - playerDistance;
+        
         // check camera collisions with world
         if(this.cameraPos.x + game.width > game.world.width) {
-            this.spriter.x = -(game.world.width - game.width);
+            this.spriter.x = -(game.world.width - game.width) - angleDif;
         }
         else if(this.cameraPos.x < 0) {
             this.spriter.x = 0;
         }
         else {
-            this.spriter.x = -this.cameraPos.x;
+            this.spriter.x = -this.cameraPos.x - angleDif;
         }
         
         // account for angle of level to keep player centered
         // will not work for 90 or -90
-        var degrees = this.spriter.angle * (Math.PI / 180)
-        var angleDif = this.player.x * Math.tan(degrees);
+        angleDif = this.player.x * Math.tan(degrees);
         
         if(this.cameraPos.y + game.height > game.world.height) {
             this.spriter.y = -(game.world.height - game.height) - angleDif;
