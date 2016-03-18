@@ -24,7 +24,7 @@ PointerController.prototype = {
 			// Set the origin of the net
 			if(this.originPointer == null) {
                 
-                var originPoint = this.relativeToAngle(new Phaser.Point(game.input.x, game.input.y), this.gameState.map.rotation);
+                var originPoint = this.relativeToAngle(new Phaser.Point(game.input.x, game.input.y));
                 
 				this.originPointer = {
 					x: originPoint.x,
@@ -75,10 +75,10 @@ PointerController.prototype = {
 	
 	drawNet: function (pointer) {
 		this.graphics.beginFill(0xff0000);
-		this.graphics.drawRect(this.gameState.cameraPos.x + this.originPointer.x, this.gameState.cameraPos.y + this.originPointer.y, pointer.x - this.originPointer.x, pointer.y - this.originPointer.y);
+		this.graphics.drawRect(this.originPointer.x - this.gameState.spriter.x, this.originPointer.y - this.gameState.spriter.y, pointer.x - this.originPointer.x, pointer.y - this.originPointer.y);
 	},
     
-    relativeToAngle: function (pointer, angle) {
+    relativeToAngle: function (pointer) {
         // get distance of pointer to 0,0
         var angle = Math.atan2(pointer.y, pointer.x);
         
