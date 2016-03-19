@@ -148,7 +148,7 @@ GameStates.Game.prototype = {
             this.spriter.x = -(game.world.width - game.width) - angleDif;
         }
         else if(this.cameraPos.x < 0) {
-            this.spriter.x = 0;
+            this.spriter.x = 0 - angleDif;
         }
         else {
             this.spriter.x = -this.cameraPos.x - angleDif;
@@ -162,7 +162,7 @@ GameStates.Game.prototype = {
             this.spriter.y = -(game.world.height - game.height) - angleDif;
         }
         else if(this.cameraPos.y < 0) {
-            this.spriter.y = 0;
+            this.spriter.y = 0 - angleDif;
         }
         else {
             this.spriter.y = -this.cameraPos.y - angleDif;
