@@ -69,7 +69,7 @@ PointerController.prototype = {
 	update: function () {
 		// place blocks if mouse is down
 		if(game.input.activePointer.leftButton.isDown) {
-			this.gameState.map.placeBlock(game.input);
+			this.gameState.map.placeBlock(this.relativeToAngle(new Phaser.Point(game.input.x - this.gameState.spriter.x, game.input.y - this.gameState.spriter.y)));
 		}
 	},
 	

@@ -272,8 +272,8 @@ Map.prototype = {
 	placeBlock: function (pointer) {
 		// get a pointer relative to camera
 		var truePointer = {
-			x: Math.floor(((pointer.x + game.camera.x) / this.MAP_GRAIN)),
-			y: Math.floor(((pointer.y + game.camera.y) / this.MAP_GRAIN))
+			x: Math.floor(((pointer.x) / this.MAP_GRAIN)),
+			y: Math.floor(((pointer.y) / this.MAP_GRAIN))
 		};
 		
 		// check if there is a block at pointer location
@@ -291,11 +291,6 @@ Map.prototype = {
 			this.blocks.push(newBlock);
 			this.blockLayer.add(newBlock);
 			this.gameState.player.inventory.change(-1);
-		}
-		else if(!this.gameState.player) {
-			var newBlock = new Block(this.gameState, truePointer.x, truePointer.y, this.MAP_GRAIN, blockType.DYNAMIC);
-			this.blocks.push(newBlock);
-			this.blockLayer.add(newBlock);
 		}
 	},
 	
