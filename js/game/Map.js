@@ -295,6 +295,10 @@ Map.prototype = {
 	},
 	
 	removeBlocksWithin: function (hitbox) {
+        // hitbox relative to camera
+        hitbox.x -= this.gameState.spriter.x;
+        hitbox.y -= this.gameState.spriter.y;
+        
 		// remove blocks that overlap
 		for(var i = 0, len = this.blocks.length; i < len; i++) {
 			if(this.gameState.player) {
@@ -305,14 +309,6 @@ Map.prototype = {
 					this.blocks[i].destroy();
 					this.blocks[i] = null;
 					this.gameState.player.inventory.change(1);
-				}
-			}
-			else {
-				if(this.blocks[i] != null
-				   && this.blocks[i].material == blockType.DYNAMIC
-				   && Phaser.Rectangle.intersects(this.blocks[i].getBounds(), hitbox)) {
-					this.blocks[i].destroy();
-					this.blocks[i] = null;
 				}
 			}
 		}
